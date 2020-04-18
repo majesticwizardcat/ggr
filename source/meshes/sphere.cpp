@@ -20,7 +20,7 @@ Sphere::Sphere(int circles) {
 			m_vertices.push_back(std::shared_ptr<Vertex>(new Vertex(pos, uv, n)));
 		}
 		pos = shading::fromSpherical(0.0f, theta);
-		uv = Point2(1.0f, 0.5f + pos.z / 2.0f);
+		uv = Point2(1.0f, 1.0f - (0.5f + pos.z / 2.0f));
 		n = Normal(pos);
 		m_vertices.push_back(std::shared_ptr<Vertex>(new Vertex(pos, uv, n)));
 	}
@@ -48,10 +48,10 @@ Sphere::Sphere(int circles) {
 		float phiN = (TWO_PI / (float) circles) * (i + 1);
 		float u = (phi / TWO_PI + phiN / TWO_PI) / 2.0f;
 		m_vertices.push_back(std::shared_ptr<Vertex>(new Vertex(Point3(0.0f, 0.0f, -1.0f),
-									Point2(u, 0.0f),
+									Point2(u, 1.0f),
 									Normal(0.0f, 0.0f, -1.0f))));
 		m_vertices.push_back(std::shared_ptr<Vertex>(new Vertex(Point3(0.0f, 0.0f, 1.0f),
-									Point2(u, 1.0f),
+									Point2(u, 0.0f),
 									Normal(0.0f, 0.0f, 1.0f))));
 		m_triangles.push_back(std::shared_ptr<Triangle>(new Triangle(
 			m_vertices[botIndex], m_vertices[i + 1], m_vertices[i])));
