@@ -85,6 +85,10 @@ To compile a project, use the g++ compiler and add the **-Isource** flag to incl
 include the **-pthread** flag for the thread includes.
 Example: g++ -Isource {source files} -O3 -pthread -o ggrtest tests/test.cpp
 
+To compile an example use the **make** command. For example to compile example0 use **make example0**. When you run an
+example you can run it without any arguments or with 2, the first is the number of samples and the second the number
+of threads to use. For example to run example0 using 32 samples and 4 threads use "./example0 32 4".
+
 ## Bugs and additions
 If you find a bug or want an addition, open an issue and I will look into it. If you want to contribute, you can open
 a pull request and I will look into it as well. I will write a more detailed documentation of the renderer and some
