@@ -52,7 +52,7 @@ Spectrum MicrofacetBTDF::evaluate(const Vector3& wo, const Vector3& wi) const {
 	float G = m_D->G1(m, wo, m_alpha) * m_D->G1(m, wi, m_alpha);
 	float D = m_D->D(m, wo, wi, m_alpha);
 	float first = (MoWo * MoWi) / (cosThetaWo * cosThetaWi);
-	return ((m_color * F * G * D * first * m_IORin * m_IORin) / denom) / (m_eta * m_eta);
+	return ((m_color * F * G * D * first * m_IORin * m_IORin) / denom) * (m_eta * m_eta);
 }
 
 float MicrofacetBTDF::pdf(const Vector3& wo, const Vector3& wi) const {
@@ -136,7 +136,7 @@ BSDFSample MicrofacetBTDF::sample(Sampler* sampler, const Vector3& wo) const {
 	float IORin2 = m_IORin * m_IORin;
 	Spectrum value = (m_color * (Spectrum(1.0f) - F) * G * D * first * IORin2) / denom;
 	return BSDFSample(
-		value / (m_eta * m_eta),
+		value * (m_eta * m_eta),
 		(D * shading::absCosTheta(m) * IORin2 * MoWi * (1.0f - choice)) / denom,
 		wi,
 		false,

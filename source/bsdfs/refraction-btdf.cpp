@@ -21,6 +21,7 @@ float RefractionBTDF::pdf(const Vector3& wo, const Vector3& wi) const {
 	return 0.0f;
 }
 
+#include <iostream>
 BSDFSample RefractionBTDF::sample(Sampler* sampler, const Vector3& wo) const {
 	float cosThetaWo = shading::cosTheta(wo);
 	if (cosThetaWo == 0.0f) {
@@ -35,6 +36,9 @@ BSDFSample RefractionBTDF::sample(Sampler* sampler, const Vector3& wo) const {
 
 	Spectrum fresnel = m_fresnel->evaluate(m_eta, cosThetaWo);
 	float pdf = fresnel.value();
+	if (pdf > 1.0f || pdf < 0.0f) {
+		std::cout << "F: " << pdf << std::endl;
+	}
 
 	if (sampler->getSample() < pdf) {
 		return BSDFSample(fresnel / cosThetaWo,
@@ -50,7 +54,7 @@ BSDFSample RefractionBTDF::sample(Sampler* sampler, const Vector3& wo) const {
 		return BSDFSample();
 	}
 
-	return BSDFSample(((m_color * (Spectrum(1.0) - fresnel)) / (m_eta * m_eta)) / cosThetaWl,
+	return BSDFSample(((m_color * (Spectrum(1.0) - fresnel)) * (m_eta * m_eta)) / cosThetaWl,
 		1.0f - pdf,
 		sampledDirection,
 		true,
