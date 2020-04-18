@@ -21,16 +21,15 @@ BSDF MetalMaterial::createBSDF(const SurfacePoint& point, const Vector3& wo) con
 	float roughness = util::clamp(m_roughness->sample(point).value(), 0.0f, 1.0f);
 	roughness *= roughness;
 
-	if (roughness > 0.0f) {
+	if (util::equals(roughness, 0.0f)) {
+		std::unique_ptr<BXDF> spec(new SpecularBRDF(m_color->sample(point), m_fresnel.get()));
+		bsdf.addBXDF(spec);
+	}
+	else {
 		std::unique_ptr<BXDF> mc(new MicrofacetBRDF(m_distribution.get(),
 			m_fresnel.get(), roughness, m_color->sample(point)));
 		bsdf.addBXDF(mc);
 	}
-	else {
-		std::unique_ptr<BXDF> spec(new SpecularBRDF(m_color->sample(point), m_fresnel.get()));
-		bsdf.addBXDF(spec);
-	}
-
 	return bsdf;
 }
 

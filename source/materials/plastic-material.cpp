@@ -25,14 +25,13 @@ BSDF PlasticMaterial::createBSDF(const SurfacePoint& point, const Vector3& wo) c
 	std::unique_ptr<BXDF> diffuse(new DiffuseBRDF(color * (1.0f - m_ratio)));
 	std::unique_ptr<BXDF> gloss;
 	
-	if (roughness > 0) {
+	if (util::equals(0.0f)) {
+		gloss = std::unique_ptr<BXDF>(new SpecularBRDF(Spectrum(m_ratio), m_fresnel.get()));
+	}
+	else {
 		gloss = std::unique_ptr<BXDF>(new MicrofacetBRDF(m_distribution.get(),
 			m_fresnel.get(), roughness, Spectrum(m_ratio)));
 	}
-	else {
-		gloss = std::unique_ptr<BXDF>(new SpecularBRDF(Spectrum(m_ratio), m_fresnel.get()));
-	}
-
 	bsdf.addBXDF(diffuse);
 	bsdf.addBXDF(gloss);
 	return bsdf;

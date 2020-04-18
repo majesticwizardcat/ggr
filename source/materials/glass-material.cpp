@@ -39,14 +39,14 @@ BSDF GlassMaterial::createBSDF(const SurfacePoint& point, const Vector3& wo) con
 	float roughness = util::clamp(m_roughness->sample(point).value(), 0.0f, 1.0f);
 	roughness *= roughness;
 
-	if (roughness > 0.0f) {
+	if (util::equals(roughness, 0.0f)) {
+		std::unique_ptr<BXDF> refr(new RefractionBTDF(color, m_fresnel.get(), IORin, IORout));
+		bsdf.addBXDF(refr);
+	}
+	else {
 		std::unique_ptr<BXDF> mcr(new MicrofacetBTDF(m_distribution.get(), m_fresnel.get(),
 			roughness, color, IORin, IORout));
 		bsdf.addBXDF(mcr);
-	}
-	else {
-		std::unique_ptr<BXDF> refr(new RefractionBTDF(color, m_fresnel.get(), IORin, IORout));
-		bsdf.addBXDF(refr);
 	}
 	return bsdf;
 }
