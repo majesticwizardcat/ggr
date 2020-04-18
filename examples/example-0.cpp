@@ -30,7 +30,17 @@
 #include <iostream>
 #include <memory>
 
-int main() {
+const int DEFAULT_SAMPLES = 32;
+const int DEFAULT_THREADS = 4;
+
+int main(int args, char** argv) {
+	int samples = DEFAULT_SAMPLES;
+	int threads = DEFAULT_THREADS;
+	if (args > 2) {
+		samples = atoi(argv[1]);
+		threads = atoi(argv[2]);
+	}
+
 	std::shared_ptr<TriangleMesh> mirror(new Cube());
 	std::shared_ptr<TriangleMesh> diffuse(new Cube());
 	std::shared_ptr<TriangleMesh> light(new Cube());
@@ -75,7 +85,7 @@ int main() {
 	std::shared_ptr<Material> greenPlasticMaterial(new PlasticMaterial(greenTexture, roughness2));
 	std::shared_ptr<EmissionMaterial> emissionMat(new EmissionMaterial(whiteTexture, 3.5f));
 
-	RenderSettings settings(500, 500, 16, 32, 4, std::shared_ptr<Filter>(new GaussianFilter(1.5f, 1.5f, 2.0f)));
+	RenderSettings settings(500, 500, 16, samples, threads, std::shared_ptr<Filter>(new GaussianFilter(1.5f, 1.5f, 2.0f)));
 	std::unique_ptr<Sampler> sampler(new StohasticSampler(settings.resolutionWidth, settings.resolutionHeight));
 	std::unique_ptr<Camera> camera(new PerspectiveCamera(std::shared_ptr<Transformation>(new Transformation(
 		transform::lookAt(Point3(0.0f, -5.0f, 1.5f), Point3(0.0f, 0.0f, 1.5f), Vector3(0.0f, 0.0f, 1.0f)))),
