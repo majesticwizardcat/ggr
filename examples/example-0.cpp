@@ -14,7 +14,7 @@
 #include "materials/metal-material.h"
 #include "materials/plastic-material.h"
 #include "materials/glass-material.h"
-#include "samplers/stohastic-sampler.h"
+#include "samplers/halton-sampler.h"
 #include "cameras/perspective-camera.h"
 #include "textures/color-texture.h"
 #include "textures/image-texture.h"
@@ -86,7 +86,7 @@ int main(int args, char** argv) {
 	auto emissionMat = std::make_shared<EmissionMaterial>(whiteTexture, 3.5f);
 
 	RenderSettings settings(500, 500, 16, samples, threads, std::make_shared<GaussianFilter>(1.5f, 1.5f, 2.0f));
-	std::unique_ptr<Sampler> sampler = std::make_unique<StohasticSampler>(settings.resolutionWidth, settings.resolutionHeight);
+	std::unique_ptr<Sampler> sampler = std::make_unique<HaltonSampler>(settings.resolutionWidth, settings.resolutionHeight);
 	std::unique_ptr<Camera> camera = std::make_unique<PerspectiveCamera>(std::make_shared<Transformation>(
 		transform::lookAt(Point3(0.0f, -5.0f, 1.5f), Point3(0.0f, 0.0f, 1.5f), Vector3(0.0f, 0.0f, 1.0f))),
 		settings.resolutionWidth, settings.resolutionHeight,
