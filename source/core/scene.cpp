@@ -4,7 +4,7 @@
 #include <limits>
 
 Scene::Scene() : Scene(
-	std::shared_ptr<Skybox>(new Skybox(std::shared_ptr<Texture>(new ColorTexture(Spectrum(0.0f)))))) { }
+	std::make_shared<Skybox>(std::make_shared<ColorTexture>(Spectrum(0.0f)))) { }
 Scene::Scene(const Scene& other) : m_skybox(other.m_skybox), m_entities(other.m_entities),
 	m_lights(other.m_lights) { }
 Scene::Scene(const std::shared_ptr<Skybox>& skybox) : m_skybox(skybox) { }
@@ -12,14 +12,14 @@ Scene::Scene(const std::shared_ptr<Skybox>& skybox) : m_skybox(skybox) { }
 void Scene::addEntity(const std::shared_ptr<TriangleMesh>& mesh, const std::shared_ptr<Material>& material) {
 	std::vector<std::shared_ptr<Triangle>> triangles = mesh->getTriangles();
 	for (const std::shared_ptr<Triangle>& tri : triangles) {
-		m_entities.push_back(std::shared_ptr<Entity>(new Entity(tri, material, m_entities.size())));
+		m_entities.push_back(std::make_shared<Entity>(tri, material, m_entities.size()));
 	}
 }
 
 void Scene::addLight(const std::shared_ptr<TriangleMesh>& mesh, const std::shared_ptr<EmissionMaterial>& emissionMat) {
 	std::vector<std::shared_ptr<Triangle>> triangles = mesh->getTriangles();
 	for (const std::shared_ptr<Triangle>& tri : triangles) {
-		std::shared_ptr<LightEntity> l(new LightEntity(tri, emissionMat, m_entities.size()));
+		std::shared_ptr<LightEntity> l = std::make_shared<LightEntity>(tri, emissionMat, m_entities.size());
 		m_entities.push_back(l);
 		m_lights.push_back(l);
 	}

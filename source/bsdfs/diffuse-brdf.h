@@ -11,7 +11,7 @@ private:
 	Spectrum m_diffuseColorOverPi;
 
 public:
-	DiffuseBRDF();
+	DiffuseBRDF() = delete;
 	DiffuseBRDF(const DiffuseBRDF& other);
 	DiffuseBRDF(const Spectrum& diffuseColor);
 

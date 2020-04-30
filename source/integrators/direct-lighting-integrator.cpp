@@ -4,7 +4,7 @@ DirectLightingIntegrator::DirectLightingIntegrator() { }
 DirectLightingIntegrator::DirectLightingIntegrator(const DirectLightingIntegrator& other) { }
 
 std::unique_ptr<Integrator> DirectLightingIntegrator::clone() const {
-	return std::unique_ptr<Integrator>(new DirectLightingIntegrator());
+	return std::make_unique<DirectLightingIntegrator>();
 }
 
 Spectrum DirectLightingIntegrator::traceRay(const Ray& ray, const Scene& scene, Camera* camera, Sampler* sampler) {

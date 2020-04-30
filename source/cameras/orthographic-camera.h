@@ -9,7 +9,7 @@ private:
 	float m_scale;
 
 public:
-	OrthographicCamera();
+	OrthographicCamera() = delete;
 	OrthographicCamera(const OrthographicCamera& other);
 	OrthographicCamera(const std::shared_ptr<Transformation>& cameraToWorld,
 		int resolutionWidth, int resolutionHeight,

@@ -12,13 +12,13 @@ Film::Film(const Film& other) : Film(other.m_resolutionWidth, other.m_resolution
 }
 
 Film::Film(float resolutionWidth, float resolutionHeight) : Film(resolutionWidth, resolutionHeight,
-	std::shared_ptr<Filter>(new BoxFilter())) { }
+	std::make_shared<BoxFilter>()) { }
 Film::Film(float resolutionWidth, float resolutionHeight, const std::shared_ptr<Filter>& filter) :
 	m_resolutionWidth(resolutionWidth + 2.0f * std::ceil(filter->getWidth())),
 	m_resolutionHeight(resolutionHeight + 2.0f * std::ceil(filter->getHeight())),
 	m_filter(filter) {
-	m_filmPixels = std::unique_ptr<FilteredFilmSample[]>
-		(new FilteredFilmSample[(int) (m_resolutionWidth) * (int) (m_resolutionHeight)]);
+	m_filmPixels = std::make_unique<FilteredFilmSample[]>(
+		(int) (m_resolutionWidth) * (int) m_resolutionHeight);
 }
 
 int Film::index(int x, int y) const {

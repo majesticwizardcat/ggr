@@ -6,17 +6,13 @@ class Fresnel;
 
 class Fresnel {
 public:
-	Fresnel();
-	Fresnel(const Fresnel& other);
-
+	Fresnel() { }
 	virtual Spectrum evaluate(float eta, float cosTheta) const = 0;
 };
 
 class FresnelCT : public Fresnel {
 public:
 	FresnelCT();
-	FresnelCT(const FresnelCT& other);
-
 	Spectrum evaluate(float eta, float cosTheta) const;
 };
 
@@ -29,7 +25,6 @@ public:
 	FresnelSchlick();
 	FresnelSchlick(const FresnelSchlick& other);
 	FresnelSchlick(const Spectrum& R0);
-
 	Spectrum evaluate(float eta, float cosTheta) const;
 };
 

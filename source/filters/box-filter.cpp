@@ -15,6 +15,6 @@ float BoxFilter::evaluate2D(const Point2& centeredSamplePoint) const {
 }
 
 std::unique_ptr<Filter> BoxFilter::clone() const {
-	return std::unique_ptr<Filter>(new BoxFilter(*this));
+	return std::make_unique<BoxFilter>(*this);
 }
 

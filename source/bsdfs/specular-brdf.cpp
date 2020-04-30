@@ -1,7 +1,6 @@
 #include "bsdfs/specular-brdf.h"
 #include "tools/shading-functions.h"
 
-SpecularBRDF::SpecularBRDF() { }
 SpecularBRDF::SpecularBRDF(const SpecularBRDF& other) : m_color(other.m_color),
 	m_fresnel(other.m_fresnel) { }
 SpecularBRDF::SpecularBRDF(const Spectrum& color, Fresnel* fresnel) : m_color(color),
@@ -33,6 +32,6 @@ BSDFSample SpecularBRDF::sample(Sampler* sampler, const Vector3& wo) const {
 }
 
 std::unique_ptr<BXDF> SpecularBRDF::clone() const {
-	return std::unique_ptr<BXDF>(new SpecularBRDF(*this));
+	return std::make_unique<SpecularBRDF>(*this);
 }
 

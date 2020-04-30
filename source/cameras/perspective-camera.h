@@ -6,7 +6,7 @@ class PerspectiveCamera;
 
 class PerspectiveCamera : public ProjectiveCamera {
 public:
-	PerspectiveCamera();
+	PerspectiveCamera() = delete;
 	PerspectiveCamera(const PerspectiveCamera& other);
 	PerspectiveCamera(const std::shared_ptr<Transformation>& cameraToWorld,
 		int resolutionWidth, int resolutionHeight,

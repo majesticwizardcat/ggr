@@ -12,7 +12,7 @@ Image loadPPM(const char* location) {
 
 	if (!imageFile.is_open()) {
 		std::cout << "Could not open PPM file for loading: " << location << std::endl;
-		return Image();
+		return Image(1, 1);
 	}
 
 	char header[2];
@@ -21,7 +21,7 @@ Image loadPPM(const char* location) {
 	if (strcmp(header, "P3") != 0) {
 		std::cout << location << " is not a P3 PPM file" << std::endl;
 		imageFile.close();
-		return Image();
+		return Image(1, 1);
 	}
 
 	int width;

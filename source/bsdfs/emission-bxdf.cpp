@@ -1,8 +1,7 @@
 #include "bsdfs/emission-bxdf.h"
 
-EmissionBXDF::EmissionBXDF() : BXDF() { }
-EmissionBXDF::EmissionBXDF(const EmissionBXDF& other) : BXDF(other), m_emission(other.m_emission) { }
-EmissionBXDF::EmissionBXDF(const Spectrum& emission) : BXDF(), m_emission(emission) { }
+EmissionBXDF::EmissionBXDF(const EmissionBXDF& other) : m_emission(other.m_emission) { }
+EmissionBXDF::EmissionBXDF(const Spectrum& emission) : m_emission(emission) { }
 
 BXDFType EmissionBXDF::getType() const {
 	return BXDFType::EMISSION;
@@ -21,6 +20,6 @@ BSDFSample EmissionBXDF::sample(Sampler* sampler, const Vector3& wo) const {
 }
 
 std::unique_ptr<BXDF> EmissionBXDF::clone() const {
-	return std::unique_ptr<BXDF>(new EmissionBXDF(*this));
+	return std::make_unique<EmissionBXDF>(*this);
 }
 

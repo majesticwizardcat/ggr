@@ -11,7 +11,7 @@ private:
 	RandomGenerator m_rGen;
 
 public:
-	StohasticSampler();
+	StohasticSampler() = delete;
 	StohasticSampler(const StohasticSampler& other);
 	StohasticSampler(float resolutionWidth, float resolutionHeight);
 

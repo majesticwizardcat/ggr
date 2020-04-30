@@ -1,7 +1,6 @@
 #include "bsdfs/refraction-btdf.h"
 #include "tools/shading-functions.h"
 
-RefractionBTDF::RefractionBTDF() : m_IORin(0.0f), m_IORout(0.0f), m_eta(0.0f) { }
 RefractionBTDF::RefractionBTDF(const RefractionBTDF& other) : m_color(other.m_color),
 	m_fresnel(other.m_fresnel), m_IORin(other.m_IORin), m_IORout(other.m_IORout), m_eta(other.m_eta) { }
 RefractionBTDF::RefractionBTDF(const Spectrum& color, Fresnel* fresnel, float IORin, float IORout) :
@@ -21,7 +20,6 @@ float RefractionBTDF::pdf(const Vector3& wo, const Vector3& wi) const {
 	return 0.0f;
 }
 
-#include <iostream>
 BSDFSample RefractionBTDF::sample(Sampler* sampler, const Vector3& wo) const {
 	float cosThetaWo = shading::cosTheta(wo);
 	if (cosThetaWo == 0.0f) {
@@ -36,10 +34,6 @@ BSDFSample RefractionBTDF::sample(Sampler* sampler, const Vector3& wo) const {
 
 	Spectrum fresnel = m_fresnel->evaluate(m_eta, cosThetaWo);
 	float pdf = fresnel.value();
-	if (pdf > 1.0f || pdf < 0.0f) {
-		std::cout << "F: " << pdf << std::endl;
-	}
-
 	if (sampler->getSample() < pdf) {
 		return BSDFSample(fresnel / cosThetaWo,
 			pdf,
@@ -62,6 +56,6 @@ BSDFSample RefractionBTDF::sample(Sampler* sampler, const Vector3& wo) const {
 }
 
 std::unique_ptr<BXDF> RefractionBTDF::clone() const {
-	return std::unique_ptr<BXDF>(new RefractionBTDF(*this));
+	return std::make_unique<RefractionBTDF>(*this);
 }
 

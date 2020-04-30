@@ -16,7 +16,7 @@ private:
 	float m_eta;
 
 public:
-	RefractionBTDF();
+	RefractionBTDF() = delete;
 	RefractionBTDF(const RefractionBTDF& other);
 	RefractionBTDF(const Spectrum& color, Fresnel* fresnel, float IORin, float IORout);
 

@@ -13,7 +13,7 @@ private:
 	float m_intensity;
 
 public:
-	EmissionMaterial();
+	EmissionMaterial() = delete;
 	EmissionMaterial(const EmissionMaterial& other);
 	EmissionMaterial(const std::shared_ptr<Texture> emission, float intensity);
 

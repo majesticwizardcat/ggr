@@ -16,7 +16,7 @@ protected:
 	float m_dy;
 
 public:
-	Camera();
+	Camera() = delete;
 	Camera(const Camera& other);
 	Camera(const std::shared_ptr<Transformation>& cameraToWorld, int resolutionWidth,
 		int resolutionHeight);

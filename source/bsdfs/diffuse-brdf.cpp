@@ -2,7 +2,6 @@
 #include "tools/constants.h"
 #include "tools/shading-functions.h"
 
-DiffuseBRDF::DiffuseBRDF() { }
 DiffuseBRDF::DiffuseBRDF(const DiffuseBRDF& other) : m_diffuseColorOverPi(other.m_diffuseColorOverPi) { }
 DiffuseBRDF::DiffuseBRDF(const Spectrum& diffuseColor) : m_diffuseColorOverPi(diffuseColor / PI) { }
 
@@ -26,6 +25,6 @@ BSDFSample DiffuseBRDF::sample(Sampler* sampler, const Vector3& wo) const {
 }
 
 std::unique_ptr<BXDF> DiffuseBRDF::clone() const {
-	return std::unique_ptr<BXDF>(new DiffuseBRDF(*this));
+	return std::make_unique<DiffuseBRDF>(*this);
 }
 

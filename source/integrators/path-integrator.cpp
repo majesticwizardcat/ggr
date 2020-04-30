@@ -7,7 +7,7 @@ PathIntegrator::PathIntegrator() { }
 PathIntegrator::PathIntegrator(const PathIntegrator& other) { }
 
 std::unique_ptr<Integrator> PathIntegrator::clone() const {
-	return std::unique_ptr<Integrator>(new PathIntegrator());
+	return std::make_unique<PathIntegrator>();
 }
 
 Spectrum PathIntegrator::traceRay(const Ray& ray, const Scene& scene, Camera* camera, Sampler* sampler) {

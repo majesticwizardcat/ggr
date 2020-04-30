@@ -12,7 +12,7 @@ private:
 	std::shared_ptr<Texture> m_diffuseColor;
 	
 public:
-	MatteMaterial();
+	MatteMaterial() = delete;
 	MatteMaterial(const MatteMaterial& other);
 	MatteMaterial(const std::shared_ptr<Texture>& diffuseColor);
 

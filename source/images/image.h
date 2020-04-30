@@ -14,7 +14,7 @@ private:
 
 	int index(int x, int y) const;
 public:
-	Image();
+	Image() = delete;
 	Image(const Image& other);
 	Image(int resolutionWidth, int resolutionHeight);
 

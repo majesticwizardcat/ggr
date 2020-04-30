@@ -15,7 +15,7 @@ private:
 	std::shared_ptr<Texture> m_color;
 
 public:
-	MirrorMaterial();
+	MirrorMaterial() = delete;
 	MirrorMaterial(const MirrorMaterial& other);
 	MirrorMaterial(const std::shared_ptr<Texture>& color);
 

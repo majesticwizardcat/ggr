@@ -3,19 +3,18 @@
 #include "bsdfs/refraction-btdf.h"
 #include "tools/util.h"
 
-GlassMaterial::GlassMaterial() { }
 GlassMaterial::GlassMaterial(const GlassMaterial& other) : m_color(other.m_color),
 	m_roughness(other.m_roughness), m_materialIOR(other.m_materialIOR),
 	m_airIOR(other.m_airIOR) {
-	m_distribution = std::unique_ptr<MicrofacetDistribution>(new GGXDistribution());
-	m_fresnel = std::unique_ptr<Fresnel>(new FresnelCT());
+	m_distribution = std::make_unique<GGXDistribution>();
+	m_fresnel = std::make_unique<FresnelCT>();
 }
 
 GlassMaterial::GlassMaterial(const std::shared_ptr<Texture>& color,
 	const std::shared_ptr<Texture>& roughness, float materialIOR, float airIOR) :
 	m_color(color), m_roughness(roughness), m_materialIOR(materialIOR), m_airIOR(airIOR) {
-	m_distribution = std::unique_ptr<MicrofacetDistribution>(new GGXDistribution());
-	m_fresnel = std::unique_ptr<Fresnel>(new FresnelCT());
+	m_distribution = std::make_unique<GGXDistribution>();
+	m_fresnel = std::make_unique<FresnelCT>();
 }
 
 GlassMaterial::GlassMaterial(const std::shared_ptr<Texture>& color,
@@ -40,12 +39,12 @@ BSDF GlassMaterial::createBSDF(const SurfacePoint& point, const Vector3& wo) con
 	roughness *= roughness;
 
 	if (util::equals(roughness, 0.0f)) {
-		std::unique_ptr<BXDF> refr(new RefractionBTDF(color, m_fresnel.get(), IORin, IORout));
+		std::unique_ptr<BXDF> refr = std::make_unique<RefractionBTDF>(color, m_fresnel.get(), IORin, IORout);
 		bsdf.addBXDF(refr);
 	}
 	else {
-		std::unique_ptr<BXDF> mcr(new MicrofacetBTDF(m_distribution.get(), m_fresnel.get(),
-			roughness, color, IORin, IORout));
+		std::unique_ptr<BXDF> mcr = std::make_unique<MicrofacetBTDF>(m_distribution.get(), m_fresnel.get(),
+			roughness, color, IORin, IORout);
 		bsdf.addBXDF(mcr);
 	}
 	return bsdf;

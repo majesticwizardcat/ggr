@@ -7,9 +7,7 @@ class Material;
 
 class Material {
 public:
-	Material();
-	Material(const Material& other);
-
+	Material() { }
 	virtual BSDF createBSDF(const SurfacePoint& point, const Vector3& wo) const = 0;
 };
 

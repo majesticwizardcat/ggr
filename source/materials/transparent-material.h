@@ -16,7 +16,7 @@ private:
 	float m_airIOR;
 
 public:
-	TransparentMaterial();
+	TransparentMaterial() = delete;
 	TransparentMaterial(const TransparentMaterial& other);
 	TransparentMaterial(const std::shared_ptr<Texture>& color, float materialIOR,
 		float airIOR);

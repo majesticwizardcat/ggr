@@ -14,7 +14,7 @@ private:
 	Spectrum m_color;
 
 public:
-	SpecularBRDF();
+	SpecularBRDF() = delete;
 	SpecularBRDF(const SpecularBRDF& other);
 	SpecularBRDF(const Spectrum& color, Fresnel* fresnel);
 

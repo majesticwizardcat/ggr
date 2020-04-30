@@ -18,7 +18,7 @@ private:
 	float m_ratio;
 
 public:
-	PlasticMaterial();
+	PlasticMaterial() = delete;
 	PlasticMaterial(const PlasticMaterial& other);
 	PlasticMaterial(const std::shared_ptr<Texture> color,
 		const std::shared_ptr<Texture> roughness);

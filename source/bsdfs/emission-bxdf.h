@@ -9,7 +9,7 @@ private:
 	Spectrum m_emission;
 
 public:
-	EmissionBXDF();
+	EmissionBXDF() = delete;
 	EmissionBXDF(const EmissionBXDF& other);
 	EmissionBXDF(const Spectrum& emisison);
 

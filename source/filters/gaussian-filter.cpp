@@ -4,13 +4,9 @@
 #include <cmath>
 
 GaussianFilter::GaussianFilter() : Filter(), m_alpha(1.0f) { }
-
 GaussianFilter::GaussianFilter(const GaussianFilter& other) : Filter(other), m_alpha(other.m_alpha) { }
-
 GaussianFilter::GaussianFilter(float width, float height, float alpha) : Filter(width, height), m_alpha(alpha) { }
-
 GaussianFilter::GaussianFilter(float width, float height) : GaussianFilter(width, height, 1.0f) { }
-
 GaussianFilter::GaussianFilter(float size) : GaussianFilter(size, size) { }
 
 float GaussianFilter::evaluate1D(float centeredSamplePoint) const {
@@ -22,6 +18,6 @@ float GaussianFilter::evaluate2D(const Point2& centeredSamplePoint) const {
 }
 
 std::unique_ptr<Filter> GaussianFilter::clone() const {
-	return std::unique_ptr<Filter>(new GaussianFilter(*this));
+	return std::make_unique<GaussianFilter>(*this);
 }
 

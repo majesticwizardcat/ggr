@@ -14,7 +14,7 @@ private:
 	Spectrum m_color;
 
 public:
-	MicrofacetBRDF();
+	MicrofacetBRDF() = delete;
 	MicrofacetBRDF(const MicrofacetBRDF& other);
 	MicrofacetBRDF(MicrofacetDistribution* D, Fresnel* fresnel, float alpha,
 		const Spectrum& color);

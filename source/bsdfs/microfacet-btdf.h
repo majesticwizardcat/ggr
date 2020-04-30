@@ -17,7 +17,7 @@ private:
 	float m_IORout;
 
 public:
-	MicrofacetBTDF();
+	MicrofacetBTDF() = delete;
 	MicrofacetBTDF(const MicrofacetBTDF& other);
 	MicrofacetBTDF(MicrofacetDistribution* D, Fresnel* fresnel, float alpha,
 		const Spectrum& color, float IORin, float IORout);

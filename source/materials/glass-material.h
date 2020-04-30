@@ -19,7 +19,7 @@ private:
 	float m_airIOR;
 
 public:
-	GlassMaterial();
+	GlassMaterial() = delete;
 	GlassMaterial(const GlassMaterial& other);
 	GlassMaterial(const std::shared_ptr<Texture>& color,
 		const std::shared_ptr<Texture>& roughness, float materialIOR,

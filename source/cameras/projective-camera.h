@@ -14,7 +14,7 @@ protected:
 	float m_focalDistance;
 
 public:
-	ProjectiveCamera();
+	ProjectiveCamera() = delete;
 	ProjectiveCamera(const ProjectiveCamera& other);
 	ProjectiveCamera(const std::shared_ptr<Transformation>&  cameraToWorld,
 		int resolutionWidth, int resolutionHeight,

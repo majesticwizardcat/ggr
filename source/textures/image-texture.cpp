@@ -1,7 +1,7 @@
 #include "textures/image-texture.h"
 
 ImageTexture::ImageTexture() {
-	m_mipmap = std::shared_ptr<MipMap>(new MipMap());
+	m_mipmap = std::make_shared<MipMap>();
 }
 
 ImageTexture::ImageTexture(const ImageTexture& other) : m_mipmap(other.m_mipmap) { }

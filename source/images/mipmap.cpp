@@ -12,14 +12,14 @@ int Layer::index(int x, int y) const {
 Layer::Layer() : m_width(0), m_height(0) { }
 Layer::Layer(const Layer& other) : m_width(other.m_width),
 	m_height(other.m_height) {
-	m_pixels = std::unique_ptr<Spectrum[]>(new Spectrum[m_width * m_height]);
+	m_pixels = std::make_unique<Spectrum[]>(m_width * m_height);
 	for (int i = 0; i < m_width * m_height; ++i) {
 		m_pixels[i] = other.m_pixels[i];
 	}
 }
 
 Layer::Layer(int width, int height) : m_width(width), m_height(height) {
-	m_pixels = std::unique_ptr<Spectrum[]>(new Spectrum[m_width * m_height]);
+	m_pixels = std::make_unique<Spectrum[]>(m_width * m_height);
 }
 
 Spectrum Layer::get(int x, int y) const {

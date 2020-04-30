@@ -2,11 +2,7 @@
 
 #include <math.h>
 
-Fresnel::Fresnel() { }
-Fresnel::Fresnel(const Fresnel& other) { }
-
 FresnelCT::FresnelCT() { }
-FresnelCT::FresnelCT(const FresnelCT& other) { }
 
 Spectrum FresnelCT::evaluate(float eta, float cosTheta) const {
 	float gSqrd = eta * eta + cosTheta * cosTheta - 1.0f;
@@ -28,6 +24,7 @@ Spectrum FresnelCT::evaluate(float eta, float cosTheta) const {
 }
 
 FresnelSchlick::FresnelSchlick() { }
+
 FresnelSchlick::FresnelSchlick(const FresnelSchlick& other) : m_R0(other.m_R0),
 	m_oneMinusR0(other.m_oneMinusR0) { }
 FresnelSchlick::FresnelSchlick(const Spectrum& R0) : m_R0(R0), m_oneMinusR0(Spectrum(1.0f) - R0) { }

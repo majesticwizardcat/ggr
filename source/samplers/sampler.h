@@ -13,7 +13,7 @@ protected:
 	float m_resolutionHeight;
 
 public:
-	Sampler();
+	Sampler() = delete;
 	Sampler(const Sampler& other);
 	Sampler(float resolutionWidth, float resolutionHeight);
 

@@ -4,8 +4,7 @@ FilmSamplingIntegrator::FilmSamplingIntegrator() : m_initialSize(0) { }
 FilmSamplingIntegrator::FilmSamplingIntegrator(const Integrator& other) { }
 
 void FilmSamplingIntegrator::setup(const Scene& scene, Camera* camera, Sampler* sampler, const RenderSettings& settings) {
-	m_frame = std::unique_ptr<Film>(new Film(settings.resolutionWidth,
-		settings.resolutionHeight, settings.filter));
+	m_frame = std::make_unique<Film>(settings.resolutionWidth, settings.resolutionHeight, settings.filter);
 	m_tiles = m_frame->createUnfilteredFilmTiles(settings.tileSize);
 	m_initialSize = m_tiles.size();
 }
@@ -32,33 +31,27 @@ bool FilmSamplingIntegrator::render(const Scene& scene, Camera* camera, Sampler*
 	Ray ray;
 	for (int x = tile.tileStartX; x < tile.tileEndX; ++x) {
 		for (int y = tile.tileStartY; y < tile.tileEndY; ++y) {
-			if (x > freeBoxStart.x && x < freeBoxEnd.x
-				&& y > freeBoxStart.y && y < freeBoxEnd.y) {
-				for (int s = 0; s < settings.samples; ++s) {
-					cameraSample = samplerClone->getCameraSample(Point2(x, y));
-					ray = camera->generateRay(cameraSample);
+			for (int s = 0; s < settings.samples; ++s) {
+				cameraSample = samplerClone->getCameraSample(Point2(x, y));
+				ray = camera->generateRay(cameraSample);
+				if (x > freeBoxStart.x && x < freeBoxEnd.x
+					&& y > freeBoxStart.y && y < freeBoxEnd.y) {
 					m_frame->addUnfilteredSample(
 						UnfilteredFilmSample(cameraSample.filmPosition,
 						traceRay(ray, scene, camera, samplerClone.get()),
 						ray.weight));
-				}	
-			}
-
-			else {
-				for (int s = 0; s < settings.samples; ++s) {
-					cameraSample = samplerClone->getCameraSample(Point2(x, y));
-					ray = camera->generateRay(cameraSample);
+				}
+				else {
 					tile.samples.push_back(
 						UnfilteredFilmSample(cameraSample.filmPosition,
 						traceRay(ray, scene, camera, samplerClone.get()),
 						ray.weight));
-				}	
-				if (m_filmLock.try_lock()) {
+				}
+				if (tile.samples.size() > 0 && m_filmLock.try_lock()) {
 					m_frame->mergeFilmTile(tile);
 					m_filmLock.unlock();
 					tile.samples.clear();
 				}
-
 			}
 		}
 	}

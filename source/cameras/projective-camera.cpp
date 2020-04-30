@@ -1,7 +1,5 @@
 #include "cameras/projective-camera.h"
 
-ProjectiveCamera::ProjectiveCamera() : Camera(), m_projection(new Transformation()), m_lensRadius(0.0f),
-	m_focalDistance(0.0f) { }
 ProjectiveCamera::ProjectiveCamera(const ProjectiveCamera& other) : Camera(other), 
 	m_projection(other.m_projection), m_lensRadius(other.m_lensRadius),
 	m_focalDistance(other.m_focalDistance) { }

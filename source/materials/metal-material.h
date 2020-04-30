@@ -17,7 +17,7 @@ private:
 	std::unique_ptr<GGXDistribution> m_distribution;
 
 public:
-	MetalMaterial();
+	MetalMaterial() = delete;
 	MetalMaterial(const MetalMaterial& other);
 	MetalMaterial(const std::shared_ptr<Texture>& color,
 		const std::shared_ptr<Texture>& roughness);

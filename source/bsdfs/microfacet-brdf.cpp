@@ -1,7 +1,6 @@
 #include "bsdfs/microfacet-brdf.h"
 #include "tools/shading-functions.h"
 
-MicrofacetBRDF::MicrofacetBRDF() { }
 MicrofacetBRDF::MicrofacetBRDF(const MicrofacetBRDF& other) :
 	MicrofacetBRDF(other.m_D, other.m_fresnel, other.m_alpha, other.m_color) { }
 MicrofacetBRDF::MicrofacetBRDF(MicrofacetDistribution* D, Fresnel* fresnel, float alpha,
@@ -60,6 +59,6 @@ BSDFSample MicrofacetBRDF::sample(Sampler* sampler, const Vector3& wo) const {
 }
 
 std::unique_ptr<BXDF> MicrofacetBRDF::clone() const {
-	return std::unique_ptr<BXDF>(new MicrofacetBRDF(*this));
+	return std::make_unique<MicrofacetBRDF>(*this);
 }
 

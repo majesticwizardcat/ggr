@@ -35,6 +35,6 @@ float LanczosFilter::evaluate2D(const Point2& centeredSamplePoint) const {
 }
 
 std::unique_ptr<Filter> LanczosFilter::clone() const {
-	return std::unique_ptr<Filter>(new LanczosFilter(*this));
+	return std::make_unique<LanczosFilter>(*this);
 }
 

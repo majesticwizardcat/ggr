@@ -13,9 +13,7 @@ enum BXDFType {
 
 class BXDF {
 public:
-	BXDF();
-	BXDF(const BXDF& other);
-
+	BXDF() { }
 	virtual BXDFType getType() const = 0;
 	virtual Spectrum evaluate(const Vector3& wo, const Vector3& wi) const = 0;
 	virtual float pdf(const Vector3& wo, const Vector3& wi) const = 0;

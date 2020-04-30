@@ -3,8 +3,6 @@
 
 #include <algorithm>
 
-MicrofacetBTDF::MicrofacetBTDF() : m_alpha(0.0f), m_eta(0.0f), m_IORin(0.0f),
-	m_IORout(0.0f) { }
 MicrofacetBTDF::MicrofacetBTDF(const MicrofacetBTDF& other) :
 	MicrofacetBTDF(other.m_D, other.m_fresnel, other.m_alpha, other.m_color,
 	other.m_IORin, other.m_IORout) { }
@@ -144,6 +142,6 @@ BSDFSample MicrofacetBTDF::sample(Sampler* sampler, const Vector3& wo) const {
 }
 
 std::unique_ptr<BXDF> MicrofacetBTDF::clone() const {
-	return std::unique_ptr<BXDF>(new MicrofacetBTDF(*this));
+	return std::make_unique<MicrofacetBTDF>(*this);
 }
 

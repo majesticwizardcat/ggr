@@ -3,7 +3,6 @@
 
 #include <utility>
 
-BSDF::BSDF() { }
 BSDF::BSDF(const BSDF& other) : m_worldToShading(other.m_worldToShading),
 	m_geometricNormal(other.m_geometricNormal) {
 	for(int i = 0; i < other.m_bxdfs.size(); ++i) {

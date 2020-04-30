@@ -4,11 +4,7 @@
 
 #include <cmath>
 
-MicrofacetDistribution::MicrofacetDistribution() { }
-MicrofacetDistribution::MicrofacetDistribution(const MicrofacetDistribution& other) { }
-
 GGXDistribution::GGXDistribution() { }
-GGXDistribution::GGXDistribution(const GGXDistribution& other) { }
 
 float GGXDistribution::D(const Normal& m, const Vector3& wo, const Vector3& wi, float alpha) {
 	float NoM = shading::absCosTheta(m);

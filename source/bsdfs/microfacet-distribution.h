@@ -8,9 +8,7 @@ class GGXDistribution;
 
 class MicrofacetDistribution {
 public:
-	MicrofacetDistribution();
-	MicrofacetDistribution(const MicrofacetDistribution& other);
-
+	MicrofacetDistribution() { }
 	virtual float D(const Normal& m, const Vector3& wo, const Vector3& wi, float alpha) = 0;
 	virtual float G1(const Normal& m, const Vector3& w, float alpha) = 0;
 	virtual Normal sampleNormal(Sampler* sampler, float alpha) = 0;
@@ -20,8 +18,6 @@ public:
 class GGXDistribution : public MicrofacetDistribution {
 public:
 	GGXDistribution();
-	GGXDistribution(const GGXDistribution& other);
-
 	float D(const Normal& m, const Vector3& wo, const Vector3& wi, float alpha);
 	float G1(const Normal& m, const Vector3& w, float alpha);
 	Normal sampleNormal(Sampler* sampler, float alpha);
