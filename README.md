@@ -55,10 +55,9 @@ ggr tries its best to minimize variance when possible. As described in some of t
 ggr will use better methods of sampling that reduce variance (eg importance sampling). Another part that uses such sampling
 techniques is the direct lighting sampling. ggr will sample direct lighting using multiple importance sampling. This is
 done by calculate weights and then using importance sampling both on the surface and the light distribution of the scene
-to obtain the result. This result is then weighted using the balanced heuristic. Although in these parts ggr will try
-to provide better sampling, it currently does not support a good way to create low discrepancy samples over any dimension
-and only uses a stohastic sampler (a sampler that just creates random numbers) to create samples. In the future, more
-sophisticated methods of creating samples will be added like a stratified sampler and Sobol sampler (Sobol sequences).
+to obtain the result. This result is then weighted using the balanced heuristic. ggr also has a Halton sampler to provide
+low discrepancy samples for any dimension using Halton sequences. More samplers will be added in the future like a 
+stratified sampler or a Sobol sampler.
 For filtering, ggr currently supports a simple box filter, a Gaussian filter and a Lanczos filter but will add more
 in the future.
 
