@@ -31,6 +31,7 @@ bool FilmSamplingIntegrator::render(const Scene& scene, Camera* camera, Sampler*
 	Ray ray;
 	for (int x = tile.tileStartX; x < tile.tileEndX; ++x) {
 		for (int y = tile.tileStartY; y < tile.tileEndY; ++y) {
+			samplerClone->createCameraSamples(Point2(x, y), settings.samples);
 			for (int s = 0; s < settings.samples; ++s) {
 				cameraSample = samplerClone->getCameraSample(Point2(x, y));
 				ray = camera->generateRay(cameraSample);
