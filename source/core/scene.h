@@ -7,15 +7,17 @@ class Scene;
 #include "materials/material.h"
 #include "lighting/skybox.h"
 #include "meshes/triangle-mesh.h"
+#include "accelerators/accelerator.h"
 
 #include <memory>
 #include <vector>
 
 class Scene {
 private:
-	std::vector<std::shared_ptr<Entity>> m_entities;
+	std::unique_ptr<Accelerator> m_accelerator;
 	std::vector<std::shared_ptr<LightEntity>> m_lights;
 	std::shared_ptr<Skybox> m_skybox;
+	int m_nextID;
 
 public:
 	Scene();
@@ -24,10 +26,12 @@ public:
 
 	void addEntity(const std::shared_ptr<TriangleMesh>& mesh, const std::shared_ptr<Material>& material);
 	void addLight(const std::shared_ptr<TriangleMesh>& mesh, const std::shared_ptr<EmissionMaterial>& emissionMat);
+	void initializeAccelerator();
 
 	Intersection intersects(const Ray& ray) const;
 	Intersection intersects(const Ray& ray, float maxT) const;
 	Intersection intersects(const SurfacePoint& surface, const Vector3& direction) const;
+	Intersection intersects(const SurfacePoint& surface, const Vector3& direction, float maxT) const;
 
 	bool areUnoccluded(const SurfacePoint& p0, const SurfacePoint& p1) const;
 	bool isIntersected(const SurfacePoint& surface, const Vector3& direction) const;

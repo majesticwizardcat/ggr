@@ -6,6 +6,7 @@ class LightEntity;
 #include "meshes/triangle-mesh.h"
 #include "materials/material.h"
 #include "intersection/intersection.h"
+#include "accelerators/bounding-box.h"
 
 #include <memory>
 
@@ -22,5 +23,7 @@ public:
 	virtual void intersects(const Ray& ray, float maxT, Intersection* result) const;
 	bool intersects(const Ray& ray, float maxT) const;
 	int getMeshID() const;
+
+	BoundingBox createBoundingBox() const;
 };
 

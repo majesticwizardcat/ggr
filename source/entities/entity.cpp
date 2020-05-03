@@ -23,3 +23,7 @@ int Entity::getMeshID() const {
 	return m_mesh->id;
 }
 
+BoundingBox Entity::createBoundingBox() const {
+	return BoundingBox(*m_mesh);
+}
+

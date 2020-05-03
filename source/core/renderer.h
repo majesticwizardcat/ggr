@@ -26,6 +26,6 @@ public:
 		std::unique_ptr<Integrator>& integrator, 
 		std::unique_ptr<Sampler>& sampler, const RenderSettings& settings);
 
-	Image render() const;
+	Image render();
 };
 

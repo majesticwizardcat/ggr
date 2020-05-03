@@ -17,7 +17,7 @@ Renderer::Renderer(const Scene& scene, std::unique_ptr<Camera>& camera,
 	m_scene(scene), m_camera(std::move(camera)), m_integrator(std::move(integrator)),
 	m_sampler(std::move(sampler)), m_settings(settings) { }
 
-Image Renderer::render() const {
+Image Renderer::render() {
 	Timer timer;
 	timer.start();
 
@@ -25,6 +25,7 @@ Image Renderer::render() const {
 	std::unique_ptr<Integrator> integrator = m_integrator->clone();
 	std::unique_ptr<Sampler> sampler = m_sampler->clone(m_settings.resolutionWidth, m_settings.resolutionHeight);
 
+	m_scene.initializeAccelerator();
 	integrator->setup(m_scene, camera.get(), sampler.get(), m_settings);
 
 	auto worker = [&] () {
