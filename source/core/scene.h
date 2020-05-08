@@ -33,7 +33,7 @@ public:
 	bool isIntersected(const SurfacePoint& surface, const Vector3& direction) const;
 
 	int getNumberOfLights() const;
-	LightEntity* getLight(int index) const;
-	Skybox* getSkybox() const;
+	const LightEntity* getLight(int index) const;
+	const Skybox* getSkybox() const;
 };
 

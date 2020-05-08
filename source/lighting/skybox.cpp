@@ -2,12 +2,6 @@
 #include "tools/constants.h"
 #include "tools/shading-functions.h"
 
-SkyboxSample::SkyboxSample() : pdf(0.0f) { }
-SkyboxSample::SkyboxSample(const SkyboxSample& other) :
-	SkyboxSample(other.emission, other.sampledDirection, other.pdf) { }
-SkyboxSample::SkyboxSample(const Spectrum& emission, const Vector3& direction, float pdf) :
-	emission(emission), sampledDirection(direction), pdf(pdf) { }
-
 Skybox::Skybox() { }
 Skybox::Skybox(const Skybox& other) : Skybox(other.m_skyboxTexture) { }
 Skybox::Skybox(const std::shared_ptr<Texture> skyboxTexture) :

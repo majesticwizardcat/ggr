@@ -1,24 +1,13 @@
 #pragma once
 
 class Skybox;
-class SkyboxSample;
 
 #include "textures/texture.h"
 #include "samplers/sampler.h"
 #include "primitives/transformation.h"
+#include "lighting/skybox-sample.h"
 
 #include <memory>
-
-class SkyboxSample {
-public:
-	Spectrum emission;
-	Vector3 sampledDirection;
-	float pdf;
-
-	SkyboxSample();
-	SkyboxSample(const SkyboxSample& other);
-	SkyboxSample(const Spectrum& emission, const Vector3& direction, float pdf);
-};
 
 class Skybox {
 private:

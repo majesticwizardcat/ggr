@@ -9,7 +9,7 @@ Integrator::Integrator(const Integrator& other) { }
 Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, const Vector3& wo,
 	const BSDF& surfaceBSDF, const Scene& scene, Sampler* sampler) const {
 	Spectrum L;
-	Skybox* skybox = scene.getSkybox();
+	const Skybox* skybox = scene.getSkybox();
 	int lights = scene.getNumberOfLights() + 1;
 	int choice = lights * sampler->getSample();
 	if (choice == lights - 1) {
@@ -30,7 +30,7 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 	}
 
 	else {
-		LightEntity* light = scene.getLight(choice);
+		const LightEntity* light = scene.getLight(choice);
 		LightSample lightSample = light->sample(sampler, surfacePoint.point);
 		lightSample.pdf /= (float) lights;
 

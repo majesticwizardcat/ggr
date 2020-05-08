@@ -92,11 +92,11 @@ int Scene::getNumberOfLights() const {
 	return m_lights.size();
 }
 
-LightEntity* Scene::getLight(int index) const {
+const LightEntity* Scene::getLight(int index) const {
 	return m_lights[index].get();
 }
 
-Skybox* Scene::getSkybox() const {
+const Skybox* Scene::getSkybox() const {
 	return m_skybox.get();
 }
 
