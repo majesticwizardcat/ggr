@@ -1,9 +1,23 @@
 #include "samplers/halton-sampler.h"
 #include "tools/shading-functions.h"
+#include "tools/primes.h"
 
-HaltonSampler::HaltonSampler(const HaltonSampler& other) : Sampler(other) { }
+HaltonSampler::HaltonSampler(const HaltonSampler& other) : Sampler(other) {
+	initBases();
+}
+
 HaltonSampler::HaltonSampler(float resolutionWidth, float resolutionHeight) :
-	Sampler(resolutionWidth, resolutionHeight) { }
+	Sampler(resolutionWidth, resolutionHeight) {
+	initBases();
+}
+
+void HaltonSampler::initBases() {
+	m_base0 = PRIMES[(int) (NUM_OF_PRIMES * m_rGen.get())];
+	m_base1 = PRIMES[(int) (NUM_OF_PRIMES * m_rGen.get())];
+	m_base2 = PRIMES[(int) (NUM_OF_PRIMES * m_rGen.get())];
+	m_base3 = PRIMES[(int) (NUM_OF_PRIMES * m_rGen.get())];
+	m_firstIndex = (m_base0 + m_base1 + m_base2 + m_base3) * m_rGen.get();
+}
 
 float HaltonSampler::sequence(int index, int base) const {
 	float value = 1.0f;
@@ -17,12 +31,12 @@ float HaltonSampler::sequence(int index, int base) const {
 }
 
 void HaltonSampler::createCameraSamples(const Point2& rasterPosition, int samples) {
-	for (int i = FIRST_INDEX; i < FIRST_INDEX + samples; ++i) {
-		Point2 filmPos = Point2(sequence(i, BASE_0), sequence(i, BASE_1)) + rasterPosition;
+	for (int i = m_firstIndex; i < m_firstIndex + samples; ++i) {
+		Point2 filmPos = Point2(sequence(i, m_base0), sequence(i, m_base1)) + rasterPosition;
 		filmPos.x /= m_resolutionWidth;
 		filmPos.y /= m_resolutionHeight;
 		Point2 lensPos = shading::diskSample(
-			Sample2D(sequence(i, BASE_2), sequence(i, BASE_3)));
+			Sample2D(sequence(i, m_base2), sequence(i, m_base3)));
 		m_samples.push(CameraSample(filmPos, lensPos));
 	}
 }

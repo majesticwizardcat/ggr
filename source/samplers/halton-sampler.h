@@ -5,17 +5,17 @@ class HaltonSampler;
 #include "samplers/sampler.h"
 #include "tools/random-generator.h"
 
-const int FIRST_INDEX = 20;
-const int BASE_0 = 2;
-const int BASE_1 = 3;
-const int BASE_2 = 5;
-const int BASE_3 = 7;
-
 class HaltonSampler : public Sampler {
 private:
+	int m_base0;
+	int m_base1;
+	int m_base2;
+	int m_base3;
+	int m_firstIndex;
 	RandomGenerator m_rGen;
 
 	float sequence(int index, int base) const;
+	void initBases();
 
 public:
 	HaltonSampler() = delete;
