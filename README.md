@@ -1,5 +1,6 @@
 # ggr - A physically based offline renderer
 ![alt text](https://raw.githubusercontent.com/loukoum/ggr/master/renders/the-one-with-the-cat.png)
+![alt text](https://raw.githubusercontent.com/loukoum/ggr/master/renders/glass-earth.png)
 
 ggr is a physically based offline renderer written in C++. Everything was written from scratch
 including the primitives used like vector classes. The purpose of the project is to create a renderer
