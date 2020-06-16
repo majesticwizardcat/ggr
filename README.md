@@ -74,8 +74,8 @@ more file formats will be supported. For texture filtering, ggr has not only the
 also, an anisotropic EWA filter that is used in most renderers.
 
 ### Speed and accelerators
-To increase speed ggr limits ray intersections using a BVH-like accelerator that reject a whole groups of primitive
-intersections decreasing rendering times. ggr also utilises multiple threads that render multiple tiles in parallel.
+To increase speed ggr limits ray intersections using a BVH-like accelerator that reject whole groups of primitives, decreasing 
+rendering times. ggr also utilises multiple threads that render tiles in parallel.
 
 ## Compiling and running
 ggr does not a have main function right now. In order to run it, you must write a cpp file that contains a main function
