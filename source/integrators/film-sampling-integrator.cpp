@@ -1,5 +1,7 @@
 #include "integrators/film-sampling-integrator.h"
 
+#include <cmath>
+
 FilmSamplingIntegrator::FilmSamplingIntegrator() : m_initialSize(0) { }
 FilmSamplingIntegrator::FilmSamplingIntegrator(const Integrator& other) { }
 

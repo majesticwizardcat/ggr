@@ -1,6 +1,6 @@
 #include "bsdfs/fresnel.h"
 
-#include <math.h>
+#include <cmath>
 
 FresnelCT::FresnelCT() { }
 

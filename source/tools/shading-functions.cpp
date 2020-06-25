@@ -1,7 +1,7 @@
 #include "tools/shading-functions.h"
 #include "constants.h"
 
-#include <math.h>
+#include <cmath>
 #include <algorithm>
 
 Point3 shading::uniformSampleSphere(const Sample2D& sample) {

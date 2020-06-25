@@ -1,7 +1,7 @@
 #include "primitives/transformation.h"
 #include "tools/util.h"
 
-#include <math.h>
+#include <cmath>
 
 Transformation::Transformation() : Transformation(Matrix4(1.0f), Matrix4(1.0f)) { } 
 Transformation::Transformation(const Transformation& other) : Transformation(other.m_transform, other.m_inverse) { }
