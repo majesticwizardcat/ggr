@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="example0_debug|x64">
+      <Configuration>example0_debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="example0|x64">
+      <Configuration>example0</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="exapmle0_debug|x64">
+      <Configuration>exapmle0_debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{3C7D1A0F-8B41-4EC0-8682-DD993A6D6D31}</ProjectGuid>
+    <RootNamespace>ggr</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='example0|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='exapmle0_debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='example0_debug|x64'">
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='example0|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='exapmle0_debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(ProjectDir)..\source;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)..\source;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir)..\source;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)..\source;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='example0|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir)..\source;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)..\source;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='exapmle0_debug|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir)..\source;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)..\source;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='example0|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='exapmle0_debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='example0_debug|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\accelerators\accelerator.h" />
+    <ClInclude Include="..\source\accelerators\bb-accelerator.h" />
+    <ClInclude Include="..\source\accelerators\bounding-box.h" />
+    <ClInclude Include="..\source\bsdfs\bsdf-sample.h" />
+    <ClInclude Include="..\source\bsdfs\bsdf.h" />
+    <ClInclude Include="..\source\bsdfs\bxdf.h" />
+    <ClInclude Include="..\source\bsdfs\diffuse-brdf.h" />
+    <ClInclude Include="..\source\bsdfs\emission-bxdf.h" />
+    <ClInclude Include="..\source\bsdfs\fresnel.h" />
+    <ClInclude Include="..\source\bsdfs\microfacet-brdf.h" />
+    <ClInclude Include="..\source\bsdfs\microfacet-btdf.h" />
+    <ClInclude Include="..\source\bsdfs\microfacet-distribution.h" />
+    <ClInclude Include="..\source\bsdfs\refraction-btdf.h" />
+    <ClInclude Include="..\source\bsdfs\specular-brdf.h" />
+    <ClInclude Include="..\source\cameras\camera-sample.h" />
+    <ClInclude Include="..\source\cameras\camera.h" />
+    <ClInclude Include="..\source\cameras\orthographic-camera.h" />
+    <ClInclude Include="..\source\cameras\perspective-camera.h" />
+    <ClInclude Include="..\source\cameras\projective-camera.h" />
+    <ClInclude Include="..\source\core\render-settings.h" />
+    <ClInclude Include="..\source\core\renderer.h" />
+    <ClInclude Include="..\source\core\scene.h" />
+    <ClInclude Include="..\source\entities\entity.h" />
+    <ClInclude Include="..\source\entities\light-entity.h" />
+    <ClInclude Include="..\source\film\film-sample.h" />
+    <ClInclude Include="..\source\film\film.h" />
+    <ClInclude Include="..\source\film\unfiltered-film-tile.h" />
+    <ClInclude Include="..\source\filters\box-filter.h" />
+    <ClInclude Include="..\source\filters\filter.h" />
+    <ClInclude Include="..\source\filters\gaussian-filter.h" />
+    <ClInclude Include="..\source\filters\lanczos-filter.h" />
+    <ClInclude Include="..\source\images\checkerboard-image.h" />
+    <ClInclude Include="..\source\images\image-io.h" />
+    <ClInclude Include="..\source\images\image.h" />
+    <ClInclude Include="..\source\images\mipmap.h" />
+    <ClInclude Include="..\source\integrators\direct-lighting-integrator.h" />
+    <ClInclude Include="..\source\integrators\film-sampling-integrator.h" />
+    <ClInclude Include="..\source\integrators\integrator.h" />
+    <ClInclude Include="..\source\integrators\path-integrator.h" />
+    <ClInclude Include="..\source\intersection\intersection.h" />
+    <ClInclude Include="..\source\intersection\ray.h" />
+    <ClInclude Include="..\source\intersection\surface-point.h" />
+    <ClInclude Include="..\source\lighting\light-sample.h" />
+    <ClInclude Include="..\source\lighting\skybox-sample.h" />
+    <ClInclude Include="..\source\lighting\skybox.h" />
+    <ClInclude Include="..\source\materials\emission-material.h" />
+    <ClInclude Include="..\source\materials\glass-material.h" />
+    <ClInclude Include="..\source\materials\material.h" />
+    <ClInclude Include="..\source\materials\matte-material.h" />
+    <ClInclude Include="..\source\materials\metal-material.h" />
+    <ClInclude Include="..\source\materials\mirror-material.h" />
+    <ClInclude Include="..\source\materials\plastic-material.h" />
+    <ClInclude Include="..\source\materials\transparent-material.h" />
+    <ClInclude Include="..\source\meshes\cube.h" />
+    <ClInclude Include="..\source\meshes\plane.h" />
+    <ClInclude Include="..\source\meshes\sphere.h" />
+    <ClInclude Include="..\source\meshes\triangle-mesh.h" />
+    <ClInclude Include="..\source\meshes\triangle.h" />
+    <ClInclude Include="..\source\meshes\vertex.h" />
+    <ClInclude Include="..\source\primitives\color.h" />
+    <ClInclude Include="..\source\primitives\matrix.h" />
+    <ClInclude Include="..\source\primitives\point.h" />
+    <ClInclude Include="..\source\primitives\transformation.h" />
+    <ClInclude Include="..\source\primitives\vector.h" />
+    <ClInclude Include="..\source\samplers\halton-sampler.h" />
+    <ClInclude Include="..\source\samplers\sample-2d.h" />
+    <ClInclude Include="..\source\samplers\sampler.h" />
+    <ClInclude Include="..\source\samplers\stohastic-sampler.h" />
+    <ClInclude Include="..\source\spectra\spectrum.h" />
+    <ClInclude Include="..\source\textures\color-texture.h" />
+    <ClInclude Include="..\source\textures\image-texture.h" />
+    <ClInclude Include="..\source\textures\texture.h" />
+    <ClInclude Include="..\source\tools\constants.h" />
+    <ClInclude Include="..\source\tools\primes.h" />
+    <ClInclude Include="..\source\tools\random-generator.h" />
+    <ClInclude Include="..\source\tools\shading-functions.h" />
+    <ClInclude Include="..\source\tools\timing.h" />
+    <ClInclude Include="..\source\tools\util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\examples\example-0.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\source\accelerators\bb-accelerator.cpp" />
+    <ClCompile Include="..\source\accelerators\bounding-box.cpp" />
+    <ClCompile Include="..\source\bsdfs\bsdf-sample.cpp" />
+    <ClCompile Include="..\source\bsdfs\bsdf.cpp" />
+    <ClCompile Include="..\source\bsdfs\diffuse-brdf.cpp" />
+    <ClCompile Include="..\source\bsdfs\emission-bxdf.cpp" />
+    <ClCompile Include="..\source\bsdfs\fresnel.cpp" />
+    <ClCompile Include="..\source\bsdfs\microfacet-brdf.cpp" />
+    <ClCompile Include="..\source\bsdfs\microfacet-btdf.cpp" />
+    <ClCompile Include="..\source\bsdfs\microfacet-distribution.cpp" />
+    <ClCompile Include="..\source\bsdfs\refraction-btdf.cpp" />
+    <ClCompile Include="..\source\bsdfs\specular-brdf.cpp" />
+    <ClCompile Include="..\source\cameras\camera-sample.cpp" />
+    <ClCompile Include="..\source\cameras\camera.cpp" />
+    <ClCompile Include="..\source\cameras\orthographic-camera.cpp" />
+    <ClCompile Include="..\source\cameras\perspective-camera.cpp" />
+    <ClCompile Include="..\source\cameras\projective-camera.cpp" />
+    <ClCompile Include="..\source\core\render-settings.cpp" />
+    <ClCompile Include="..\source\core\renderer.cpp" />
+    <ClCompile Include="..\source\core\scene.cpp" />
+    <ClCompile Include="..\source\entities\entity.cpp" />
+    <ClCompile Include="..\source\entities\light-entity.cpp" />
+    <ClCompile Include="..\source\film\film-sample.cpp" />
+    <ClCompile Include="..\source\film\film.cpp" />
+    <ClCompile Include="..\source\film\unfiltered-film-tile.cpp" />
+    <ClCompile Include="..\source\filters\box-filter.cpp" />
+    <ClCompile Include="..\source\filters\filter.cpp" />
+    <ClCompile Include="..\source\filters\gaussian-filter.cpp" />
+    <ClCompile Include="..\source\filters\lanczos-filter.cpp" />
+    <ClCompile Include="..\source\ggr.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='example0|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='exapmle0_debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\source\images\checkerboard-image.cpp" />
+    <ClCompile Include="..\source\images\image-io.cpp" />
+    <ClCompile Include="..\source\images\image.cpp" />
+    <ClCompile Include="..\source\images\mipmap.cpp" />
+    <ClCompile Include="..\source\integrators\direct-lighting-integrator.cpp" />
+    <ClCompile Include="..\source\integrators\film-sampling-integrator.cpp" />
+    <ClCompile Include="..\source\integrators\integrator.cpp" />
+    <ClCompile Include="..\source\integrators\path-integrator.cpp" />
+    <ClCompile Include="..\source\intersection\intersection.cpp" />
+    <ClCompile Include="..\source\intersection\ray.cpp" />
+    <ClCompile Include="..\source\intersection\surface-point.cpp" />
+    <ClCompile Include="..\source\lighting\light-sample.cpp" />
+    <ClCompile Include="..\source\lighting\skybox-sample.cpp" />
+    <ClCompile Include="..\source\lighting\skybox.cpp" />
+    <ClCompile Include="..\source\materials\emission-material.cpp" />
+    <ClCompile Include="..\source\materials\glass-material.cpp" />
+    <ClCompile Include="..\source\materials\matte-material.cpp" />
+    <ClCompile Include="..\source\materials\metal-material.cpp" />
+    <ClCompile Include="..\source\materials\mirror-material.cpp" />
+    <ClCompile Include="..\source\materials\plastic-material.cpp" />
+    <ClCompile Include="..\source\materials\transparent-material.cpp" />
+    <ClCompile Include="..\source\meshes\cube.cpp" />
+    <ClCompile Include="..\source\meshes\plane.cpp" />
+    <ClCompile Include="..\source\meshes\sphere.cpp" />
+    <ClCompile Include="..\source\meshes\triangle-mesh.cpp" />
+    <ClCompile Include="..\source\meshes\triangle.cpp" />
+    <ClCompile Include="..\source\meshes\vertex.cpp" />
+    <ClCompile Include="..\source\primitives\color.cpp" />
+    <ClCompile Include="..\source\primitives\matrix.cpp" />
+    <ClCompile Include="..\source\primitives\point.cpp" />
+    <ClCompile Include="..\source\primitives\transformation.cpp" />
+    <ClCompile Include="..\source\primitives\vector.cpp" />
+    <ClCompile Include="..\source\samplers\halton-sampler.cpp" />
+    <ClCompile Include="..\source\samplers\sample-2d.cpp" />
+    <ClCompile Include="..\source\samplers\sampler.cpp" />
+    <ClCompile Include="..\source\samplers\stohastic-sampler.cpp" />
+    <ClCompile Include="..\source\spectra\spectrum.cpp" />
+    <ClCompile Include="..\source\textures\color-texture.cpp" />
+    <ClCompile Include="..\source\textures\image-texture.cpp" />
+    <ClCompile Include="..\source\textures\texture.cpp" />
+    <ClCompile Include="..\source\tools\random-generator.cpp" />
+    <ClCompile Include="..\source\tools\shading-functions.cpp" />
+    <ClCompile Include="..\source\tools\timing.cpp" />
+    <ClCompile Include="..\source\tools\util.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

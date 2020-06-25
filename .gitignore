@@ -5,4 +5,8 @@ a.out
 example0
 ggr
 *.swp
+vs-project/.vs
+vs-project/ggr.vcxproj.user
+vs-project/x64
+vs-project/enc_temp_folder
 
