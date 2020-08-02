@@ -108,6 +108,7 @@ int main(int args, char** argv) {
 
 	Renderer renderer(scene, camera, integrator, sampler, settings);
 	savePPM("example-0-render.ppm", renderer.render());
+	std::cout << "Press enter to exit" << std::endl;
 	std::cin.get();
 }
 
