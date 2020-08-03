@@ -21,7 +21,7 @@ The path tracer is the most used integrator to calculate global illumination in 
 ggr currently supports six materials but they are enough to emulate most of the real life with proper
 parametrization. An all purpose (uber) material is currently on the works that will be added in the future.
 All of the materials can be parametrized not only with values but also with texture maps like a roughness
-texture map. ggr does not currently support bumping although this feature is on the works.
+texture map. ggr also supports bump mapping with image textures.
 The list of the current materials are:
 - **Matte material**: A fully diffuse material that reflects light uniformly over the hemisphere. These materials
 are also known as Lambertian.
