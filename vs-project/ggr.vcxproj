@@ -244,7 +244,9 @@
     <ClInclude Include="..\source\samplers\sampler.h" />
     <ClInclude Include="..\source\samplers\stohastic-sampler.h" />
     <ClInclude Include="..\source\spectra\spectrum.h" />
+    <ClInclude Include="..\source\textures\bump-map.h" />
     <ClInclude Include="..\source\textures\color-texture.h" />
+    <ClInclude Include="..\source\textures\height-map.h" />
     <ClInclude Include="..\source\textures\image-texture.h" />
     <ClInclude Include="..\source\textures\texture.h" />
     <ClInclude Include="..\source\tools\constants.h" />
@@ -308,6 +310,7 @@
     <ClCompile Include="..\source\lighting\skybox.cpp" />
     <ClCompile Include="..\source\materials\emission-material.cpp" />
     <ClCompile Include="..\source\materials\glass-material.cpp" />
+    <ClCompile Include="..\source\materials\material.cpp" />
     <ClCompile Include="..\source\materials\matte-material.cpp" />
     <ClCompile Include="..\source\materials\metal-material.cpp" />
     <ClCompile Include="..\source\materials\mirror-material.cpp" />
@@ -330,6 +333,7 @@
     <ClCompile Include="..\source\samplers\stohastic-sampler.cpp" />
     <ClCompile Include="..\source\spectra\spectrum.cpp" />
     <ClCompile Include="..\source\textures\color-texture.cpp" />
+    <ClCompile Include="..\source\textures\height-map.cpp" />
     <ClCompile Include="..\source\textures\image-texture.cpp" />
     <ClCompile Include="..\source\textures\texture.cpp" />
     <ClCompile Include="..\source\tools\random-generator.cpp" />

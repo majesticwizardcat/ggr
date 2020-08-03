@@ -18,6 +18,7 @@
 #include "cameras/perspective-camera.h"
 #include "textures/color-texture.h"
 #include "textures/image-texture.h"
+#include "textures/height-map.h"
 #include "film/film.h"
 #include "images/image-io.h"
 #include "images/mipmap.h"
@@ -30,7 +31,7 @@
 #include <iostream>
 #include <memory>
 
-const int DEFAULT_SAMPLES = 32;
+const int DEFAULT_SAMPLES = 64;
 const int DEFAULT_THREADS = 4;
 
 int main(int args, char** argv) {
@@ -64,8 +65,11 @@ int main(int args, char** argv) {
 	back->transform(transform::translate(0.0f, 3.5f, 0.0f).combine(transform::rotate(PI_OVER_TWO, 0.0f, 0.0f))
 		.combine(transform::scale(35.0f, 35.0f, 1.0f)));
 
-	auto floorMip = std::make_shared<MipMap>(CheckerboardImage(32), 8);
+	CheckerboardImage checker(24);
+	auto floorMip = std::make_shared<MipMap>(checker, 8);
+	auto floorHeightMip = std::make_shared<MipMap>(checker.generateHeightMap(), 8);
 
+	auto floorTexture = std::make_shared<ImageTexture>(floorMip);
 	auto skyTexture = std::make_shared<ColorTexture>(Spectrum(0.0f));
 	auto redTexture = std::make_shared<ColorTexture>(Spectrum(RGBColor(0.7f, 0.1f, 0.25f)));
 	auto whiteTexture = std::make_shared<ColorTexture>(Spectrum(RGBColor(1.0f, 1.0f, 1.0f)));
@@ -75,6 +79,8 @@ int main(int args, char** argv) {
 	auto roughness1 = std::make_shared<ColorTexture>(Spectrum(0.2f));
 	auto roughness2 = std::make_shared<ColorTexture>(Spectrum(0.7f));
 
+	auto floorBumpMap = std::make_shared<HeightMap>(floorHeightMip);
+
 	auto redMatte = std::make_shared<MatteMaterial>(redTexture);
 	auto metalMaterial = std::make_shared<MetalMaterial>(whiteTexture, roughness0);
 	auto mirrorMaterial = std::make_shared<MirrorMaterial>(whiteTexture);
@@ -83,7 +89,10 @@ int main(int args, char** argv) {
 	auto whitePlasticMaterial = std::make_shared<PlasticMaterial>(whiteTexture, roughness1);
 	auto bluePlasticMaterial = std::make_shared<PlasticMaterial>(blueTexture, roughness1);
 	auto greenPlasticMaterial = std::make_shared<PlasticMaterial>(greenTexture, roughness1);
+	auto floorMaterial = std::make_shared<PlasticMaterial>(floorTexture, roughness1);
 	auto emissionMat = std::make_shared<EmissionMaterial>(whiteTexture, 3.5f);
+
+	floorMaterial->setBumpMap(floorBumpMap);
 
 	RenderSettings settings(500, 500, 16, samples, threads, std::make_shared<GaussianFilter>(1.5f, 1.5f, 2.0f));
 	std::unique_ptr<Sampler> sampler = std::make_unique<HaltonSampler>(settings.resolutionWidth, settings.resolutionHeight);
@@ -97,7 +106,7 @@ int main(int args, char** argv) {
 
 	scene.addEntity(diffuse, redMatte);
 	scene.addEntity(mirror, mirrorMaterial);
-	scene.addEntity(plane, whitePlasticMaterial);
+	scene.addEntity(plane, floorMaterial);
 	scene.addEntity(back, metalMaterial);
 	scene.addEntity(bluePlastic, bluePlasticMaterial);
 	scene.addEntity(greenPlastic, greenPlasticMaterial);

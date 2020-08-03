@@ -21,6 +21,7 @@ Spectrum DirectLightingIntegrator::traceRay(const Ray& ray, const Scene& scene, 
 	}
 
 	else {
+		intersection.intersectionPoint = intersection.material->bump(intersection.intersectionPoint);
 		BSDF bsdf = intersection.material->createBSDF(intersection.intersectionPoint, intersection.wo);
 		L = sampleDirectLighting(intersection.intersectionPoint, intersection.wo, bsdf, scene, sampler);
 	}

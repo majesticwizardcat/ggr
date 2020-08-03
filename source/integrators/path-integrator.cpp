@@ -36,6 +36,7 @@ Spectrum PathIntegrator::traceRay(const Ray& ray, const Scene& scene, Camera* ca
 		}
 
 
+		intersection.intersectionPoint = intersection.material->bump(intersection.intersectionPoint);
 		BSDF bsdf = intersection.material->createBSDF(intersection.intersectionPoint, intersection.wo);
 		BSDFSample bsdfSample = bsdf.sample(sampler, intersection.wo);
 		float cosTheta = intersection.intersectionPoint.shadingNormal.dot(bsdfSample.sampledDirection);
