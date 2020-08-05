@@ -32,13 +32,8 @@ Image CheckerboardImage::generateHeightMap() const {
 	Image heightMap(getWidth(), getHeight());
 	for (int x = 0; x < getWidth(); ++x) {
 		for (int y = 0; y < getHeight(); ++y) {
-			RGBColor c(0.5f, 0.5f, 0.5f);
-			int xmodtiles = x % PIXELS_PER_TILE;
-			int ymodtiles = y % PIXELS_PER_TILE;
-			if (xmodtiles > 35 || xmodtiles < 3 || ymodtiles > 35 || ymodtiles < 3) {
-				c = RGBColor(0.3f, 0.3f, 0.3f);
-			}
-			heightMap.setPixel(x, y, c);
+			float h = (getPixel(x, y).r + 0.5f) * 0.5f;
+			heightMap.setPixel(x, y, RGBColor(h, h, h));
 		}
 	}
 	return heightMap;
