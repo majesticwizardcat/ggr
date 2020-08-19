@@ -17,7 +17,6 @@ Spectrum PathIntegrator::traceRay(const Ray& ray, const Scene& scene, Camera* ca
 	Vector3 rayDirection = ray.direction;
 	bool cameraRay = true;
 	bool lastDistDelta = false;
-	int bounces = 0;
 	
 	while (true) {
 		if (!intersection.hit || intersection.light != nullptr) {
@@ -54,17 +53,11 @@ Spectrum PathIntegrator::traceRay(const Ray& ray, const Scene& scene, Camera* ca
 		throughput *= (bsdfSample.value * std::abs(cosTheta)) / bsdfSample.pdf;
 		lastDistDelta = bsdfSample.isDeltaDist;
 
-		if (outside) {
-			bounces++;
+		float rrProb = std::max(0.05f, 1.0f - throughput.luminance());
+		if (sampler->getSample() < rrProb) {
+			break;
 		}
-
-		if (bounces > 4) {
-			float rrProb = std::max(0.05f, 1.0f - throughput.luminance());
-			if (sampler->getSample() < rrProb) {
-				break;
-			}
-			throughput /= std::max((1.0f - rrProb), 0.1f);
-		}
+		throughput /= std::max((1.0f - rrProb), 0.1f);
 
 		cameraRay = false;
 		rayDirection = bsdfSample.sampledDirection;
