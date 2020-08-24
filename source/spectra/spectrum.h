@@ -4,12 +4,9 @@ class Spectrum;
 
 #include "primitives/color.h"
 
-class Spectrum {
-private:
-	float m_r;
-	float m_g;
-	float m_b;
+#include <glm/vec3.hpp>
 
+class Spectrum : public glm::vec3 {
 public:
 	Spectrum();
 	Spectrum(const Spectrum& other);
@@ -18,7 +15,6 @@ public:
 	Spectrum(const XYZColor& xyzColor);
 	Spectrum(const RGBColor& rgbColor);
 
-	void print() const;
 	void clamp();
 
 	bool isZero() const;
@@ -30,18 +26,6 @@ public:
 	float avg() const;
 	float min() const;
 	float max() const;
-
-	Spectrum operator+(const Spectrum& right) const;
-	Spectrum operator-(const Spectrum& right) const;
-	Spectrum operator*(const Spectrum& right) const;
-	Spectrum operator*(float scalar) const;
-	Spectrum operator/(float scalar) const;
-
-	Spectrum& operator+=(const Spectrum& right);
-	Spectrum& operator-=(const Spectrum& right);
-	Spectrum& operator*=(const Spectrum& right);
-	Spectrum& operator*=(float scalar);
-	Spectrum& operator/=(float scalar);
 
 	XYZColor getXYZ() const;
 	RGBColor getRGB() const;

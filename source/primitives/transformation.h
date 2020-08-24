@@ -23,9 +23,6 @@ public:
 		       float m02, float m12, float m22, float m32,
 		       float m03, float m13, float m23, float m33);
 
-	void print() const;
-
-	bool swapsHandedness() const;
 	bool operator==(const Transformation& other) const;
 
 	Transformation transpose() const;

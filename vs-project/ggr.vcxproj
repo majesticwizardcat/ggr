@@ -79,23 +79,26 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\source;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\libraries;$(ProjectDir)..\source;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)..\source;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\source;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\libraries;$(ProjectDir)..\source;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)..\source;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='example0|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\source;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\libraries;$(ProjectDir)..\source;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)..\source;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='exapmle0_debug|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\source;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\libraries;$(ProjectDir)..\source;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)..\source;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='example0_debug|x64'">
+    <IncludePath>$(ProjectDir)..\libraries;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -323,10 +326,7 @@
     <ClCompile Include="..\source\meshes\triangle.cpp" />
     <ClCompile Include="..\source\meshes\vertex.cpp" />
     <ClCompile Include="..\source\primitives\color.cpp" />
-    <ClCompile Include="..\source\primitives\matrix.cpp" />
-    <ClCompile Include="..\source\primitives\point.cpp" />
     <ClCompile Include="..\source\primitives\transformation.cpp" />
-    <ClCompile Include="..\source\primitives\vector.cpp" />
     <ClCompile Include="..\source\samplers\halton-sampler.cpp" />
     <ClCompile Include="..\source\samplers\sample-2d.cpp" />
     <ClCompile Include="..\source\samplers\sampler.cpp" />

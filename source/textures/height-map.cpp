@@ -21,12 +21,10 @@ SurfacePoint HeightMap::bump(const SurfacePoint& point) const {
 
 	bumped.dpdu = point.dpdu + (point.shadingNormal * ((heightU - height) / du));
 	bumped.dpdv = point.dpdv + (point.shadingNormal * ((heightV - height) / dv));
-	bumped.shadingNormal = bumped.dpdu.cross(bumped.dpdv).unit();
-	bumped.tangent = bumped.dpdu.unit();
-	if (bumped.shadingNormal.dot(point.shadingNormal) < 0.0f) {
-		bumped.shadingNormal.flip();
-	}
-	bumped.bitangent = bumped.shadingNormal.cross(bumped.tangent).unit();
+	bumped.shadingNormal = glm::normalize(glm::cross(bumped.dpdu, bumped.dpdv));
+	bumped.tangent = glm::normalize(bumped.dpdu);
+	bumped.shadingNormal = glm::faceforward(bumped.shadingNormal, bumped.shadingNormal, point.shadingNormal);
+	bumped.bitangent = glm::normalize(glm::cross(bumped.shadingNormal, bumped.tangent));
 	return bumped;
 }
 
