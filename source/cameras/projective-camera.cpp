@@ -1,5 +1,7 @@
 #include "cameras/projective-camera.h"
 
+#include <iostream>
+#include <glm/gtx/string_cast.hpp>
 ProjectiveCamera::ProjectiveCamera(const ProjectiveCamera& other) : Camera(other), 
 	m_projection(other.m_projection), m_lensRadius(other.m_lensRadius),
 	m_focalDistance(other.m_focalDistance) { }
@@ -20,9 +22,9 @@ Ray ProjectiveCamera::generateRay(const CameraSample& sample) const {
 		(2.0f * sample.filmPosition.x - 1.0f) * m_aspectRatio,
 		1.0f - 2.0f * (sample.filmPosition.y + m_dy));
 
-	Ray main = m_cameraToWorld->apply(applyDOF(unproject(centeredFilmPos), sample.lensPosition));
-	Ray dxMain = m_cameraToWorld->apply(applyDOF(unproject(dxCenteredFilmPos), sample.lensPosition));
-	Ray dyMain = m_cameraToWorld->apply(applyDOF(unproject(dyCenteredFilmPos), sample.lensPosition));
+	Ray main = m_cameraToWorld->applyRay(applyDOF(unproject(centeredFilmPos), sample.lensPosition));
+	Ray dxMain = m_cameraToWorld->applyRay(applyDOF(unproject(dxCenteredFilmPos), sample.lensPosition));
+	Ray dyMain = m_cameraToWorld->applyRay(applyDOF(unproject(dyCenteredFilmPos), sample.lensPosition));
 
 	main.dxOrigin = dxMain.origin;
 	main.dxDirection = dxMain.direction;
@@ -44,7 +46,7 @@ Ray ProjectiveCamera::applyDOF(const Ray& ray, const Point2& lensPosition) const
 
 	Ray r;
 	r.origin = origin;
-	r.direction = (fp - origin).unit();
+	r.direction = glm::normalize(fp - origin);
 	return r;
 }
 

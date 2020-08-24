@@ -4,6 +4,7 @@
 #include "tools/constants.h"
 
 #include <limits>
+#include <glm/gtx/norm.hpp>
 
 Scene::Scene() : Scene(
 	std::make_shared<Skybox>(std::make_shared<ColorTexture>(Spectrum(0.0f)))) {
@@ -79,7 +80,7 @@ Intersection Scene::intersects(const SurfacePoint& surface, const Vector3& direc
 
 bool Scene::areUnoccluded(const SurfacePoint& p0, const SurfacePoint& p1) const {
 	Vector3 p0p1 = p1.point - p0.point;
-	float l2 = p0p1.lengthSquared();
+	float l2 = glm::length2(p0p1);
 	if (l2 <= 0.01f) {
 		return true;
 	}

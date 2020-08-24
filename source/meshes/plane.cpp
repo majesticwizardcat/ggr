@@ -13,7 +13,7 @@ Plane::Plane() {
 	Point2 uv2(0.0f, 0.0f);
 	Point2 uv3(1.0f, 0.0f);
 
-	Normal n(0.0f, 0.0f, 1.0f);
+	Vector3 n(0.0f, 0.0f, 1.0f);
 
 	m_vertices.push_back(std::make_shared<Vertex>(p0, uv0, n));
 	m_vertices.push_back(std::make_shared<Vertex>(p1, uv1, n));

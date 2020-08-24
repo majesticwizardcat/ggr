@@ -33,17 +33,17 @@ void Triangle::calculateGeometry() {
 	Vector3 p2p0 = v2->position - v0->position;
 	m_dpdu = (p1p0 * v2v0 - p2p0 * v1v0) * oneOverDt;
 	m_dpdv = (p2p0 * u1u0 - p1p0 * u2u0) * oneOverDt;
-	m_geometricNormal = m_dpdu.cross(m_dpdv).unit();
-	m_tangent = m_dpdu.unit();
+	m_geometricNormal = glm::normalize(glm::cross(m_dpdu, m_dpdv));
+	m_tangent = glm::normalize(m_dpdu);
 
-	m_area = p1p0.cross(p2p0).length() / 2.0f;
+	m_area = glm::length(glm::cross(p1p0, p2p0)) / 2.0f;
 }
 
 Vertex Triangle::interpolate(float w0, float w1, float w2) const {
 	Vertex res;
 	res.position = v0->position * w0 + v1->position * w1 + v2->position * w2;
 	res.uv = v0->uv * w0 + v1->uv * w1 + v2->uv * w2;
-	res.normal = (v0->normal * w0 + v1->normal * w1 + v2->normal * w2).unit();
+	res.normal = glm::normalize(v0->normal * w0 + v1->normal * w1 + v2->normal * w2);
 	return res;
 }
 
@@ -87,14 +87,14 @@ bool Triangle::intersects(const Ray& ray, float maxT, Intersection* result) cons
 	}
 
 	Vertex iv = interpolate(w0, w1, w2);
-	Normal gn = m_geometricNormal;
-	if (iv.normal.dot(m_geometricNormal) < 0.0f) {
-		gn.flip();
+	Vector3 gn = m_geometricNormal;
+	if (glm::dot(m_geometricNormal, iv.normal) < 0.0f) {
+		gn *= -1.0f;
 	}
 
 	result->t = t;
 	result->intersectionPoint =
-		SurfacePoint(iv, gn, m_dpdu, m_dpdv, m_tangent, iv.normal.cross(m_tangent), m_area, id);
+		SurfacePoint(iv, gn, m_dpdu, m_dpdv, m_tangent, glm::cross(iv.normal, m_tangent), m_area, id);
 	return true;
 }
 
@@ -110,12 +110,8 @@ SurfacePoint Triangle::samplePoint(Sampler* sampler) const {
 	float w2 = 1.0f - w0 - w1;
 
 	Vertex v = interpolate(w0, w1, w2);
-	Normal gn = m_geometricNormal;
-	if (v.normal.dot(m_geometricNormal) < 0) {
-		gn.flip();
-	}
-
-	return SurfacePoint(v, gn, m_dpdu, m_dpdv, m_tangent, v.normal.cross(m_tangent), m_area, id);
+	Vector3 gn = glm::faceforward(m_geometricNormal, m_geometricNormal, v.normal);
+	return SurfacePoint(v, gn, m_dpdu, m_dpdv, m_tangent, glm::cross(v.normal, m_tangent), m_area, id);
 }
 
 float Triangle::getArea() const {

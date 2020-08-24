@@ -38,13 +38,12 @@ Spectrum PathIntegrator::traceRay(const Ray& ray, const Scene& scene, Camera* ca
 		intersection.intersectionPoint = intersection.material->bump(intersection.intersectionPoint);
 		BSDF bsdf = intersection.material->createBSDF(intersection.intersectionPoint, intersection.wo);
 		BSDFSample bsdfSample = bsdf.sample(sampler, intersection.wo);
-		float cosTheta = intersection.intersectionPoint.shadingNormal.dot(bsdfSample.sampledDirection);
+		float cosTheta = glm::dot(intersection.intersectionPoint.shadingNormal, bsdfSample.sampledDirection);
 
 		if (util::equals(bsdfSample.pdf, 0.0f) || bsdfSample.value.isZero() || util::equals(cosTheta, 0.0f)) {
 			break;
 		}
 
-		bool outside = intersection.intersectionPoint.shadingNormal.dot(intersection.wo) * cosTheta > 0;
 		if (!bsdfSample.isDeltaDist) {
 			L += throughput * sampleDirectLighting(intersection.intersectionPoint, intersection.wo,
 				bsdf, scene, sampler);

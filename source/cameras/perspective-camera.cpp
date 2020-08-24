@@ -11,12 +11,12 @@ PerspectiveCamera::PerspectiveCamera(const std::shared_ptr<Transformation>& came
 	lensRadius, focalDistance) { }
 
 Ray PerspectiveCamera::unproject(const Point2& filmPosition) const {
-	Point3 unprojected = m_projection->applyInverse(Point3(filmPosition));
+	Point3 unprojected = m_projection->applyInversePoint(Point3(filmPosition, 0.0f));
 	Vector3 fp(unprojected);
 
 	Ray r;
 	r.origin = Point3(0.0f);
-	r.direction = fp.unit();
+	r.direction = glm::normalize(fp);
 	return r;
 }
 

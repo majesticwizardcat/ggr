@@ -9,15 +9,7 @@ Ray::Ray(const Ray& other) : origin(other.origin), direction(other.direction),
 	dxDirection(other.dxDirection), dyOrigin(other.dyOrigin), dyDirection(other.dyDirection),
 	isCameraRay(other.isCameraRay) { }
 Ray::Ray(const Point3& origin, const Vector3& direction, float weight) : origin(origin),
-	direction(direction.unit()), weight(weight), isCameraRay(false) { }
-
-void Ray::print() {
-	std::cout << "Origin: ";
-	origin.print();
-	std::cout << "Direction: ";
-	direction.print();
-	std::cout << "Weight: " << weight << std::endl;
-}
+	direction(direction), weight(weight), isCameraRay(false) { }
 
 void Ray::createRaySpace() {
 	if (direction.z != 0.0f) {

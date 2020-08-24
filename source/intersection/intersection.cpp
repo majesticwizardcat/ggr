@@ -15,22 +15,6 @@ Intersection::Intersection(bool hit, float t, const Vector3& wo, const SurfacePo
 Intersection::Intersection(float t, const Vector3& wo, const SurfacePoint& intersectionPoint) :
 	Intersection(true, t, wo, intersectionPoint) { }
 
-void Intersection::print() const {
-	std::cout << "Hit: ";
-	if (hit) {
-		std::cout << "True";
-	}
-	else {
-		std::cout << "False";
-	}
-	std::cout << std::endl;
-
-	std::cout << "t: " << t << std::endl;
-	std::cout << "wo: ";
-	wo.print();
-	intersectionPoint.print();
-}
-
 void Intersection::calculateScreenDifferentials(const Ray& ray) {
 	if (!hit || !ray.isCameraRay) {
 		return;
@@ -39,16 +23,16 @@ void Intersection::calculateScreenDifferentials(const Ray& ray) {
 	Vector3 dpdx;
 	Vector3 dpdy;
 
-	float NoP = -intersectionPoint.geometricNormal.dot(intersectionPoint.point);
-	float NoD = intersectionPoint.geometricNormal.dot(ray.dxDirection);
+	float NoP = -glm::dot(intersectionPoint.geometricNormal, intersectionPoint.point);
+	float NoD = glm::dot(intersectionPoint.geometricNormal, ray.dxDirection);
 	if (NoD != 0.0f) {
-		float NoO = intersectionPoint.geometricNormal.dot(ray.dxOrigin);
+		float NoO = glm::dot(intersectionPoint.geometricNormal, ray.dxOrigin);
 		dpdx = ray.dxOrigin + ray.dxDirection * (-(NoO + NoP) / NoD);
 	}
 
-	NoD = intersectionPoint.geometricNormal.dot(ray.dyDirection);
+	NoD = glm::dot(intersectionPoint.geometricNormal, ray.dyDirection);
 	if (NoD != 0.0f) {
-		float NoO = intersectionPoint.geometricNormal.dot(ray.dyOrigin);
+		float NoO = glm::dot(intersectionPoint.geometricNormal, ray.dyOrigin);
 		dpdy = ray.dyOrigin + ray.dyDirection * (-(NoO + NoP) / NoD);
 	}
 

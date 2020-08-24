@@ -11,7 +11,7 @@ OrthographicCamera::OrthographicCamera(const std::shared_ptr<Transformation>& ca
 	lensRadius, focalDistance), m_scale(scale) { }
 
 Ray OrthographicCamera::unproject(const Point2& filmPosition) const {
-	return m_projection->applyInverse(Ray(Point3(filmPosition * m_scale), Vector3(0.0f, 0.0f, 1.0f)));
+	return m_projection->applyInverseRay(Ray(Point3(filmPosition * m_scale, 0.0f), Vector3(0.0f, 0.0f, 1.0f)));
 }
 
 std::unique_ptr<Camera> OrthographicCamera::clone() const {

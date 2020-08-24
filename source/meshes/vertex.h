@@ -9,10 +9,10 @@ class Vertex {
 public:
 	Point3 position;
 	Point2 uv;
-	Normal normal;
+	Vector3 normal;
 
 	Vertex();
 	Vertex(const Vertex& other);
-	Vertex(const Point3& position, const Point2& uv, const Normal& normal);
+	Vertex(const Point3& position, const Point2& uv, const Vector3& normal);
 };
 

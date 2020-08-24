@@ -31,7 +31,7 @@ FresnelSchlick::FresnelSchlick(const Spectrum& R0) : m_R0(R0), m_oneMinusR0(Spec
 
 Spectrum FresnelSchlick::evaluate(float eta, float cosTheta) const {
 	float oct = 1.0f - cosTheta;
-	oct = oct * oct * oct * oct * oct;
+	oct *= oct * oct * oct * oct;
 	return m_R0 + m_oneMinusR0 * oct;
 }
 

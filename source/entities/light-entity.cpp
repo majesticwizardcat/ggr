@@ -1,5 +1,7 @@
 #include "entities/light-entity.h"
 
+#include <glm/gtx/norm.hpp>
+
 LightEntity::LightEntity() : Entity() { }
 LightEntity::LightEntity(const LightEntity& other) : Entity(other) { }
 LightEntity::LightEntity(const std::shared_ptr<Triangle>& mesh,
@@ -14,15 +16,15 @@ void LightEntity::intersects(const Ray& ray, float maxT, Intersection* result) c
 }
 
 Spectrum LightEntity::emission(const Point3& surfacePoint, const SurfacePoint& lightPoint) const {
-	Vector3 direction = (surfacePoint - lightPoint.point).unit();
+	Vector3 direction = glm::normalize(surfacePoint - lightPoint.point);
 	return m_material->createBSDF(lightPoint, direction).evaluate(direction, direction);
 }
 
 float LightEntity::pdf(const Point3& surfacePoint, const SurfacePoint& lightPoint) const {
 	Vector3 direction = surfacePoint - lightPoint.point;
-	float distance2 = direction.lengthSquared();
-	direction.normalize();
-	float denom = std::abs(lightPoint.shadingNormal.dot(direction)) * lightPoint.surfaceArea;
+	float distance2 = glm::length2(direction);
+	direction = glm::normalize(direction);
+	float denom = std::abs(glm::dot(lightPoint.shadingNormal, direction)) * lightPoint.surfaceArea;
 	if (denom == 0.0f) {
 		return 0.0f;
 	}

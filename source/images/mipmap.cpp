@@ -4,6 +4,7 @@
 #include <cmath>
 #include <algorithm>
 #include <iostream>
+#include <glm/gtx/norm.hpp>
 
 int Layer::index(int x, int y) const {
 	return x * m_height + y;
@@ -72,7 +73,7 @@ MipMap::MipMap(const Image& image, int anisotropicLevel) : m_anisotropicLevel(an
 				}
 			}
 
-			value = value / sampled;
+			value /= sampled;
 			layer.set(x, y, value);
 		}
 	}
@@ -99,7 +100,7 @@ MipMap::MipMap(const Image& image, int anisotropicLevel) : m_anisotropicLevel(an
 						sampled++;
 					}
 				}
-				value = value / sampled;
+				value /= sampled;
 				current.set(x, y, value);
 			}
 		}
@@ -211,7 +212,7 @@ Spectrum MipMap::sample(const SurfacePoint& point) const {
 	Vector2 minorAxis;
 	Vector2 majorAxis;
 
-	if (point.dUVdx.lengthSquared() < point.dUVdy.lengthSquared()) {
+	if (glm::length2(point.dUVdx) < glm::length2(point.dUVdy)) {
 		minorAxis = point.dUVdx;
 		majorAxis = point.dUVdy;
 	}
@@ -221,10 +222,10 @@ Spectrum MipMap::sample(const SurfacePoint& point) const {
 		majorAxis = point.dUVdx;
 	}
 
-	float minorAxisL = minorAxis.length();
-	float majorAxisL = majorAxis.length();
+	float minorAxisL = glm::length(minorAxis);
+	float majorAxisL = glm::length(majorAxis);
 
-	if (minorAxisL == 0.0f || majorAxis == 0.0f) {
+	if (minorAxisL == 0.0f || majorAxisL == 0.0f) {
 		return bilinear(0, point.uv);
 	}
 

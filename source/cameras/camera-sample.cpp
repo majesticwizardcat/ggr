@@ -7,10 +7,3 @@ CameraSample::CameraSample(const CameraSample& other) : CameraSample(other.filmP
 CameraSample::CameraSample(const Point2& filmPosition, const Point2& lensPosition) :
 	filmPosition(filmPosition), lensPosition(lensPosition) { }
 
-void CameraSample::print() {
-	std::cout << "Camera Sample: film position: ";
-	filmPosition.print();
-	std::cout << ", lensPosition: ";
-	lensPosition.print();
-}
-

@@ -31,12 +31,12 @@ Cube::Cube() : TriangleMesh() {
 	Point2 uv19(0.25f, 0.75f);
 	Point2 uv20(0.75f, 0.75f);
 
-	Normal n1( 0.0f,  1.0f,  0.0f);
-	Normal n2( 0.0f,  0.0f,  1.0f);
-	Normal n3(-1.0f,  0.0f,  0.0f);
-	Normal n4( 0.0f, -1.0f,  0.0f);
-	Normal n5( 1.0f,  0.0f,  0.0f);
-	Normal n6( 0.0f,  0.0f, -1.0f);
+	Vector3 n1( 0.0f,  1.0f,  0.0f);
+	Vector3 n2( 0.0f,  0.0f,  1.0f);
+	Vector3 n3(-1.0f,  0.0f,  0.0f);
+	Vector3 n4( 0.0f, -1.0f,  0.0f);
+	Vector3 n5( 1.0f,  0.0f,  0.0f);
+	Vector3 n6( 0.0f,  0.0f, -1.0f);
 
 	m_vertices.push_back(std::make_shared<Vertex>(p5, uv1, n1));
 	m_vertices.push_back(std::make_shared<Vertex>(p3, uv2, n1));

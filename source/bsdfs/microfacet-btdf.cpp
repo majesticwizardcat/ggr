@@ -23,19 +23,16 @@ Spectrum MicrofacetBTDF::evaluate(const Vector3& wo, const Vector3& wi) const {
 	}
 
 	if (outside > 0.0f) {
-		Normal m = (wo + wi).unit();
-		float cosThetaWo = shading::absCosTheta(wo);
-		float cosThetaWi = shading::absCosTheta(wi);
+		Vector3 m = glm::normalize(wo + wi);
 		float G = m_D->G1(m, wo, m_alpha) * m_D->G1(m, wi, m_alpha);
 		float D = m_D->D(m, wo, wi, m_alpha);
-		return (m_fresnel->evaluate(m_eta, m.dot(wo)) * G * D) / (4.0f * cosThetaWo * cosThetaWi);
+		float r = (G * D) / (4.0f * outside);
+		return m_fresnel->evaluate(m_eta, glm::dot(m, wo)) * r;
 	} 
 
-	Normal m = -(wi * m_IORout + wo * m_IORin).unit();
-	float MoWo = std::abs(m.dot(wo));
-	float MoWi = std::abs(m.dot(wi));
-	float cosThetaWo = shading::absCosTheta(wo);
-	float cosThetaWi = shading::absCosTheta(wi);
+	Vector3 m = glm::normalize(-(wi * m_IORout + wo * m_IORin));
+	float MoWo = std::abs(glm::dot(m, wo));
+	float MoWi = std::abs(glm::dot(m, wi));
 	float denom = m_IORout * MoWo + m_IORin * MoWi;
 	denom *= denom;
 	if (denom == 0.0f) {
@@ -49,8 +46,9 @@ Spectrum MicrofacetBTDF::evaluate(const Vector3& wo, const Vector3& wi) const {
 
 	float G = m_D->G1(m, wo, m_alpha) * m_D->G1(m, wi, m_alpha);
 	float D = m_D->D(m, wo, wi, m_alpha);
-	float first = (MoWo * MoWi) / (cosThetaWo * cosThetaWi);
-	return ((m_color * F * G * D * first * m_IORin * m_IORin) / denom) * (m_eta * m_eta);
+	float first = (MoWo * MoWi) / (std::abs(outside));
+	float r = ((G * D * first * m_IORin * m_IORin) / denom) * (m_eta * m_eta);
+	return m_color * F * r;
 }
 
 float MicrofacetBTDF::pdf(const Vector3& wo, const Vector3& wi) const {
@@ -60,8 +58,8 @@ float MicrofacetBTDF::pdf(const Vector3& wo, const Vector3& wi) const {
 	}
 
 	if (outside > 0.0f) {
-		Normal m = (wo + wi).unit();
-		float MoWo = m.dot(wo);
+		Vector3 m = glm::normalize(wo + wi);
+		float MoWo = glm::dot(m, wo);
 		if (MoWo == 0.0f) {
 			return 0.0f;
 		}
@@ -69,9 +67,9 @@ float MicrofacetBTDF::pdf(const Vector3& wo, const Vector3& wi) const {
 		return (m_D->D(m, wo, wi, m_alpha) * shading::absCosTheta(m)) / (4.0f * MoWo);
 	}
 
-	Normal m = -(wi * m_IORout + wo * m_IORin).unit();
-	float MoWo = std::abs(m.dot(wo));
-	float MoWi = std::abs(m.dot(wi));
+	Vector3 m = glm::normalize(-(wi * m_IORout + wo * m_IORin));
+	float MoWo = std::abs(glm::dot(m, wo));
+	float MoWi = std::abs(glm::dot(m, wi));
 	float denom = m_IORout * MoWo + m_IORin * MoWi;
 	denom *= denom;
 	if (denom == 0.0f) {
@@ -87,12 +85,13 @@ BSDFSample MicrofacetBTDF::sample(Sampler* sampler, const Vector3& wo) const {
 		return BSDFSample();
 	}
 
-	Normal m = m_D->sampleNormal(sampler, m_alpha);
-	if (m.dot(wo) < 0) {
+	Vector3 m = m_D->sampleNormal(sampler, m_alpha);
+	float MoWo = glm::dot(m, wo);
+	if (MoWo < 0) {
 		m = -m;
 	}
 
-	float MoWo = std::abs(m.dot(wo));
+	MoWo = std::abs(MoWo);
 	Spectrum F = m_fresnel->evaluate(m_eta, MoWo);
 	float choice = F.value();
 
@@ -103,11 +102,11 @@ BSDFSample MicrofacetBTDF::sample(Sampler* sampler, const Vector3& wo) const {
 			return BSDFSample();
 		}
 
-		float MoWo = m.dot(wo);
 		Spectrum F = m_fresnel->evaluate(m_eta, MoWo);
 		float G = m_D->G1(m, wo, m_alpha) * m_D->G1(m, wi, m_alpha);
 		float D = m_D->D(m, wo, wi, m_alpha);
-		return BSDFSample((F * G * D) / (4.0f * cosThetaWo * cosThetaWi),
+		float r = G * D / (4.0f * cosThetaWo * cosThetaWi);
+		return BSDFSample(F * r,
 		       (D * shading::absCosTheta(m) * choice) / (4.0f * MoWo),
 		       wi,
 		       false,
@@ -120,7 +119,7 @@ BSDFSample MicrofacetBTDF::sample(Sampler* sampler, const Vector3& wo) const {
 		return BSDFSample();
 	}
 
-	float MoWi = std::abs(m.dot(wi));
+	float MoWi = std::abs(glm::dot(m, wi));
 	float denom = m_IORout * MoWo + m_IORin * MoWi;
 	denom *= denom;
 
@@ -132,9 +131,10 @@ BSDFSample MicrofacetBTDF::sample(Sampler* sampler, const Vector3& wo) const {
 	float D = m_D->D(m, wo, wi, m_alpha);
 	float first = (MoWo * MoWi) / (cosThetaWo * cosThetaWi);
 	float IORin2 = m_IORin * m_IORin;
-	Spectrum value = (m_color * (Spectrum(1.0f) - F) * G * D * first * IORin2) / denom;
+	float r = ((G * D * first * IORin2) / denom) * (m_eta * m_eta);
+	Spectrum value = (m_color * ((Spectrum(1.0f) - F))) * r;
 	return BSDFSample(
-		value * (m_eta * m_eta),
+		value,
 		(D * shading::absCosTheta(m) * IORin2 * MoWi * (1.0f - choice)) / denom,
 		wi,
 		false,

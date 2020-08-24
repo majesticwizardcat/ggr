@@ -2,7 +2,7 @@
 
 class BXDF;
 
-enum BXDFType {
+enum class BXDFType {
 	NONE, REFLECTION, REFRACTION, BOTH, EMISSION
 };
 

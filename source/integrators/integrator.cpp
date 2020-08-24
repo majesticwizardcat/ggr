@@ -24,7 +24,7 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 				/ (skySample.pdf + surfaceBSDF.pdf(wo, skySample.sampledDirection));
 			L += (surfaceBSDF.evaluate(wo, skySample.sampledDirection)
 				* skySample.emission
-				* std::abs(surfacePoint.shadingNormal.dot(skySample.sampledDirection))
+				* std::abs(glm::dot(surfacePoint.shadingNormal, skySample.sampledDirection))
 				* MISWeight) / skySample.pdf;
 		}
 	}
@@ -38,12 +38,12 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 			&& !lightSample.emission.isZero()
 			&& scene.areUnoccluded(surfacePoint, lightSample.sampledPoint)) {
 
-			Vector3 wl = (lightSample.sampledPoint.point - surfacePoint.point).unit();
+			Vector3 wl = glm::normalize(lightSample.sampledPoint.point - surfacePoint.point);
 			float MISWeight = lightSample.pdf / (lightSample.pdf + surfaceBSDF.pdf(wo, wl));
 
 			L += (surfaceBSDF.evaluate(wo, wl)
 				* lightSample.emission
-				* std::abs(surfacePoint.shadingNormal.dot(wl))
+				* std::abs(glm::dot(surfacePoint.shadingNormal, wl))
 				* MISWeight) / lightSample.pdf;
 		}
 	}
@@ -59,7 +59,7 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 		float MISWeight = bsdfSample.pdf / (bsdfSample.pdf + pdfSkybox);
 		L += (bsdfSample.value
 			* skybox->emission(bsdfSample.sampledDirection)
-			* std::abs(surfacePoint.shadingNormal.dot(bsdfSample.sampledDirection))
+			* std::abs(glm::dot(surfacePoint.shadingNormal, bsdfSample.sampledDirection))
 			* MISWeight) / bsdfSample.pdf;
 	}
 
@@ -69,7 +69,7 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 		float MISWeight = bsdfSample.pdf / (bsdfSample.pdf + pdfLight);
 		L += (bsdfSample.value
 			* lightEmission
-			* std::abs(surfacePoint.shadingNormal.dot(bsdfSample.sampledDirection))
+			* std::abs(glm::dot(surfacePoint.shadingNormal, bsdfSample.sampledDirection))
 			* MISWeight) / bsdfSample.pdf;
 	}
 

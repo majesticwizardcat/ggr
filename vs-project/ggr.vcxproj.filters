@@ -476,13 +476,7 @@
     <ClCompile Include="..\source\tools\random-generator.cpp">
       <Filter>source\tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\tools\shading-functions.cpp">
-      <Filter>source\tools</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\tools\timing.cpp">
-      <Filter>source\tools</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\tools\util.cpp">
       <Filter>source\tools</Filter>
     </ClCompile>
     <ClCompile Include="..\source\textures\color-texture.cpp">
@@ -494,13 +488,7 @@
     <ClCompile Include="..\source\textures\texture.cpp">
       <Filter>source\textures</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\spectra\spectrum.cpp">
-      <Filter>source\spectra</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\samplers\halton-sampler.cpp">
-      <Filter>source\samplers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\samplers\sample-2d.cpp">
       <Filter>source\samplers</Filter>
     </ClCompile>
     <ClCompile Include="..\source\samplers\sampler.cpp">
@@ -512,16 +500,7 @@
     <ClCompile Include="..\source\primitives\color.cpp">
       <Filter>source\primitives</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\primitives\matrix.cpp">
-      <Filter>source\primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\primitives\point.cpp">
-      <Filter>source\primitives</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\primitives\transformation.cpp">
-      <Filter>source\primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\primitives\vector.cpp">
       <Filter>source\primitives</Filter>
     </ClCompile>
     <ClCompile Include="..\source\ggr.cpp">
@@ -535,6 +514,9 @@
     </ClCompile>
     <ClCompile Include="..\source\textures\height-map.cpp">
       <Filter>source\textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\spectra\spectrum.cpp">
+      <Filter>source\spectra</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

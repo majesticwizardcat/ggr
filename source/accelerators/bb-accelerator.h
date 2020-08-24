@@ -44,7 +44,6 @@ private:
 	void intersects(const Ray& ray, int ignoreID, Intersection* result) const;
 	float intersectNode(BBNode* node, const Ray& ray, int ignoreID, Intersection* result) const;
 	bool intersectEntityAny(BBNode* node, const Ray& ray, int ignoreID, float maxT) const;
-	bool intersectBoxAny(BBNode* node, const Ray& ray, float maxT) const;
 
 public:
 	BBAccelerator() { }

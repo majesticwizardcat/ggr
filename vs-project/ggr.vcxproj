@@ -13,10 +13,6 @@
       <Configuration>example0</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="exapmle0_debug|x64">
-      <Configuration>exapmle0_debug</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
@@ -49,13 +45,6 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='exapmle0_debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='example0_debug|x64'">
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
@@ -73,29 +62,24 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='example0|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='exapmle0_debug|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\source;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\libraries;$(ProjectDir)..\source;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)..\source;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\source;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\libraries;$(ProjectDir)..\source;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)..\source;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='example0|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\source;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\libraries;$(ProjectDir)..\source;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)..\source;$(SourcePath)</SourcePath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='exapmle0_debug|x64'">
-    <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\source;$(IncludePath)</IncludePath>
-    <SourcePath>$(ProjectDir)..\source;$(SourcePath)</SourcePath>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='example0_debug|x64'">
+    <IncludePath>$(ProjectDir)..\libraries;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -121,7 +105,7 @@
       <OmitFramePointers>true</OmitFramePointers>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Precise</FloatingPointModel>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,30 +120,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLM_FORCE_ALIGNED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>true</OmitFramePointers>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <FloatingPointModel>Precise</FloatingPointModel>
+      <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='exapmle0_debug|x64'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <Optimization>Disabled</Optimization>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -292,7 +261,6 @@
     <ClCompile Include="..\source\filters\lanczos-filter.cpp" />
     <ClCompile Include="..\source\ggr.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='example0|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='exapmle0_debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\source\images\checkerboard-image.cpp" />
     <ClCompile Include="..\source\images\image-io.cpp" />
@@ -323,12 +291,8 @@
     <ClCompile Include="..\source\meshes\triangle.cpp" />
     <ClCompile Include="..\source\meshes\vertex.cpp" />
     <ClCompile Include="..\source\primitives\color.cpp" />
-    <ClCompile Include="..\source\primitives\matrix.cpp" />
-    <ClCompile Include="..\source\primitives\point.cpp" />
     <ClCompile Include="..\source\primitives\transformation.cpp" />
-    <ClCompile Include="..\source\primitives\vector.cpp" />
     <ClCompile Include="..\source\samplers\halton-sampler.cpp" />
-    <ClCompile Include="..\source\samplers\sample-2d.cpp" />
     <ClCompile Include="..\source\samplers\sampler.cpp" />
     <ClCompile Include="..\source\samplers\stohastic-sampler.cpp" />
     <ClCompile Include="..\source\spectra\spectrum.cpp" />
@@ -337,9 +301,7 @@
     <ClCompile Include="..\source\textures\image-texture.cpp" />
     <ClCompile Include="..\source\textures\texture.cpp" />
     <ClCompile Include="..\source\tools\random-generator.cpp" />
-    <ClCompile Include="..\source\tools\shading-functions.cpp" />
     <ClCompile Include="..\source\tools\timing.cpp" />
-    <ClCompile Include="..\source\tools\util.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

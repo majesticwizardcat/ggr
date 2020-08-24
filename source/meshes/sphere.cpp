@@ -11,17 +11,17 @@ Sphere::Sphere(int circles) {
 		float theta = PI - ((i + 1) * (PI / (float) (circles + 1)));
 		Point3 pos;
 		Point2 uv;
-		Normal n;
+		Vector3 n;
 		for (int j = 0; j < circles; ++j) {
 			float phi = (TWO_PI / (float) circles) * j;
 			pos = shading::fromSpherical(phi, theta);
 			uv = Point2(phi / TWO_PI, 1.0f - (0.5f + pos.z / 2.0f));
-			n = Normal(pos);
+			n = pos;
 			m_vertices.push_back(std::make_shared<Vertex>(pos, uv, n));
 		}
 		pos = shading::fromSpherical(0.0f, theta);
 		uv = Point2(1.0f, 1.0f - (0.5f + pos.z / 2.0f));
-		n = Normal(pos);
+		n = pos;
 		m_vertices.push_back(std::make_shared<Vertex>(pos, uv, n));
 	}
 
@@ -49,10 +49,10 @@ Sphere::Sphere(int circles) {
 		float u = (phi / TWO_PI + phiN / TWO_PI) / 2.0f;
 		m_vertices.push_back(std::make_shared<Vertex>(Point3(0.0f, 0.0f, -1.0f),
 									Point2(u, 1.0f),
-									Normal(0.0f, 0.0f, -1.0f)));
+									Vector3(0.0f, 0.0f, -1.0f)));
 		m_vertices.push_back(std::make_shared<Vertex>(Point3(0.0f, 0.0f, 1.0f),
 									Point2(u, 0.0f),
-									Normal(0.0f, 0.0f, 1.0f)));
+									Vector3(0.0f, 0.0f, 1.0f)));
 		m_triangles.push_back(std::make_shared<Triangle>(
 			m_vertices[botIndex], m_vertices[i + 1], m_vertices[i]));
 		m_triangles.push_back(std::make_shared<Triangle>(

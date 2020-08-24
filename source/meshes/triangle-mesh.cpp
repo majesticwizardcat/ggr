@@ -31,8 +31,8 @@ void TriangleMesh::addTriangle(const Triangle& t) {
 
 void TriangleMesh::transform(const Transformation& transformation) {
 	for (const std::shared_ptr<Vertex>& v : m_vertices) {
-		v->position = transformation.apply(v->position);
-		v->normal = transformation.apply(v->normal);
+		v->position = transformation.applyPoint(v->position);
+		v->normal = transformation.applyNormal(v->normal);
 	}
 
 	for (int i = 0; i < m_triangles.size(); ++i) {

@@ -13,14 +13,15 @@ BSDF::BSDF(const BSDF& other) : m_worldToShading(other.m_worldToShading),
 BSDF::BSDF(const SurfacePoint& point) : BSDF(point.shadingNormal, point.tangent,
 	point.bitangent, point.geometricNormal) { }
 
-BSDF::BSDF(const Normal& shading, const Vector3& tangent,
-	const Vector3& bitangent, const Normal& geometric) :
+BSDF::BSDF(const Vector3& shading, const Vector3& tangent,
+	const Vector3& bitangent, const Vector3& geometric) :
 	m_geometricNormal(geometric) {
 	Matrix4 wts(tangent.x,   tangent.y,   tangent.z,   0.0f,
 		    bitangent.x, bitangent.y, bitangent.z, 0.0f,
 		    shading.x,   shading.y,   shading.z,   0.0f,
 		    0.0f,        0.0f,        0.0f,        1.0f);
-	m_worldToShading = Transformation(wts, wts.transpose());
+
+	m_worldToShading = Transformation(glm::transpose(wts), wts);
 }
 
 void BSDF::addBXDF(std::unique_ptr<BXDF>& bxdf) {
@@ -29,10 +30,10 @@ void BSDF::addBXDF(std::unique_ptr<BXDF>& bxdf) {
 
 Spectrum BSDF::evaluate(const Vector3& worldWo, const Vector3& worldWi) const {
 	Spectrum result;
-	Vector3 wo = m_worldToShading.apply(worldWo).unit();
-	Vector3 wi = m_worldToShading.apply(worldWi).unit();
+	Vector3 wo = glm::normalize(m_worldToShading.applyVector(worldWo));
+	Vector3 wi = glm::normalize(m_worldToShading.applyVector(worldWi));
 
-	BXDFType type = m_geometricNormal.dot(worldWo) * m_geometricNormal.dot(worldWi) > 0
+	BXDFType type = glm::dot(m_geometricNormal, worldWo) * glm::dot(m_geometricNormal, worldWi) > 0
 		? BXDFType::REFLECTION : BXDFType::REFRACTION;
 
 	for (int i = 0; i < m_bxdfs.size(); ++i) {
@@ -49,10 +50,10 @@ Spectrum BSDF::evaluate(const Vector3& worldWo, const Vector3& worldWi) const {
 
 float BSDF::pdf(const Vector3& worldWo, const Vector3& worldWi) const {
 	float result = 0.0f;
-	Vector3 wo = m_worldToShading.apply(worldWo);
-	Vector3 wi = m_worldToShading.apply(worldWi);
+	Vector3 wo = m_worldToShading.applyVector(worldWo);
+	Vector3 wi = m_worldToShading.applyVector(worldWi);
 
-	BXDFType type = m_geometricNormal.dot(worldWo) * m_geometricNormal.dot(worldWi) > 0
+	BXDFType type = glm::dot(m_geometricNormal, worldWo) * glm::dot(m_geometricNormal, worldWi) > 0
 		? BXDFType::REFLECTION : BXDFType::REFRACTION;
 
 	int count = 0;
@@ -74,7 +75,7 @@ float BSDF::pdf(const Vector3& worldWo, const Vector3& worldWi) const {
 }
 
 BSDFSample BSDF::sample(Sampler* sampler, const Vector3& worldWo) const {
-	Vector3 wo = m_worldToShading.apply(worldWo).unit();
+	Vector3 wo = glm::normalize(m_worldToShading.applyVector(worldWo));
 	int choice = sampler->getSample() * m_bxdfs.size();
 	if (m_bxdfs[choice]->getType() == BXDFType::EMISSION) {
 		return BSDFSample();
@@ -87,10 +88,10 @@ BSDFSample BSDF::sample(Sampler* sampler, const Vector3& worldWo) const {
 	}
 
 	Vector3 wi = sample.sampledDirection;
-	Vector3 worldWi = m_worldToShading.applyInverse(wi).unit();
+	Vector3 worldWi = glm::normalize(m_worldToShading.applyInverseVector(wi));
 	sample.sampledDirection = worldWi;
 
-	BXDFType type = m_geometricNormal.dot(worldWo) * m_geometricNormal.dot(worldWi) > 0
+	BXDFType type = glm::dot(m_geometricNormal, worldWo) * glm::dot(m_geometricNormal, worldWi) > 0
 		? BXDFType::REFLECTION : BXDFType::REFRACTION;
 	int count = 1;
 

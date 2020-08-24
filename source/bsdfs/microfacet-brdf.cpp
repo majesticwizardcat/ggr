@@ -11,17 +11,16 @@ BXDFType MicrofacetBRDF::getType() const{
 }
 
 Spectrum MicrofacetBRDF::evaluate(const Vector3& wo, const Vector3& wi) const {
-	if (shading::cosTheta(wo) * shading::cosTheta(wi) <= 0.0f) {
+	float cosThetaWoCosThetaWi = shading::cosTheta(wo) * shading::cosTheta(wi);
+	if (cosThetaWoCosThetaWi <= 0.0f) {
 		return Spectrum(0.0f);
 	}
 
-	Normal m = (wo + wi).unit();
-	float cosThetaWo = shading::absCosTheta(wo);
-	float cosThetaWi = shading::absCosTheta(wi);
+	Vector3 m = glm::normalize(wo + wi);
 	float G = m_D->G1(m, wo, m_alpha) * m_D->G1(m, wi, m_alpha);
 	float D = m_D->D(m, wo, wi, m_alpha);
-	return m_color
-		* ((m_fresnel->evaluate(1.5f, m.dot(wo)) * G * D) / (4.0f * cosThetaWo * cosThetaWi));
+	float r = G * D / (4.0f * cosThetaWoCosThetaWi);
+	return m_color * m_fresnel->evaluate(1.5f, glm::dot(m, wo)) * r;
 }
 
 float MicrofacetBRDF::pdf(const Vector3& wo, const Vector3& wi) const {
@@ -29,8 +28,8 @@ float MicrofacetBRDF::pdf(const Vector3& wo, const Vector3& wi) const {
 		return 0.0f;
 	}
 
-	Normal m = (wo + wi).unit();
-	float MoWo = m.dot(wo);
+	Vector3 m = glm::normalize(wo + wi);
+	float MoWo = glm::dot(m, wo);
 	if (MoWo == 0.0f) {
 		return 0.0f;
 	}
@@ -39,11 +38,11 @@ float MicrofacetBRDF::pdf(const Vector3& wo, const Vector3& wi) const {
 }
 
 BSDFSample MicrofacetBRDF::sample(Sampler* sampler, const Vector3& wo) const {
-	Normal m = m_D->sampleNormal(sampler, m_alpha);
+	Vector3 m = m_D->sampleNormal(sampler, m_alpha);
 	Vector3 wi = shading::reflect(wo, m);
 	float cosThetaWi = shading::absCosTheta(wi);
 	float cosThetaWo = shading::absCosTheta(wo);
-	float MoWo = m.dot(wo);
+	float MoWo = glm::dot(m, wo);
 	if (cosThetaWo == 0.0f || cosThetaWi == 0.0f || MoWo == 0.0f) {
 		return BSDFSample();
 	}
@@ -51,7 +50,8 @@ BSDFSample MicrofacetBRDF::sample(Sampler* sampler, const Vector3& wo) const {
 	Spectrum F = m_fresnel->evaluate(1.5f, MoWo);
 	float G = m_D->G1(m, wo, m_alpha) * m_D->G1(m, wi, m_alpha);
 	float D = m_D->D(m, wo, wi, m_alpha);
-	return BSDFSample(m_color * ((F * G * D) / (4.0f * cosThetaWo * cosThetaWi)),
+	float r = (G * D) / (4.0f * cosThetaWo * cosThetaWi);
+	return BSDFSample(m_color * F * r,
 	       (D * shading::absCosTheta(m)) / (4.0f * MoWo),
 	       wi,
 	       false,

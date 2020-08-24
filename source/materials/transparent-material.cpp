@@ -14,7 +14,7 @@ TransparentMaterial::TransparentMaterial(const std::shared_ptr<Texture>& color, 
 BSDF TransparentMaterial::createBSDF(const SurfacePoint& point, const Vector3& wo) const {
 	float IORin;
 	float IORout;
-	if (point.geometricNormal.dot(wo) > 0) {
+	if (glm::dot(point.geometricNormal, wo) > 0) {
 		IORin = m_airIOR;
 		IORout = m_materialIOR;
 	}

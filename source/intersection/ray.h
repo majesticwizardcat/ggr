@@ -28,7 +28,6 @@ public:
 	Ray(const Ray& other);
 	Ray(const Point3& origin, const Vector3& direction, float weight);
 
-	void print();
 	void createRaySpace();
 
 	bool operator==(const Ray& other) const;

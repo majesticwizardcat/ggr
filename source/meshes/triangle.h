@@ -14,7 +14,7 @@ class Triangle {
 private:
 	Vector3 m_dpdu;
 	Vector3 m_dpdv;
-	Normal m_geometricNormal;
+	Vector3 m_geometricNormal;
 	Vector3 m_tangent;
 	float m_area;
 	bool m_degenerate;

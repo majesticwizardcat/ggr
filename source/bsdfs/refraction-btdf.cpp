@@ -26,7 +26,7 @@ BSDFSample RefractionBTDF::sample(Sampler* sampler, const Vector3& wo) const {
 		return BSDFSample();
 	}
 
-	Normal n(0.0f, 0.0f, 1.0f);
+	Vector3 n(0.0f, 0.0f, 1.0f);
 	if (cosThetaWo < 0) {
 		n.z = -1.0f;
 		cosThetaWo = -cosThetaWo;
@@ -48,7 +48,8 @@ BSDFSample RefractionBTDF::sample(Sampler* sampler, const Vector3& wo) const {
 		return BSDFSample();
 	}
 
-	return BSDFSample(((m_color * (Spectrum(1.0) - fresnel)) * (m_eta * m_eta)) / cosThetaWl,
+	float r = (m_eta * m_eta) / cosThetaWl;
+	return BSDFSample((m_color * (Spectrum(1.0) - fresnel)) * r,
 		1.0f - pdf,
 		sampledDirection,
 		true,

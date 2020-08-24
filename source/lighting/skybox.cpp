@@ -13,7 +13,7 @@ Skybox::Skybox(const std::shared_ptr<Texture> skyboxTexture, float intensity,
 	m_intensity(intensity), m_rotation(rotation) { }
 
 Spectrum Skybox::emission(const Vector3& direction) const {
-	Point2 spherical = shading::toSpherical(m_rotation.applyInverse(direction));
+	Point2 spherical = shading::toSpherical(m_rotation.applyInversePoint(direction));
 	SurfacePoint uvp;
 	uvp.uv = Point2(spherical.x * INV_TWO_PI, spherical.y * INV_PI);
 	return m_skyboxTexture->sample(uvp) * m_intensity;

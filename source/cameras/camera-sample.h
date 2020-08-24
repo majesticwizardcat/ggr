@@ -12,7 +12,5 @@ public:
 	CameraSample();
 	CameraSample(const CameraSample& other);
 	CameraSample(const Point2& filmPosition, const Point2& lensPosition);
-
-	void print();
 };
 

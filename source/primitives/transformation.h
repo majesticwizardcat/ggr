@@ -7,6 +7,7 @@ class Transformation;
 #include "primitives/point.h"
 #include "intersection/ray.h"
 #include "meshes/vertex.h"
+#include "tools/util.h"
 
 class Transformation {
 private:
@@ -14,44 +15,125 @@ private:
 	Matrix4 m_inverse;
 
 public:
-	Transformation();
-	Transformation(const Transformation& other);
-	Transformation(const Matrix4& transform);
-	Transformation(const Matrix4& transform, const Matrix4& inverse);
-	Transformation(float m00, float m10, float m20, float m30,
-		       float m01, float m11, float m21, float m31,
-		       float m02, float m12, float m22, float m32,
-		       float m03, float m13, float m23, float m33);
+	Transformation() : Transformation(Matrix4(1.0f), Matrix4(1.0f)) { } 
+	Transformation(const Transformation& other) : Transformation(other.m_transform, other.m_inverse) { }
+	Transformation(const Matrix4& transform) : Transformation(transform, glm::inverse(transform)) { }
+	Transformation(const Matrix4& transform, const Matrix4& inverse) : m_transform(transform), m_inverse(inverse) { }
 
-	void print() const;
+	Ray applyRay(const Ray& r) const;
+	Ray applyInverseRay(const Ray& r) const;
+	Vertex applyVertex(const Vertex& v) const;
+	Vertex applyInverseVertex(const Vertex& v) const;
 
-	bool swapsHandedness() const;
-	bool operator==(const Transformation& other) const;
+	inline bool operator==(const Transformation& other) const {
+		return m_transform == other.m_transform;
+	}
 
-	Transformation transpose() const;
-	Transformation inverse() const;
-	Transformation combine(const Transformation& right) const;
-	Transformation operator*(const Transformation& right) const;
+	inline Transformation transpose() const {
+		return Transformation(glm::transpose(m_transform), glm::transpose(m_inverse));
+	}
 
-	Vector4 apply(const Vector4& v) const;
-	Vector3 apply(const Vector3& v) const;
-	Vector2 apply(const Vector2& v) const;
-	Normal apply(const Normal& n) const;
-	Point4 apply(const Point4& p) const;
-	Point3 apply(const Point3& p) const;
-	Point2 apply(const Point2& p) const;
-	Ray apply(const Ray& r) const;
-	Vertex apply(const Vertex& v) const;
+	inline Transformation inverse() const {
+		return Transformation(m_inverse, m_transform);
+	}
 
-	Vector4 applyInverse(const Vector4& v) const;
-	Vector3 applyInverse(const Vector3& v) const;
-	Vector2 applyInverse(const Vector2& v) const;
-	Normal applyInverse(const Normal& n) const;
-	Point4 applyInverse(const Point4& p) const;
-	Point3 applyInverse(const Point3& p) const;
-	Point2 applyInverse(const Point2& p) const;
-	Ray applyInverse(const Ray& r) const;
-	Vertex applyInverse(const Vertex& v) const;
+	inline Transformation combine(const Transformation& right) const {
+		return Transformation(m_transform * right.m_transform, right.m_inverse * m_inverse);
+	}
+
+	inline Transformation operator*(const Transformation& right) const {
+		return combine(right);
+	}
+
+	inline Vector4 applyVector(const Vector4& v) const {
+		return m_transform * v;
+	}
+
+	inline Vector3 applyVector(const Vector3& v) const {
+		return m_transform * Vector4(v, 0.0f);
+	}
+
+	inline Vector2 applyVector(const Vector2& v) const {
+		return m_transform * Vector4(v, 0.0f, 0.0f);
+	}
+
+	inline Vector3 applyNormal(const Vector3& n) const {
+		return glm::transpose(m_inverse) * Vector4(n, 0.0f);
+	}
+
+	inline Point4 applyPoint(const Point4& p) const {
+		Point4 res = m_transform * p;
+
+		if (!util::equals(res.w, 0.0f)) {
+			res = res / res.w;
+		}
+
+		return res;
+	}
+
+	inline Point3 applyPoint(const Point3& p) const {
+		Point4 res = m_transform * Point4(p, 1.0f);
+		if (!util::equals(res.w, 0.0f)) {
+			res = res / res.w;
+		}
+
+		return res;
+	}
+
+	inline Point2 applyPoint(const Point2& p) const {
+		Point4 res = m_transform * Point4(p, 0.0f, 1.0f);
+		if (!util::equals(res.w, 0.0f)) {
+			res = res / res.w;
+		}
+
+		return res;
+	}
+
+	inline Vector4 applyInverseVector(const Vector4& v) const {
+		return m_inverse * v;
+	}
+
+	inline Vector3 applyInverseVector(const Vector3& v) const {
+		return m_inverse * Vector4(v, 0.0f);
+	}
+
+	inline Vector2 applyInverseVector(const Vector2& v) const {
+		return m_inverse * Vector4(v, 0.0f, 0.0f);
+	}
+
+	inline Vector3 applyInverseNormal(const Vector3& n) const {
+		return glm::transpose(m_transform) * Vector4(n, 0.0f);
+	}
+
+	inline Point4 applyInversePoint(const Point4& p) const {
+		Point4 res = m_inverse * p;
+
+		if (!util::equals(res.w, 0.0f)) {
+			res = res / res.w;
+		}
+
+		return res;
+	}
+
+	inline Point3 applyInversePoint(const Point3& p) const {
+		Point4 res = m_inverse * Point4(p, 1.0f);
+
+		if (!util::equals(res.w, 0.0f)) {
+			res = res / res.w;
+		}
+
+		return res;
+	}
+
+	inline Point2 applyInversePoint(const Point2& p) const {
+		Point4 res = m_inverse * Point4(p, 0.0f, 1.0f);
+
+		if (!util::equals(res.w, 0.0f)) {
+			res = res / res.w;
+		}
+
+		return res;
+	}
 };
 
 namespace transform {

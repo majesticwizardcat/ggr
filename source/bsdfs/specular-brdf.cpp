@@ -26,7 +26,7 @@ BSDFSample SpecularBRDF::sample(Sampler* sampler, const Vector3& wo) const {
 
 	return BSDFSample((m_fresnel->evaluate(1.5f, cosTheta) * m_color) / cosTheta,
 		1.0f,
-		shading::reflect(wo, Normal(0.0f, 0.0f, 1.0f)),
+		shading::reflect(wo, Vector3(0.0f, 0.0f, 1.0f)),
 		true,
 		BXDFType::REFLECTION);
 }
