@@ -2,10 +2,10 @@
 ![alt text](https://raw.githubusercontent.com/loukoum/ggr/master/renders/the-one-with-the-cat.png)
 ![alt text](https://raw.githubusercontent.com/loukoum/ggr/master/renders/glass-earth.png)
 
-ggr is a physically based offline renderer written in C++. Everything was written from scratch
-including the primitives used like vector classes. The purpose of the project is to create a renderer
+ggr is a physically based offline renderer written in C++. The purpose of the project is to create a renderer
 that can create realistic pictures, indistinguishable from ones taken from a real camera and to
-create practice grounds to write and test more complicated methods for computer graphics.
+create practice grounds to write and test more complicated methods for computer graphics. Although ggr
+was entirely written from scratch it had its linear algebra classes replaced with [GLM](https://github.com/g-truc/glm)
 
 ## Features
 ### Integrators
