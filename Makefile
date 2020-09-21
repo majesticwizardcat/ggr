@@ -1,6 +1,6 @@
 NAME = ggr
 
-INCLUDES = -Isource
+INCLUDES = -Isource -Ilibraries
 SOURCE = source/accelerators/*.cpp source/bsdfs/*.cpp source/core/*.cpp source/film/*.cpp source/cameras/*.cpp source/filters/*.cpp source/samplers/*.cpp source/images/*.cpp source/primitives/*.cpp source/entities/*.cpp source/lighting/*.cpp source/materials/*.cpp source/spectra/*.cpp source/tools/*.cpp source/intersection/*.cpp source/textures/*.cpp source/meshes/*.cpp source/integrators/*.cpp
 
 OPTIONS = -pthread -O3
