@@ -1,4 +1,7 @@
 *.ppm
+*.obj
+*.mtl
+obj-loader-test
 examples/glass-earth.cpp
 examples/the-one-with-the-cat.cpp
 a.out
