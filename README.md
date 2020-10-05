@@ -43,8 +43,7 @@ real life materials like marble, fined wood, ceramic surfaces or leather.
 ### Geometry
 ggr only supports triangle meshes. This decision was taken to have a consistent ray-intersection test.
 There are currently three pre-written shapes that are converted into triangle meshes: Cubes, spheres
-and planes. A mesh loader is currently on the works that will add the ability to load 3D models created
-by modeling programs.
+and planes. ggr also supports Wavefront(.obj) files for loading triangular meshes from 3D modeling progrms.
 
 ### Lighting
 The only realistic light model is the area light so ggr only supports area lights(or surfaces that have
