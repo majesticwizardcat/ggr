@@ -303,6 +303,9 @@
     <ClInclude Include="..\source\textures\height-map.h">
       <Filter>source\textures</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\meshes\mesh-loader.h">
+      <Filter>source\meshes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\accelerators\bb-accelerator.cpp">
@@ -517,6 +520,9 @@
     </ClCompile>
     <ClCompile Include="..\source\spectra\spectrum.cpp">
       <Filter>source\spectra</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\meshes\mesh-loader.cpp">
+      <Filter>source\meshes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

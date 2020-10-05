@@ -198,6 +198,7 @@
     <ClInclude Include="..\source\materials\plastic-material.h" />
     <ClInclude Include="..\source\materials\transparent-material.h" />
     <ClInclude Include="..\source\meshes\cube.h" />
+    <ClInclude Include="..\source\meshes\mesh-loader.h" />
     <ClInclude Include="..\source\meshes\plane.h" />
     <ClInclude Include="..\source\meshes\sphere.h" />
     <ClInclude Include="..\source\meshes\triangle-mesh.h" />
@@ -285,6 +286,7 @@
     <ClCompile Include="..\source\materials\plastic-material.cpp" />
     <ClCompile Include="..\source\materials\transparent-material.cpp" />
     <ClCompile Include="..\source\meshes\cube.cpp" />
+    <ClCompile Include="..\source\meshes\mesh-loader.cpp" />
     <ClCompile Include="..\source\meshes\plane.cpp" />
     <ClCompile Include="..\source\meshes\sphere.cpp" />
     <ClCompile Include="..\source\meshes\triangle-mesh.cpp" />
