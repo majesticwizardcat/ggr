@@ -2,14 +2,14 @@
 
 class Sphere;
 
-const int DEFAULT_CIRCLES = 8;
+const size_t DEFAULT_CIRCLES = 8;
 
 #include "meshes/triangle-mesh.h"
 
 class Sphere : public TriangleMesh {
 public:
 	Sphere();
-	Sphere(const Sphere& other);
-	Sphere(int circles);
+	Sphere(size_t circles);
+	Sphere(const Sphere& other) = delete;
 };
 

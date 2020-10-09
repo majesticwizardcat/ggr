@@ -18,7 +18,7 @@ private:
 	Vector3 m_geometricNormal;
 
 public:
-	BSDF() = delete;
+	BSDF() { }
 	BSDF(const BSDF& other);
 	BSDF(const SurfacePoint& other);
 	BSDF(const Vector3& shading, const Vector3& tangent,

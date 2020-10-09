@@ -13,18 +13,17 @@ class Renderer;
 
 class Renderer {
 private:
-	Scene m_scene;
-	std::unique_ptr<Camera> m_camera;
-	std::unique_ptr<Integrator> m_integrator;
-	std::unique_ptr<Sampler> m_sampler;
+	Scene* m_scene;
+	Camera* m_camera;
+	Integrator* m_integrator;
+	Sampler* m_sampler;
 	RenderSettings m_settings;
 
 public:
-	Renderer();
-	Renderer(const Renderer& other);
-	Renderer(const Scene& scene, std::unique_ptr<Camera>& camera,
-		std::unique_ptr<Integrator>& integrator, 
-		std::unique_ptr<Sampler>& sampler, const RenderSettings& settings);
+	Renderer() = delete;
+	Renderer(const Renderer& other) = delete;
+	Renderer(Scene* scene, Camera* camera, Integrator* integrator,
+		Sampler* sampler, RenderSettings settings);
 
 	Image render();
 };

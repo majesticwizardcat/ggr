@@ -5,16 +5,7 @@
 #include <limits>
 #include <iostream>
 
-Triangle::Triangle() : m_degenerate(true) { }
-
-Triangle::Triangle(const std::shared_ptr<Vertex>& v0, const std::shared_ptr<Vertex>& v1,
-	const std::shared_ptr<Vertex>& v2) : v0(v0), v1(v1), v2(v2), m_degenerate(false) {
-	calculateGeometry();
-}
-
-Triangle::Triangle(const Triangle& other) : id(other.id), v0(other.v0), v1(other.v1), v2(other.v2),
-	m_dpdu(other.m_dpdu), m_dpdv(m_dpdv), m_geometricNormal(other.m_geometricNormal),
-	m_tangent(other.m_tangent), m_area(other.m_area), m_degenerate(other.m_degenerate) { }
+Triangle::Triangle(const Vertex* v0, const Vertex* v1, const Vertex* v2) : v0(v0), v1(v1), v2(v2) { }
 
 void Triangle::calculateGeometry() {
 	float u1u0 = v1->uv.x - v0->uv.x;
@@ -93,8 +84,15 @@ bool Triangle::intersects(const Ray& ray, float maxT, Intersection* result) cons
 	}
 
 	result->t = t;
-	result->intersectionPoint =
-		SurfacePoint(iv, gn, m_dpdu, m_dpdv, m_tangent, glm::cross(iv.normal, m_tangent), m_area, id);
+	result->intersectionPoint.point = iv.position;
+	result->intersectionPoint.uv = iv.uv;
+	result->intersectionPoint.geometricNormal = gn;
+	result->intersectionPoint.dpdu = m_dpdu;
+	result->intersectionPoint.dpdv = m_dpdv;
+	result->intersectionPoint.shadingNormal = iv.normal;
+	result->intersectionPoint.tangent = m_tangent;
+	result->intersectionPoint.bitangent = glm::cross(iv.normal, m_tangent);
+	result->intersectionPoint.surfaceArea = m_area;
 	return true;
 }
 
@@ -110,11 +108,20 @@ SurfacePoint Triangle::samplePoint(Sampler* sampler) const {
 	float w2 = 1.0f - w0 - w1;
 
 	Vertex v = interpolate(w0, w1, w2);
-	Vector3 gn = glm::faceforward(m_geometricNormal, m_geometricNormal, v.normal);
-	return SurfacePoint(v, gn, m_dpdu, m_dpdv, m_tangent, glm::cross(v.normal, m_tangent), m_area, id);
-}
+	Vector3 gn = m_geometricNormal;
+	if (glm::dot(m_geometricNormal, v.normal) < 0.0f) {
+		gn *= -1.0f;
+	}
 
-float Triangle::getArea() const {
-	return m_area;
+	SurfacePoint sampled;
+	sampled.point = v.position;
+	sampled.uv = v.uv;
+	sampled.geometricNormal = gn;
+	sampled.dpdu = m_dpdu;
+	sampled.dpdv = m_dpdv;
+	sampled.shadingNormal = v.normal;
+	sampled.tangent = m_tangent;
+	sampled.bitangent = glm::cross(v.normal, m_tangent);
+	sampled.surfaceArea = m_area;
+	return sampled;
 }
-

@@ -11,16 +11,15 @@ class MetalMaterial;
 
 class MetalMaterial : public Material {
 private:
-	std::shared_ptr<Texture> m_color;
-	std::shared_ptr<Texture> m_roughness;
+	const Texture* m_color;
+	const Texture* m_roughness;
 	std::unique_ptr<Fresnel> m_fresnel;
 	std::unique_ptr<GGXDistribution> m_distribution;
 
 public:
 	MetalMaterial() = delete;
-	MetalMaterial(const MetalMaterial& other);
-	MetalMaterial(const std::shared_ptr<Texture>& color,
-		const std::shared_ptr<Texture>& roughness);
+	MetalMaterial(const MetalMaterial& other) = delete;
+	MetalMaterial(const Texture* color, const Texture* roughness);
 
 	BSDF createBSDF(const SurfacePoint& point, const Vector3& wo) const;
 };

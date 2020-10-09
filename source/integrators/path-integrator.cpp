@@ -3,29 +3,22 @@
 
 #include <algorithm>
 
-PathIntegrator::PathIntegrator() { }
-PathIntegrator::PathIntegrator(const PathIntegrator& other) { }
-
-std::unique_ptr<Integrator> PathIntegrator::clone() const {
-	return std::make_unique<PathIntegrator>();
-}
-
-Spectrum PathIntegrator::traceRay(const Ray& ray, const Scene& scene, Camera* camera, Sampler* sampler) {
+Spectrum PathIntegrator::traceRay(const Ray& ray, const Scene* scene, const Camera* camera, Sampler* sampler) {
 	Spectrum L;
 	Spectrum throughput(1.0f);
-	Intersection intersection = scene.intersects(ray);
+	Intersection intersection = scene->intersects(ray);
 	Vector3 rayDirection = ray.direction;
 	bool cameraRay = true;
 	bool lastDistDelta = false;
 	
 	while (true) {
-		if (!intersection.hit || intersection.light != nullptr) {
+		if (!intersection.hit || intersection.light) {
 			if (cameraRay || lastDistDelta) {
 				if (!intersection.hit) {
-					L += throughput * scene.getSkybox()->emission(rayDirection);
+					L += throughput * scene->getSkybox()->emission(rayDirection);
 				}
 
-				else if (intersection.light != nullptr) {
+				else if (intersection.light) {
 					BSDF bsdf = intersection.material->createBSDF(intersection.intersectionPoint,
 						intersection.wo);
 					L += throughput * bsdf.evaluate(intersection.wo, intersection.wo);
@@ -33,7 +26,6 @@ Spectrum PathIntegrator::traceRay(const Ray& ray, const Scene& scene, Camera* ca
 			}
 			break;
 		}
-
 
 		intersection.intersectionPoint = intersection.material->bump(intersection.intersectionPoint);
 		BSDF bsdf = intersection.material->createBSDF(intersection.intersectionPoint, intersection.wo);
@@ -60,7 +52,7 @@ Spectrum PathIntegrator::traceRay(const Ray& ray, const Scene& scene, Camera* ca
 
 		cameraRay = false;
 		rayDirection = bsdfSample.sampledDirection;
-		intersection = scene.intersects(intersection.intersectionPoint, bsdfSample.sampledDirection);
+		intersection = scene->intersects(intersection.intersectionPoint, bsdfSample.sampledDirection);
 	}
 
 	return L;

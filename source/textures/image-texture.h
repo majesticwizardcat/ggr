@@ -9,12 +9,12 @@ class ImageTexture;
 
 class ImageTexture : public Texture {
 private:
-	std::shared_ptr<MipMap> m_mipmap;
+	const MipMap* m_mipmap;
 
 public:
-	ImageTexture();
-	ImageTexture(const ImageTexture& other);
-	ImageTexture(const std::shared_ptr<MipMap>& mipmap);
+	ImageTexture() = delete;
+	ImageTexture(const ImageTexture& other) = delete;
+	ImageTexture(const MipMap* mipmap);
 
 	Spectrum sample(const SurfacePoint& point) const;
 };

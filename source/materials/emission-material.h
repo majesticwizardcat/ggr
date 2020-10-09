@@ -9,13 +9,15 @@ class EmissionMaterial;
 
 class EmissionMaterial : public Material {
 private:
-	std::shared_ptr<Texture> m_emission;
+	const Texture* m_emission;
 	float m_intensity;
 
 public:
 	EmissionMaterial() = delete;
-	EmissionMaterial(const EmissionMaterial& other);
-	EmissionMaterial(const std::shared_ptr<Texture> emission, float intensity);
+	EmissionMaterial(const EmissionMaterial& other) : Material(other), m_emission(other.m_emission),
+		m_intensity(other.m_intensity) { }
+	EmissionMaterial(const Texture* emission, float intensity) : Material(),
+		m_emission(emission), m_intensity(intensity) { }
 
 	BSDF createBSDF(const SurfacePoint& point, const Vector3& wo) const;
 };

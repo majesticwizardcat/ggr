@@ -11,13 +11,13 @@ class MirrorMaterial;
 
 class MirrorMaterial : public Material {
 private:
+	const Texture* m_color;
 	std::unique_ptr<Fresnel> m_fresnel;
-	std::shared_ptr<Texture> m_color;
 
 public:
 	MirrorMaterial() = delete;
-	MirrorMaterial(const MirrorMaterial& other);
-	MirrorMaterial(const std::shared_ptr<Texture>& color);
+	MirrorMaterial(const MirrorMaterial& other) = delete;
+	MirrorMaterial(const Texture* color);
 
 	BSDF createBSDF(const SurfacePoint& point, const Vector3& wo) const;
 };

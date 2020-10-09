@@ -11,8 +11,8 @@ class GlassMaterial;
 
 class GlassMaterial : public Material {
 private:
-	std::shared_ptr<Texture> m_color;
-	std::shared_ptr<Texture> m_roughness;
+	const Texture* m_color;
+	const Texture* m_roughness;
 	std::unique_ptr<Fresnel> m_fresnel;
 	std::unique_ptr<MicrofacetDistribution> m_distribution;
 	float m_materialIOR;
@@ -20,12 +20,9 @@ private:
 
 public:
 	GlassMaterial() = delete;
-	GlassMaterial(const GlassMaterial& other);
-	GlassMaterial(const std::shared_ptr<Texture>& color,
-		const std::shared_ptr<Texture>& roughness, float materialIOR,
-		float airIOR);
-	GlassMaterial(const std::shared_ptr<Texture>& color,
-		const std::shared_ptr<Texture>& roughness, float materialIOR);
+	GlassMaterial(const GlassMaterial& other) = delete;
+	GlassMaterial(const Texture* color, const Texture* roughness, float materialIOR, float airIOR);
+	GlassMaterial(const Texture* color, const Texture* roughness, float materialIOR);
 
 	BSDF createBSDF(const SurfacePoint& point, const Vector3& wo) const;
 };

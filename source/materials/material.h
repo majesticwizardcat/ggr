@@ -10,15 +10,15 @@ class Material;
 
 class Material {
 private:
-	std::shared_ptr<BumpMap> m_bumpMap;
+	const BumpMap* m_bumpMap;
 
 public:
-	Material();
-	Material(const Material& other);
-	Material(const std::shared_ptr<BumpMap>& bumpMap);
+	Material() : m_bumpMap(nullptr) { }
+	Material(const Material& other) : m_bumpMap(other.m_bumpMap) { }
+	Material(const BumpMap* bumpMap) : m_bumpMap(bumpMap) { }
 
 	SurfacePoint bump(const SurfacePoint& point) const;
-	void setBumpMap(const std::shared_ptr<BumpMap>& bumpMap);
+	void setBumpMap(const BumpMap* bumpMap);
 
 	virtual BSDF createBSDF(const SurfacePoint& point, const Vector3& wo) const = 0;
 };

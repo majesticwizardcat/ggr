@@ -8,10 +8,10 @@ class UnfilteredFilmTile;
 
 class UnfilteredFilmTile {
 public:
-	int tileStartX;
-	int tileStartY;
-	int tileEndX;
-	int tileEndY;
+	unsigned int tileStartX;
+	unsigned int tileStartY;
+	unsigned int tileEndX;
+	unsigned int tileEndY;
 	std::vector<UnfilteredFilmSample> samples;
 
 	UnfilteredFilmTile();

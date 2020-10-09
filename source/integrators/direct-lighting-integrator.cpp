@@ -1,18 +1,11 @@
 #include "integrators/direct-lighting-integrator.h"
 
-DirectLightingIntegrator::DirectLightingIntegrator() { }
-DirectLightingIntegrator::DirectLightingIntegrator(const DirectLightingIntegrator& other) { }
-
-std::unique_ptr<Integrator> DirectLightingIntegrator::clone() const {
-	return std::make_unique<DirectLightingIntegrator>();
-}
-
-Spectrum DirectLightingIntegrator::traceRay(const Ray& ray, const Scene& scene, Camera* camera, Sampler* sampler) {
-	Intersection intersection = scene.intersects(ray);
+Spectrum DirectLightingIntegrator::traceRay(const Ray& ray, const Scene* scene, const Camera* camera, Sampler* sampler) {
+	Intersection intersection = scene->intersects(ray);
 	Spectrum L;
 
 	if (!intersection.hit) {
-		L = scene.getSkybox()->emission(ray.direction);
+		L = scene->getSkybox()->emission(ray.direction);
 	}
 
 	else if (intersection.light != nullptr) {

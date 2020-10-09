@@ -4,16 +4,7 @@
 #include <cmath>
 #include <algorithm>
 
-Film::Film() : Film(0.0f, 0.0f) { }
-Film::Film(const Film& other) : Film(other.m_resolutionWidth, other.m_resolutionHeight, other.m_filter) {
-	for (int i = 0; i < m_resolutionWidth * m_resolutionHeight; ++i) {
-		m_filmPixels[i] = FilteredFilmSample(other.m_filmPixels[i]);
-	}
-}
-
-Film::Film(float resolutionWidth, float resolutionHeight) : Film(resolutionWidth, resolutionHeight,
-	std::make_shared<BoxFilter>()) { }
-Film::Film(float resolutionWidth, float resolutionHeight, const std::shared_ptr<Filter>& filter) :
+Film::Film(float resolutionWidth, float resolutionHeight, const Filter* filter) :
 	m_resolutionWidth(resolutionWidth + 2.0f * std::ceil(filter->getWidth())),
 	m_resolutionHeight(resolutionHeight + 2.0f * std::ceil(filter->getHeight())),
 	m_filter(filter) {

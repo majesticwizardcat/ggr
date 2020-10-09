@@ -42,14 +42,14 @@ int main(int args, char** argv) {
 		threads = atoi(argv[2]);
 	}
 
-	auto mirror = std::make_shared<Cube>();
-	auto diffuse = std::make_shared<Cube>();
-	auto light = std::make_shared<Cube>();
-	auto glass = std::make_shared<Cube>();
-	auto transparent = std::make_shared<Cube>();
-	auto bluePlastic = std::make_shared<Cube>();
-	auto greenPlastic = std::make_shared<Cube>();
-	auto light2ndFloor = std::make_shared<Cube>();
+	auto mirror = std::make_unique<Cube>();
+	auto diffuse = std::make_unique<Cube>();
+	auto light = std::make_unique<Cube>();
+	auto glass = std::make_unique<Cube>();
+	auto transparent = std::make_unique<Cube>();
+	auto bluePlastic = std::make_unique<Cube>();
+	auto greenPlastic = std::make_unique<Cube>();
+	auto light2ndFloor = std::make_unique<Cube>();
 
 	mirror->transform(transform::translate(2.0f, 0.0f, 0.0f));
 	diffuse->transform(transform::translate(-2.0f, 0.0f, 0.0f));
@@ -59,63 +59,64 @@ int main(int args, char** argv) {
 	greenPlastic->transform(transform::translate(2.0f, 0.0f, 3.0f));
 	light2ndFloor->transform(transform::translate(0.0f, 1.5f, 2.0f).combine(transform::scale(0.5f, 0.5f, 0.5f)));
 
-	auto plane = std::make_shared<Plane>();
-	auto back = std::make_shared<Plane>();
+	auto plane = std::make_unique<Plane>();
+	auto back = std::make_unique<Plane>();
 	plane->transform(transform::translate(0.0f, 0.0f, -0.5f).combine(transform::scale(15.0f, 15.0f, 1.0f)));
 	back->transform(transform::translate(0.0f, 3.5f, 0.0f).combine(transform::rotate(PI_OVER_TWO, 0.0f, 0.0f))
 		.combine(transform::scale(35.0f, 35.0f, 1.0f)));
 
 	CheckerboardImage checker(24);
-	auto floorMip = std::make_shared<MipMap>(checker, 8);
-	auto floorHeightMip = std::make_shared<MipMap>(checker.generateHeightMap(), 8);
+	auto floorMip = std::make_unique<MipMap>(checker, 8);
+	auto floorHeightMip = std::make_unique<MipMap>(checker.generateHeightMap(), 8);
 
-	auto floorTexture = std::make_shared<ImageTexture>(floorMip);
-	auto skyTexture = std::make_shared<ColorTexture>(Spectrum(0.0f));
-	auto redTexture = std::make_shared<ColorTexture>(Spectrum(RGBColor(0.7f, 0.1f, 0.25f)));
-	auto whiteTexture = std::make_shared<ColorTexture>(Spectrum(RGBColor(1.0f, 1.0f, 1.0f)));
-	auto blueTexture = std::make_shared<ColorTexture>(Spectrum(RGBColor(0.0f, 0.1f, 0.85f)));
-	auto greenTexture = std::make_shared<ColorTexture>(Spectrum(RGBColor(0.0f, 0.85f, 0.15f)));
-	auto roughness0 = std::make_shared<ColorTexture>(Spectrum(0.225f));
-	auto roughness1 = std::make_shared<ColorTexture>(Spectrum(0.2f));
-	auto roughness2 = std::make_shared<ColorTexture>(Spectrum(0.7f));
+	auto floorTexture = std::make_unique<ImageTexture>(floorMip.get());
+	auto skyTexture = std::make_unique<ColorTexture>(Spectrum(0.0f));
+	auto redTexture = std::make_unique<ColorTexture>(Spectrum(RGBColor(0.7f, 0.1f, 0.25f)));
+	auto whiteTexture = std::make_unique<ColorTexture>(Spectrum(RGBColor(1.0f, 1.0f, 1.0f)));
+	auto blueTexture = std::make_unique<ColorTexture>(Spectrum(RGBColor(0.0f, 0.1f, 0.85f)));
+	auto greenTexture = std::make_unique<ColorTexture>(Spectrum(RGBColor(0.0f, 0.85f, 0.15f)));
+	auto roughness0 = std::make_unique<ColorTexture>(Spectrum(0.225f));
+	auto roughness1 = std::make_unique<ColorTexture>(Spectrum(0.2f));
+	auto roughness2 = std::make_unique<ColorTexture>(Spectrum(0.7f));
 
-	auto floorBumpMap = std::make_shared<HeightMap>(floorHeightMip);
+	auto floorBumpMap = std::make_unique<HeightMap>(floorHeightMip.get());
 
-	auto redMatte = std::make_shared<MatteMaterial>(redTexture);
-	auto metalMaterial = std::make_shared<MetalMaterial>(whiteTexture, roughness0);
-	auto mirrorMaterial = std::make_shared<MirrorMaterial>(whiteTexture);
-	auto glassMaterial = std::make_shared<GlassMaterial>(whiteTexture, roughness0, 1.8f);
-	auto transparentMaterial = std::make_shared<TransparentMaterial>(whiteTexture, 1.5f);
-	auto whitePlasticMaterial = std::make_shared<PlasticMaterial>(whiteTexture, roughness1);
-	auto bluePlasticMaterial = std::make_shared<PlasticMaterial>(blueTexture, roughness1);
-	auto greenPlasticMaterial = std::make_shared<PlasticMaterial>(greenTexture, roughness1);
-	auto floorMaterial = std::make_shared<PlasticMaterial>(floorTexture, roughness1);
-	auto emissionMat = std::make_shared<EmissionMaterial>(whiteTexture, 3.5f);
+	auto redMatte = std::make_unique<MatteMaterial>(redTexture.get());
+	auto metalMaterial = std::make_unique<MetalMaterial>(whiteTexture.get(), roughness0.get());
+	auto mirrorMaterial = std::make_unique<MirrorMaterial>(whiteTexture.get());
+	auto glassMaterial = std::make_unique<GlassMaterial>(whiteTexture.get(), roughness0.get(), 1.8f);
+	auto transparentMaterial = std::make_unique<TransparentMaterial>(whiteTexture.get(), 1.5f);
+	auto whitePlasticMaterial = std::make_unique<PlasticMaterial>(whiteTexture.get(), roughness1.get());
+	auto bluePlasticMaterial = std::make_unique<PlasticMaterial>(blueTexture.get(), roughness1.get());
+	auto greenPlasticMaterial = std::make_unique<PlasticMaterial>(greenTexture.get(), roughness1.get());
+	auto floorMaterial = std::make_unique<PlasticMaterial>(floorTexture.get(), roughness1.get());
+	auto emissionMat = std::make_unique<EmissionMaterial>(whiteTexture.get(), 3.5f);
 
-	floorMaterial->setBumpMap(floorBumpMap);
+	floorMaterial->setBumpMap(floorBumpMap.get());
 
-	RenderSettings settings(500, 500, 16, samples, threads, std::make_shared<GaussianFilter>(1.5f, 1.5f, 2.0f));
-	std::unique_ptr<Sampler> sampler = std::make_unique<HaltonSampler>(settings.resolutionWidth, settings.resolutionHeight);
-	std::unique_ptr<Camera> camera = std::make_unique<PerspectiveCamera>(std::make_shared<Transformation>(
+	auto filter = std::make_unique<GaussianFilter>(1.5f, 1.5f, 2.0f);
+	RenderSettings settings(500, 500, 16, samples, threads, filter.get());
+	auto sampler = std::make_unique<HaltonSampler>(settings.resolutionWidth, settings.resolutionHeight);
+	auto camera = std::make_unique<PerspectiveCamera>(std::make_shared<Transformation>(
 		transform::view(Point3(0.0f, -5.0f, 1.5f), Point3(0.0f, 0.0f, 1.5f), Vector3(0.0f, 0.0f, 1.0f))),
 		settings.resolutionWidth, settings.resolutionHeight,
 		0.0f, 0.0f, PI_OVER_TWO);
 	std::unique_ptr<Integrator> integrator = std::make_unique<PathIntegrator>();
-	auto skybox = std::make_shared<Skybox>(skyTexture);
-	Scene scene(skybox);
+	auto skybox = std::make_unique<Skybox>(skyTexture.get(), 1.0f, Transformation());
+	Scene scene(skybox.get());
 
-	scene.addEntity(diffuse, redMatte);
-	scene.addEntity(mirror, mirrorMaterial);
-	scene.addEntity(plane, floorMaterial);
-	scene.addEntity(back, metalMaterial);
-	scene.addEntity(bluePlastic, bluePlasticMaterial);
-	scene.addEntity(greenPlastic, greenPlasticMaterial);
-	scene.addEntity(glass, glassMaterial);
-	scene.addEntity(transparent, transparentMaterial);
-	scene.addLight(light, emissionMat);
-	scene.addLight(light2ndFloor, emissionMat);
+	scene.addEntity(diffuse.get(), redMatte.get());
+	scene.addEntity(mirror.get(), mirrorMaterial.get());
+	scene.addEntity(plane.get(), floorMaterial.get());
+	scene.addEntity(back.get(), metalMaterial.get());
+	scene.addEntity(bluePlastic.get(), bluePlasticMaterial.get());
+	scene.addEntity(greenPlastic.get(), greenPlasticMaterial.get());
+	scene.addEntity(glass.get(), glassMaterial.get());
+	scene.addEntity(transparent.get(), transparentMaterial.get());
+	scene.addLight(light.get(), emissionMat.get());
+	scene.addLight(light2ndFloor.get(), emissionMat.get());
 
-	Renderer renderer(scene, camera, integrator, sampler, settings);
+	Renderer renderer(&scene, camera.get(), integrator.get(), sampler.get(), settings);
 	savePPM("example-0-render.ppm", renderer.render());
 	std::cout << "Press enter to exit" << std::endl;
 	std::cin.get();

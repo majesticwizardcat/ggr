@@ -7,6 +7,6 @@ class Cube;
 class Cube : public TriangleMesh {
 public:
 	Cube();
-	Cube(const Cube& other);
+	Cube(const Cube& other) = delete;
 };
 

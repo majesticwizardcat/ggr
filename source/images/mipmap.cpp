@@ -10,11 +10,10 @@ int Layer::index(int x, int y) const {
 	return x * m_height + y;
 }
 
-Layer::Layer() : m_width(0), m_height(0) { }
 Layer::Layer(const Layer& other) : m_width(other.m_width),
 	m_height(other.m_height) {
 	m_pixels = std::make_unique<Spectrum[]>(m_width * m_height);
-	for (int i = 0; i < m_width * m_height; ++i) {
+	for (unsigned int i = 0; i < m_width * m_height; ++i) {
 		m_pixels[i] = other.m_pixels[i];
 	}
 }
@@ -39,11 +38,6 @@ int Layer::getHeight() const {
 	return m_height;
 }
 
-MipMap::MipMap() {
-	m_mipmaps.push_back(Layer(1, 1));
-}
-
-MipMap::MipMap(const MipMap& other) : m_mipmaps(other.m_mipmaps) { }
 MipMap::MipMap(const Image& image) : MipMap(image, 0) { }
 
 MipMap::MipMap(const Image& image, int anisotropicLevel) : m_anisotropicLevel(anisotropicLevel) {

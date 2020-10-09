@@ -20,7 +20,7 @@ private:
 	int index(int width, int height) const;
 
 public:
-	Layer();
+	Layer() = delete;
 	Layer(const Layer& other);
 	Layer(int width, int height);
 

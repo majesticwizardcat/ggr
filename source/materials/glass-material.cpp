@@ -3,22 +3,13 @@
 #include "bsdfs/refraction-btdf.h"
 #include "tools/util.h"
 
-GlassMaterial::GlassMaterial(const GlassMaterial& other) : m_color(other.m_color),
-	m_roughness(other.m_roughness), m_materialIOR(other.m_materialIOR),
-	m_airIOR(other.m_airIOR) {
+GlassMaterial::GlassMaterial(const Texture* color, const Texture* roughness, float materialIOR, float airIOR) :
+	Material(), m_color(color), m_roughness(roughness), m_materialIOR(materialIOR), m_airIOR(airIOR) {
 	m_distribution = std::make_unique<GGXDistribution>();
 	m_fresnel = std::make_unique<FresnelCT>();
 }
 
-GlassMaterial::GlassMaterial(const std::shared_ptr<Texture>& color,
-	const std::shared_ptr<Texture>& roughness, float materialIOR, float airIOR) :
-	m_color(color), m_roughness(roughness), m_materialIOR(materialIOR), m_airIOR(airIOR) {
-	m_distribution = std::make_unique<GGXDistribution>();
-	m_fresnel = std::make_unique<FresnelCT>();
-}
-
-GlassMaterial::GlassMaterial(const std::shared_ptr<Texture>& color,
-	const std::shared_ptr<Texture>& roughness, float materialIOR) :
+GlassMaterial::GlassMaterial(const Texture* color, const Texture* roughness, float materialIOR) :
 	GlassMaterial(color, roughness, materialIOR, 1.0f) { }
 
 BSDF GlassMaterial::createBSDF(const SurfacePoint& point, const Vector3& wo) const {

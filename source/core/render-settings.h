@@ -1,23 +1,24 @@
 #pragma once
 
-class RenderSettings;
+struct RenderSettings;
 
 #include "filters/filter.h"
 
-#include <memory>
+struct RenderSettings {
+	unsigned int resolutionWidth;
+	unsigned int resolutionHeight;
+	unsigned int tileSize;
+	unsigned int samples;
+	unsigned int threads;
+	const Filter* filter;
 
-class RenderSettings {
-public:
-	int resolutionWidth;
-	int resolutionHeight;
-	int tileSize;
-	int samples;
-	int threads;
-	std::shared_ptr<Filter> filter;
-
-	RenderSettings();
-	RenderSettings(const RenderSettings& other);
-	RenderSettings(int resW, int resH, int tileSize, int samples, int threads,
-		const std::shared_ptr<Filter>& filter);
+	RenderSettings() = delete;
+	RenderSettings(const RenderSettings& other) : resolutionWidth(other.resolutionWidth),
+		resolutionHeight(other.resolutionHeight), tileSize(other.tileSize), samples(other.samples),
+		threads(other.threads), filter(other.filter) { }
+	RenderSettings(unsigned int resW, unsigned int resH, unsigned int tileSize,
+		unsigned int samples, unsigned int threads, const Filter* filter) :
+		resolutionWidth(resW), resolutionHeight(resH), tileSize(tileSize), samples(samples),
+		threads(threads), filter(filter) { }
 };
 

@@ -7,9 +7,6 @@ class Texture;
 
 class Texture {
 public:
-	Texture();
-	Texture(const Texture& other);
-
 	virtual Spectrum sample(const SurfacePoint& point) const = 0;
 };
 

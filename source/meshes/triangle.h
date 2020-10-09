@@ -20,15 +20,13 @@ private:
 	bool m_degenerate;
 
 public:
-	int id;
-	std::shared_ptr<Vertex> v0;
-	std::shared_ptr<Vertex> v1;
-	std::shared_ptr<Vertex> v2;
+	const Vertex* v0;
+	const Vertex* v1;
+	const Vertex* v2;
 
-	Triangle();
-	Triangle(const std::shared_ptr<Vertex>& v0, const std::shared_ptr<Vertex>& v1,
-		const std::shared_ptr<Vertex>& v2);
-	Triangle(const Triangle& other);
+	Triangle() = delete;
+	Triangle(const Triangle& other) = delete;
+	Triangle(const Vertex* v0, const Vertex* v1, const Vertex* v2);
 
 	void calculateGeometry();
 	Vertex interpolate(float w0, float w1, float w2) const;
@@ -36,6 +34,7 @@ public:
 	bool intersects(const Ray& ray, float maxT, Intersection* result) const;
 	bool intersects(const Ray& ray, float maxT) const;
 	SurfacePoint samplePoint(Sampler* sampler) const;
-	float getArea() const;
-};
 
+	inline float getArea() const { return m_area; }
+	inline bool isDegenerate() const { return m_degenerate; }
+};

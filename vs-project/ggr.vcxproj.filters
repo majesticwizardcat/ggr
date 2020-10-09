@@ -63,9 +63,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\accelerators\accelerator.h">
-      <Filter>source\accelerators</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\accelerators\bb-accelerator.h">
       <Filter>source\accelerators</Filter>
     </ClInclude>
@@ -362,9 +359,6 @@
     <ClCompile Include="..\source\core\renderer.cpp">
       <Filter>source\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\core\render-settings.cpp">
-      <Filter>source\core</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\core\scene.cpp">
       <Filter>source\core</Filter>
     </ClCompile>
@@ -425,9 +419,6 @@
     <ClCompile Include="..\source\intersection\ray.cpp">
       <Filter>source\intersection</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\intersection\surface-point.cpp">
-      <Filter>source\intersection</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\lighting\light-sample.cpp">
       <Filter>source\lighting</Filter>
     </ClCompile>
@@ -473,9 +464,6 @@
     <ClCompile Include="..\source\meshes\triangle-mesh.cpp">
       <Filter>source\meshes</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\meshes\vertex.cpp">
-      <Filter>source\meshes</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\tools\random-generator.cpp">
       <Filter>source\tools</Filter>
     </ClCompile>
@@ -486,9 +474,6 @@
       <Filter>source\textures</Filter>
     </ClCompile>
     <ClCompile Include="..\source\textures\image-texture.cpp">
-      <Filter>source\textures</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\textures\texture.cpp">
       <Filter>source\textures</Filter>
     </ClCompile>
     <ClCompile Include="..\source\samplers\halton-sampler.cpp">
@@ -506,9 +491,6 @@
     <ClCompile Include="..\source\primitives\transformation.cpp">
       <Filter>source\primitives</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\ggr.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\examples\example-0.cpp">
       <Filter>examples</Filter>
     </ClCompile>
@@ -523,6 +505,9 @@
     </ClCompile>
     <ClCompile Include="..\source\meshes\mesh-loader.cpp">
       <Filter>source\meshes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ggr.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

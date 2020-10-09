@@ -3,14 +3,8 @@
 #include "bsdfs/specular-brdf.h"
 #include "tools/util.h"
 
-MetalMaterial::MetalMaterial(const MetalMaterial& other) :
-	m_color(other.m_color), m_roughness(other.m_roughness) {
-	m_fresnel = std::make_unique<FresnelSchlick>(Spectrum(1.0f));
-	m_distribution = std::make_unique<GGXDistribution>();
-}
-
-MetalMaterial::MetalMaterial(const std::shared_ptr<Texture>& color,
-	const std::shared_ptr<Texture>& roughness) : m_color(color), m_roughness(roughness) {
+MetalMaterial::MetalMaterial(const Texture* color, const Texture* roughness)
+	: Material(), m_color(color), m_roughness(roughness) {
 	m_fresnel = std::make_unique<FresnelSchlick>(Spectrum(1.0f));
 	m_distribution = std::make_unique<GGXDistribution>();
 }

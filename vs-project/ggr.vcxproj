@@ -5,10 +5,6 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="example0_debug|x64">
-      <Configuration>example0_debug</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="example0|x64">
       <Configuration>example0</Configuration>
       <Platform>x64</Platform>
@@ -45,9 +41,6 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='example0_debug|x64'">
-    <PlatformToolset>v142</PlatformToolset>
-  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -77,9 +70,6 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(ProjectDir)..\libraries;$(ProjectDir)..\source;$(IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)..\source;$(SourcePath)</SourcePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='example0_debug|x64'">
-    <IncludePath>$(ProjectDir)..\libraries;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -126,9 +116,10 @@
       <OmitFramePointers>true</OmitFramePointers>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,14 +128,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='example0_debug|x64'">
-    <ClCompile>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <Optimization>Disabled</Optimization>
-    </ClCompile>
-  </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\accelerators\accelerator.h" />
     <ClInclude Include="..\source\accelerators\bb-accelerator.h" />
     <ClInclude Include="..\source\accelerators\bounding-box.h" />
     <ClInclude Include="..\source\bsdfs\bsdf-sample.h" />
@@ -248,7 +232,6 @@
     <ClCompile Include="..\source\cameras\orthographic-camera.cpp" />
     <ClCompile Include="..\source\cameras\perspective-camera.cpp" />
     <ClCompile Include="..\source\cameras\projective-camera.cpp" />
-    <ClCompile Include="..\source\core\render-settings.cpp" />
     <ClCompile Include="..\source\core\renderer.cpp" />
     <ClCompile Include="..\source\core\scene.cpp" />
     <ClCompile Include="..\source\entities\entity.cpp" />
@@ -262,6 +245,8 @@
     <ClCompile Include="..\source\filters\lanczos-filter.cpp" />
     <ClCompile Include="..\source\ggr.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='example0|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\source\images\checkerboard-image.cpp" />
     <ClCompile Include="..\source\images\image-io.cpp" />
@@ -273,7 +258,6 @@
     <ClCompile Include="..\source\integrators\path-integrator.cpp" />
     <ClCompile Include="..\source\intersection\intersection.cpp" />
     <ClCompile Include="..\source\intersection\ray.cpp" />
-    <ClCompile Include="..\source\intersection\surface-point.cpp" />
     <ClCompile Include="..\source\lighting\light-sample.cpp" />
     <ClCompile Include="..\source\lighting\skybox-sample.cpp" />
     <ClCompile Include="..\source\lighting\skybox.cpp" />
@@ -291,7 +275,6 @@
     <ClCompile Include="..\source\meshes\sphere.cpp" />
     <ClCompile Include="..\source\meshes\triangle-mesh.cpp" />
     <ClCompile Include="..\source\meshes\triangle.cpp" />
-    <ClCompile Include="..\source\meshes\vertex.cpp" />
     <ClCompile Include="..\source\primitives\color.cpp" />
     <ClCompile Include="..\source\primitives\transformation.cpp" />
     <ClCompile Include="..\source\samplers\halton-sampler.cpp" />
@@ -301,7 +284,6 @@
     <ClCompile Include="..\source\textures\color-texture.cpp" />
     <ClCompile Include="..\source\textures\height-map.cpp" />
     <ClCompile Include="..\source\textures\image-texture.cpp" />
-    <ClCompile Include="..\source\textures\texture.cpp" />
     <ClCompile Include="..\source\tools\random-generator.cpp" />
     <ClCompile Include="..\source\tools\timing.cpp" />
   </ItemGroup>

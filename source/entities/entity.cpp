@@ -1,17 +1,15 @@
 #include "entities/entity.h"
 
-Entity::Entity() { }
-Entity::Entity(const Entity& other) : m_mesh(other.m_mesh), m_material(other.m_material) { }
-Entity::Entity(const std::shared_ptr<Triangle>& mesh, const std::shared_ptr<Material>& material, int meshID) :
-	m_mesh(mesh), m_material(material) {
-	m_mesh->id = meshID;
-}
+Entity::Entity(const Entity& other) : Entity(other.m_mesh, other.m_material, other.m_id) { }
+Entity::Entity(const Triangle* mesh, const Material* material, int id) : m_mesh(mesh),
+	m_material(material), m_id(id) { }
 
 void Entity::intersects(const Ray& ray, float maxT, Intersection* result) const {
 	if (m_mesh->intersects(ray, maxT, result)) {
 		result->hit = true;
 		result->material = m_material;
 		result->light = nullptr;
+		result->intersectionPoint.meshID = m_id;
 	}
 }
 
@@ -19,8 +17,8 @@ bool Entity::intersects(const Ray& ray, float maxT) const {
 	return m_mesh->intersects(ray, maxT);
 }
 
-int Entity::getMeshID() const {
-	return m_mesh->id;
+int Entity::getID() const {
+	return m_id;
 }
 
 BoundingBox Entity::createBoundingBox() const {

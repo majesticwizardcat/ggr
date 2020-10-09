@@ -2,13 +2,12 @@
 #include "bsdfs/specular-brdf.h"
 #include "bsdfs/refraction-btdf.h"
 
-TransparentMaterial::TransparentMaterial(const TransparentMaterial& other) : m_color(other.m_color),
-	m_materialIOR(other.m_materialIOR), m_airIOR(other.m_airIOR) { }
-TransparentMaterial::TransparentMaterial(const std::shared_ptr<Texture>& color, float materialIOR,
-	float airIOR) : m_color(color), m_materialIOR(materialIOR), m_airIOR(airIOR) {
+TransparentMaterial::TransparentMaterial(const Texture* color, float materialIOR,
+	float airIOR) : Material(), m_color(color), m_materialIOR(materialIOR), m_airIOR(airIOR) {
 	m_fresnel = std::make_unique<FresnelCT>();
 }
-TransparentMaterial::TransparentMaterial(const std::shared_ptr<Texture>& color, float materialIOR)
+
+TransparentMaterial::TransparentMaterial(const Texture* color, float materialIOR)
 	: TransparentMaterial(color, materialIOR, 1.0f) { }
 
 BSDF TransparentMaterial::createBSDF(const SurfacePoint& point, const Vector3& wo) const {

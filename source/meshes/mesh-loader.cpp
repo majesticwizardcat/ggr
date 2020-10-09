@@ -12,7 +12,7 @@ std::unique_ptr<TriangleMesh> meshloader::loadObj(const char* location) {
 	std::vector<Point3> positions;
 	std::vector<Point2> uvs;
 	std::vector<Vector3> normals;
-	std::vector<std::shared_ptr<Vertex>> vertices;
+	std::vector<Vertex> vertices;
 	std::vector<int> indices;
 	std::map<std::tuple<int, int, int>, int> ptn;
 	std::string in;
@@ -58,8 +58,7 @@ std::unique_ptr<TriangleMesh> meshloader::loadObj(const char* location) {
 				std::tuple<int, int, int> v = std::make_tuple(p - 1, t - 1, n - 1);
 
 				if (ptn.find(v) == ptn.end()) {
-					vertices.push_back(
-						std::make_shared<Vertex>(positions[p - 1], uvs[t - 1], normals[n - 1]));
+					vertices.push_back(Vertex(positions[p - 1], uvs[t - 1], normals[n - 1]));
 					indices.push_back(indices.size());
 				}
 

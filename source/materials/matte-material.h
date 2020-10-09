@@ -5,16 +5,14 @@ class MatteMaterial;
 #include "materials/material.h"
 #include "textures/texture.h"
 
-#include <memory>
-
 class MatteMaterial : public Material {
 private:
-	std::shared_ptr<Texture> m_diffuseColor;
+	const Texture* m_diffuseColor;
 	
 public:
 	MatteMaterial() = delete;
-	MatteMaterial(const MatteMaterial& other);
-	MatteMaterial(const std::shared_ptr<Texture>& diffuseColor);
+	MatteMaterial(const MatteMaterial& other) = delete;
+	MatteMaterial(const Texture* diffuseColor) : Material(), m_diffuseColor(diffuseColor) { }
 
 	BSDF createBSDF(const SurfacePoint& point, const Vector3& wo) const;
 };

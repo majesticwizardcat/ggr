@@ -12,18 +12,18 @@ class LightEntity;
 
 class Entity {
 protected:
-	std::shared_ptr<Triangle> m_mesh;
-	std::shared_ptr<Material> m_material;
+	int m_id;
+	const Triangle* m_mesh;
+	const Material* m_material;
 
 public:
-	Entity();
+	Entity() = delete;
 	Entity(const Entity& other);
-	Entity(const std::shared_ptr<Triangle>& mesh, const std::shared_ptr<Material>& material, int meshID);
+	Entity(const Triangle* mesh, const Material* material, int meshID);
 
 	virtual void intersects(const Ray& ray, float maxT, Intersection* result) const;
 	bool intersects(const Ray& ray, float maxT) const;
-	int getMeshID() const;
-
+	int getID() const;
 	BoundingBox createBoundingBox() const;
 };
 

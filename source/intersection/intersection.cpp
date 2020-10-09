@@ -1,20 +1,6 @@
 #include "intersection/intersection.h"
 #include "tools/util.h"
 
-#include <iostream>
-#include <limits>
-
-Intersection::Intersection() : hit(false), t(std::numeric_limits<float>::max()), light(nullptr) { }
-Intersection::Intersection(const Intersection& other) : Intersection(other.hit, other.t,
-	other.wo, other.intersectionPoint, other.material, other.light) { }
-Intersection::Intersection(bool hit, float t, const Vector3& wo, const SurfacePoint& intersectionPoint,
-	const std::shared_ptr<Material>& material, const LightEntity* light) : hit(hit), t(t), wo(wo),
-	intersectionPoint(intersectionPoint), material(material), light(light) { }
-Intersection::Intersection(bool hit, float t, const Vector3& wo, const SurfacePoint& intersectionPoint) :
-	hit(hit), t(t), wo(wo), intersectionPoint(intersectionPoint) { }
-Intersection::Intersection(float t, const Vector3& wo, const SurfacePoint& intersectionPoint) :
-	Intersection(true, t, wo, intersectionPoint) { }
-
 void Intersection::calculateScreenDifferentials(const Ray& ray) {
 	if (!hit || !ray.isCameraRay) {
 		return;
@@ -89,11 +75,3 @@ void Intersection::calculateScreenDifferentials(const Ray& ray) {
 		intersectionPoint.dUVdy.y = (yy * dux - xy * duy) * oneOverDet;
 	}
 }
-
-bool Intersection::operator==(const Intersection& other) const {
-	return intersectionPoint == other.intersectionPoint
-		&& hit == other.hit
-		&& t == other.t
-		&& wo == other.wo;
-}
-

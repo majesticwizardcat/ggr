@@ -14,16 +14,16 @@ class TriangleMesh;
 
 class TriangleMesh {
 protected:
-	std::vector<std::shared_ptr<Vertex>> m_vertices;
-	std::vector<std::shared_ptr<Triangle>> m_triangles;
+	std::vector<Vertex> m_vertices;
+	std::vector<std::unique_ptr<Triangle>> m_triangles;
+
+	TriangleMesh() { }
 
 public:
-	TriangleMesh();
-	TriangleMesh(const TriangleMesh& other);
-	TriangleMesh(const std::vector<std::shared_ptr<Vertex>>& vertices, const std::vector<int>& indices);
+	TriangleMesh(const TriangleMesh& other) = delete;
+	TriangleMesh(const std::vector<Vertex>& vertices, const std::vector<int>& indices);
 
-	void addTriangle(const Triangle& t);
 	void transform(const Transformation& transformation);
-	std::vector<std::shared_ptr<Triangle>> getTriangles() const;
+	inline const std::unique_ptr<Triangle>* getTriangles() const { return m_triangles.data(); }
+	inline size_t getNumberOfTriangles() const { return m_triangles.size(); }
 };
-

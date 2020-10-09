@@ -6,10 +6,9 @@ class PathIntegrator;
 
 class PathIntegrator : public FilmSamplingIntegrator {
 public:
-	PathIntegrator();
-	PathIntegrator(const PathIntegrator& other);
+	PathIntegrator() { }
+	PathIntegrator(const PathIntegrator& other) = delete;
 
-	std::unique_ptr<Integrator> clone() const;
-	Spectrum traceRay(const Ray& ray, const Scene& scene, Camera* camera, Sampler* sampler);
+	Spectrum traceRay(const Ray& ray, const Scene* scene, const Camera* camera, Sampler* sampler);
 };
 

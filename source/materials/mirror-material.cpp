@@ -1,11 +1,7 @@
 #include "materials/mirror-material.h"
 #include "bsdfs/specular-brdf.h"
 
-MirrorMaterial::MirrorMaterial(const MirrorMaterial& other) : m_color(other.m_color) {
-	m_fresnel = std::make_unique<FresnelSchlick>(Spectrum(1.0f));
-}
-
-MirrorMaterial::MirrorMaterial(const std::shared_ptr<Texture>& color) : m_color(color) {
+MirrorMaterial::MirrorMaterial(const Texture* color) : Material(), m_color(color) {
 	m_fresnel = std::make_unique<FresnelSchlick>(Spectrum(1.0f));
 }
 

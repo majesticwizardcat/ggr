@@ -8,10 +8,9 @@ class LightEntity;
 
 class LightEntity : public Entity {
 public:
-	LightEntity();
+	LightEntity() = delete;
 	LightEntity(const LightEntity& other);
-	LightEntity(const std::shared_ptr<Triangle>& mesh, const std::shared_ptr<EmissionMaterial>& material,
-		int meshID);
+	LightEntity(const Triangle* mesh, const EmissionMaterial* material, int meshID);
 
 	void intersects(const Ray& ray, float maxT, Intersection* result) const;
 	Spectrum emission(const Point3& surfacePoint, const SurfacePoint& lightPoint) const;

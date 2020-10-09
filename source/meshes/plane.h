@@ -7,6 +7,6 @@ class Plane;
 class Plane : public TriangleMesh {
 public:
 	Plane();
-	Plane(const Plane& other);
+	Plane(const Plane& other) = delete;
 };
 

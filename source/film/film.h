@@ -14,16 +14,15 @@ class Film {
 private:
 	float m_resolutionWidth;
 	float m_resolutionHeight;
-	std::shared_ptr<Filter> m_filter;
+	const Filter* m_filter;
 	std::unique_ptr<FilteredFilmSample[]> m_filmPixels;
 
 	int index(int x, int y) const;
 
 public:
-	Film();
-	Film(const Film& other);
-	Film(float resolutionWidth, float resolutionHeight);
-	Film(float resolutionWidth, float resolutionHeight, const std::shared_ptr<Filter>& filter);
+	Film() = delete;
+	Film(const Film& other) = delete;
+	Film(float resolutionWidth, float resolutionHeight, const Filter* filter);
 
 	void addUnfilteredSample(const UnfilteredFilmSample& sample);
 	void mergeFilmTile(const UnfilteredFilmTile& tile);

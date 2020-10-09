@@ -2,16 +2,13 @@
 
 #include <cmath>
 
-FilmSamplingIntegrator::FilmSamplingIntegrator() : m_initialSize(0) { }
-FilmSamplingIntegrator::FilmSamplingIntegrator(const Integrator& other) { }
-
-void FilmSamplingIntegrator::setup(const Scene& scene, Camera* camera, Sampler* sampler, const RenderSettings& settings) {
+void FilmSamplingIntegrator::setup(const Scene* scene, const Camera* camera, Sampler* sampler, const RenderSettings& settings) {
 	m_frame = std::make_unique<Film>(settings.resolutionWidth, settings.resolutionHeight, settings.filter);
 	m_tiles = m_frame->createUnfilteredFilmTiles(settings.tileSize);
 	m_initialSize = m_tiles.size();
 }
 
-bool FilmSamplingIntegrator::render(const Scene& scene, Camera* camera, Sampler* sampler, const RenderSettings& settings) {
+bool FilmSamplingIntegrator::render(const Scene* scene, const Camera* camera, Sampler* sampler, const RenderSettings& settings) {
 	m_tilesLock.lock();
 	if (m_tiles.empty()) {
 		m_tilesLock.unlock();
@@ -31,10 +28,10 @@ bool FilmSamplingIntegrator::render(const Scene& scene, Camera* camera, Sampler*
 	std::unique_ptr<Sampler> samplerClone = sampler->clone();
 	CameraSample cameraSample;
 	Ray ray;
-	for (int x = tile.tileStartX; x < tile.tileEndX; ++x) {
-		for (int y = tile.tileStartY; y < tile.tileEndY; ++y) {
+	for (unsigned int x = tile.tileStartX; x < tile.tileEndX; ++x) {
+		for (unsigned int y = tile.tileStartY; y < tile.tileEndY; ++y) {
 			samplerClone->createCameraSamples(Point2(x, y), settings.samples);
-			for (int s = 0; s < settings.samples; ++s) {
+			for (unsigned int s = 0; s < settings.samples; ++s) {
 				cameraSample = samplerClone->getCameraSample(Point2(x, y));
 				ray = camera->generateRay(cameraSample);
 				if (x > freeBoxStart.x && x < freeBoxEnd.x
@@ -66,6 +63,11 @@ bool FilmSamplingIntegrator::render(const Scene& scene, Camera* camera, Sampler*
 	m_frame->mergeFilmTile(tile);
 	m_filmLock.unlock();
 	return finished;
+}
+
+void FilmSamplingIntegrator::reset() {
+	m_tiles.clear();
+	m_initialSize = 0;
 }
 
 float FilmSamplingIntegrator::getCompletion() const {

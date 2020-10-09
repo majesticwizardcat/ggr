@@ -9,7 +9,7 @@ private:
 	Spectrum m_color;
 
 public:
-	ColorTexture();
+	ColorTexture() = delete;
 	ColorTexture(const ColorTexture& other);
 	ColorTexture(const Spectrum& color);
 

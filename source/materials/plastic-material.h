@@ -11,19 +11,17 @@ class PlasticMaterial;
 
 class PlasticMaterial : public Material {
 private:
+	const Texture* m_color;
+	const Texture* m_roughness;
 	std::unique_ptr<MicrofacetDistribution> m_distribution;
 	std::unique_ptr<Fresnel> m_fresnel;
-	std::shared_ptr<Texture> m_color;
-	std::shared_ptr<Texture> m_roughness;
 	float m_ratio;
 
 public:
 	PlasticMaterial() = delete;
-	PlasticMaterial(const PlasticMaterial& other);
-	PlasticMaterial(const std::shared_ptr<Texture> color,
-		const std::shared_ptr<Texture> roughness);
-	PlasticMaterial(const std::shared_ptr<Texture> color,
-		const std::shared_ptr<Texture> roughness, float ratio);
+	PlasticMaterial(const PlasticMaterial& other) = delete;
+	PlasticMaterial(const Texture* color, const Texture* roughness);
+	PlasticMaterial(const Texture* color, const Texture* roughness, float ratio);
 
 	BSDF createBSDF(const SurfacePoint& point, const Vector3& wo) const;
 };

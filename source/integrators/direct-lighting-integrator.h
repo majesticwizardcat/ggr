@@ -6,10 +6,9 @@ class DirectLightingIntegrator;
 
 class DirectLightingIntegrator : public FilmSamplingIntegrator {
 public:
-	DirectLightingIntegrator();
-	DirectLightingIntegrator(const DirectLightingIntegrator& other);
+	DirectLightingIntegrator() { }
+	DirectLightingIntegrator(const DirectLightingIntegrator& other) = delete;
 
-	std::unique_ptr<Integrator> clone() const;
-	Spectrum traceRay(const Ray& ray, const Scene& scene, Camera* camera, Sampler* sampler);
+	Spectrum traceRay(const Ray& ray, const Scene* scene, const Camera* camera, Sampler* sampler);
 };
 

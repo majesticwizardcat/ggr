@@ -15,14 +15,11 @@ Plane::Plane() {
 
 	Vector3 n(0.0f, 0.0f, 1.0f);
 
-	m_vertices.push_back(std::make_shared<Vertex>(p0, uv0, n));
-	m_vertices.push_back(std::make_shared<Vertex>(p1, uv1, n));
-	m_vertices.push_back(std::make_shared<Vertex>(p2, uv2, n));
-	m_vertices.push_back(std::make_shared<Vertex>(p3, uv3, n));
+	m_vertices.push_back(Vertex(p0, uv0, n));
+	m_vertices.push_back(Vertex(p1, uv1, n));
+	m_vertices.push_back(Vertex(p2, uv2, n));
+	m_vertices.push_back(Vertex(p3, uv3, n));
 
-	m_triangles.push_back(std::make_shared<Triangle>(m_vertices[0], m_vertices[1], m_vertices[2]));
-	m_triangles.push_back(std::make_shared<Triangle>(m_vertices[1], m_vertices[3], m_vertices[2]));
+	m_triangles.push_back(std::make_unique<Triangle>(&m_vertices[0], &m_vertices[1], &m_vertices[2]));
+	m_triangles.push_back(std::make_unique<Triangle>(&m_vertices[1], &m_vertices[3], &m_vertices[2]));
 }
-
-Plane::Plane(const Plane& other) : TriangleMesh(other) { }
-

@@ -2,8 +2,7 @@
 
 #include <algorithm>
 
-HeightMap::HeightMap(const HeightMap& other) : ImageTexture(other) { }
-HeightMap::HeightMap(const std::shared_ptr<MipMap>& mipmap) : ImageTexture(mipmap) { }
+HeightMap::HeightMap(const MipMap* mipmap) : ImageTexture(mipmap) { }
 
 SurfacePoint HeightMap::bump(const SurfacePoint& point) const {
 	float du = std::max(0.0001f, 0.5f * (std::abs(point.dUVdx.x) + std::abs(point.dUVdy.x)));

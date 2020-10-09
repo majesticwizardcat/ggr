@@ -5,40 +5,19 @@
 #include <queue>
 #include <functional>
 
-BBNode::BBNode() : itemIndex(-1) { }
-BBNode::BBNode(const BBNode& other) : itemIndex(other.itemIndex) {
-	if (other.left) {
-		left = std::make_unique<BBNode>(*other.left);
-	}
-	if (other.right) {
-		right = std::make_unique<BBNode>(*other.right);
-	}
-}
-
 BBNode::BBNode(int itemIndex) : itemIndex(itemIndex) { }
 
 bool BBNode::isLeaf() const {
 	return !(left || right);
 }
 
-BBAccelerator::BBAccelerator(const BBAccelerator& other) : m_entities(other.m_entities),
-	m_boundingBoxes(other.m_boundingBoxes) {
-	if (m_root) {
-		m_root = std::make_unique<BBNode>(*other.m_root);
-	}
-}
-
-void BBAccelerator::addMesh(const std::vector<std::shared_ptr<Entity>>& mesh) {
-	m_entities.insert(m_entities.end(), mesh.begin(), mesh.end());
-}
-
-int BBAccelerator::findSplitIndex(int startIndex, int endIndex,
-	const std::vector<std::pair<BoundingBox, int>>& boxes, const Axis& axis) const {
+int BBAccelerator::findSplitIndex(size_t startIndex, size_t endIndex,
+	const std::vector<std::pair<BoundingBox, size_t>>& boxes, const Axis& axis) const {
 	return (startIndex + endIndex) / 2;
 }
 
-std::unique_ptr<BBNode> BBAccelerator::split(int startIndex, int endIndex,
-	std::vector<std::pair<BoundingBox, int>>& boxes) {
+std::unique_ptr<BBNode> BBAccelerator::split(size_t startIndex, size_t endIndex,
+	std::vector<std::pair<BoundingBox, size_t>>& boxes) {
 	std::unique_ptr<BBNode> node = std::make_unique<BBNode>();
 	if (endIndex - startIndex == 1) {
 		node->itemIndex = boxes[startIndex].second;
@@ -46,20 +25,20 @@ std::unique_ptr<BBNode> BBAccelerator::split(int startIndex, int endIndex,
 	}
 
 	Axis axis = findSortAxis(boxes, startIndex, endIndex);
-	auto sortAxis = [&](const std::pair<BoundingBox, int>& b0,
-		const std::pair<BoundingBox, int>& b1) {
+	auto sortAxis = [&](const std::pair<BoundingBox, size_t>& b0,
+		const std::pair<BoundingBox, size_t>& b1) {
 		return pointCompAxis(b0.first.mid(), b1.first.mid(), axis);
 	};
 	std::sort(boxes.begin() + startIndex, boxes.begin() + endIndex, sortAxis);
 
 	BoundingBox box;
-	for (int i = startIndex; i < endIndex; ++i) {
+	for (size_t i = startIndex; i < endIndex; ++i) {
 		box.addBoundingBox(boxes[i].first);
 	}
 	node->itemIndex = m_boundingBoxes.size();
 	m_boundingBoxes.push_back(box);
 
-	int splitIndex = findSplitIndex(startIndex, endIndex, boxes, axis);
+	size_t splitIndex = findSplitIndex(startIndex, endIndex, boxes, axis);
 	node->left = split(startIndex, splitIndex, boxes);
 	node->right = split(splitIndex, endIndex, boxes);
 	return node;
@@ -92,8 +71,8 @@ float BBAccelerator::calculateGapAverage(std::vector<Point3>& midPoints, const A
 		- pointAxisValue(midPoints[0], axis)) / (midPoints.size() - 1);
 }
 
-Axis BBAccelerator::findSortAxis(const std::vector<std::pair<BoundingBox, int>>& boxes,
-	int startIndex, int endIndex) const {
+Axis BBAccelerator::findSortAxis(const std::vector<std::pair<BoundingBox, size_t>>& boxes,
+	size_t startIndex, size_t endIndex) const {
 	std::vector<Point3> midPoints;
 	for (int i = startIndex; i < endIndex; ++i) {
 		midPoints.push_back(boxes[i].first.mid());
@@ -113,19 +92,20 @@ Axis BBAccelerator::findSortAxis(const std::vector<std::pair<BoundingBox, int>>&
 	return Axis::Z_AXIS;
 }
 
-void BBAccelerator::initialize() {
-	if (!m_entities.empty()) {
-		std::vector<std::pair<BoundingBox, int>> boxes;
-		for (int i = 0; i < m_entities.size(); ++i) {
+void BBAccelerator::initialize(const std::unique_ptr<Entity>* entities, size_t numberOfEntities) {
+	m_entities = entities;
+	if (numberOfEntities > 0) {
+		std::vector<std::pair<BoundingBox, size_t>> boxes;
+		for (int i = 0; i < numberOfEntities; ++i) {
 			boxes.push_back(std::make_pair(m_entities[i]->createBoundingBox(), i));
 		}
 		m_root = split(0, boxes.size(), boxes);
 	}
 }
 
-float BBAccelerator::intersectNode(BBNode* node, const Ray& ray, int ignoreID, Intersection* result) const {
+float BBAccelerator::intersectNode(BBNode* node, const Ray& ray, size_t ignoreID, Intersection* result) const {
 	if (node->isLeaf()) {
-		if (m_entities[node->itemIndex]->getMeshID() != ignoreID) {
+		if (m_entities[node->itemIndex]->getID() != ignoreID) {
 			float lastT = result->t;
 			m_entities[node->itemIndex]->intersects(ray, result->t, result);
 			if (result->hit && result->t != lastT) {
@@ -137,7 +117,7 @@ float BBAccelerator::intersectNode(BBNode* node, const Ray& ray, int ignoreID, I
 	return m_boundingBoxes[node->itemIndex].intersects(ray, result->t);
 }
 
-void BBAccelerator::intersects(const Ray& ray, int ignoreID, Intersection* result) const {
+void BBAccelerator::intersects(const Ray& ray, size_t ignoreID, Intersection* result) const {
 	std::priority_queue<std::pair<float, BBNode*>, std::vector<std::pair<float, BBNode*>>,
 		std::greater<std::pair<float, BBNode*>>> tq;
 	tq.push(std::make_pair(0.0f, m_root.get()));
@@ -173,8 +153,8 @@ void BBAccelerator::intersects(const Ray& ray, const SurfacePoint& surface, Inte
 	intersects(ray, surface.meshID, result);
 }
 
-bool BBAccelerator::intersectEntityAny(BBNode* node, const Ray& ray, int ignoreID, float maxT) const {
-	return m_entities[node->itemIndex]->getMeshID() != ignoreID
+bool BBAccelerator::intersectEntityAny(BBNode* node, const Ray& ray, size_t ignoreID, float maxT) const {
+	return m_entities[node->itemIndex]->getID() != ignoreID
 		&& m_entities[node->itemIndex]->intersects(ray, maxT);
 }
 
@@ -208,8 +188,3 @@ bool BBAccelerator::intersects(const Ray& ray, const SurfacePoint& surface, floa
 	}
 	return false;
 }
-
-std::unique_ptr<Accelerator> BBAccelerator::clone() const {
-	return std::make_unique<BBAccelerator>(*this);
-}
-
