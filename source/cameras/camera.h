@@ -21,7 +21,7 @@ public:
 	Camera(const std::shared_ptr<Transformation>& cameraToWorld, int resolutionWidth,
 		int resolutionHeight);
 
-	virtual Ray generateRay(const CameraSample& sample) const = 0;
+	virtual void generateRay(Ray* ray, const CameraSample& sample) const = 0;
 	virtual std::unique_ptr<Camera> clone() const = 0;
 };
 

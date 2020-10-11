@@ -20,10 +20,11 @@ public:
 	Transformation(const Matrix4& transform) : Transformation(transform, glm::inverse(transform)) { }
 	Transformation(const Matrix4& transform, const Matrix4& inverse) : m_transform(transform), m_inverse(inverse) { }
 
-	Ray applyRay(const Ray& r) const;
-	Ray applyInverseRay(const Ray& r) const;
 	Vertex applyVertex(const Vertex& v) const;
 	Vertex applyInverseVertex(const Vertex& v) const;
+
+	void applyRay(Ray* r) const;
+	void applyInverseRay(Ray* r) const;
 
 	inline bool operator==(const Transformation& other) const {
 		return m_transform == other.m_transform;

@@ -2,40 +2,22 @@
 
 #include <glm/gtx/transform.hpp>
 
-Ray Transformation::applyRay(const Ray& ray) const {
-	Ray r;
-	r.origin = applyPoint(ray.origin);
-	r.direction = applyVector(ray.direction);
-	r.weight = ray.weight;
-	r.isCameraRay = ray.isCameraRay;
-
-	if (!r.isCameraRay) {
-		return r;
-	}
-
-	r.dxOrigin = applyPoint(ray.dxOrigin);
-	r.dxDirection = applyVector(ray.dxDirection);
-	r.dyOrigin = applyPoint(ray.dyOrigin);
-	r.dyDirection = applyVector(ray.dyDirection);
-	return r;
+void Transformation::applyRay(Ray* ray) const {
+	ray->origin = applyPoint(ray->origin);
+	ray->direction = applyVector(ray->direction);
+	ray->dxOrigin = applyPoint(ray->dxOrigin);
+	ray->dxDirection = applyVector(ray->dxDirection);
+	ray->dyOrigin = applyPoint(ray->dyOrigin);
+	ray->dyDirection = applyVector(ray->dyDirection);
 }
 
-Ray Transformation::applyInverseRay(const Ray& ray) const {
-	Ray r;
-	r.origin = applyInversePoint(ray.origin);
-	r.direction = applyInverseVector(ray.direction);
-	r.weight = ray.weight;
-	r.isCameraRay = ray.isCameraRay;
-
-	if (!r.isCameraRay) {
-		return r;
-	}
-
-	r.dxOrigin = applyInversePoint(ray.dxOrigin);
-	r.dxDirection = applyInverseVector(ray.dxDirection);
-	r.dyOrigin = applyInversePoint(ray.dyOrigin);
-	r.dyDirection = applyInverseVector(ray.dyDirection);
-	return r;
+void Transformation::applyInverseRay(Ray* ray) const {
+	ray->origin = applyInversePoint(ray->origin);
+	ray->direction = applyInverseVector(ray->direction);
+	ray->dxOrigin = applyInversePoint(ray->dxOrigin);
+	ray->dxDirection = applyInverseVector(ray->dxDirection);
+	ray->dyOrigin = applyInversePoint(ray->dyOrigin);
+	ray->dyDirection = applyInverseVector(ray->dyDirection);
 }
 
 Vertex Transformation::applyInverseVertex(const Vertex& v) const {

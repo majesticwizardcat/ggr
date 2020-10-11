@@ -15,7 +15,7 @@ public:
 		int resolutionWidth, int resolutionHeight,
 		float lensRadius, float focalDistance, float scale);
 
-	Ray unproject(const Point2& filmPosition) const;
+	void unproject(Ray* filmPositionRay) const;
 	std::unique_ptr<Camera> clone() const;
 };
 

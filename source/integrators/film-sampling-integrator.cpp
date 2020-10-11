@@ -28,12 +28,13 @@ bool FilmSamplingIntegrator::render(const Scene* scene, const Camera* camera, Sa
 	std::unique_ptr<Sampler> samplerClone = sampler->clone();
 	CameraSample cameraSample;
 	Ray ray;
+
 	for (unsigned int x = tile.tileStartX; x < tile.tileEndX; ++x) {
 		for (unsigned int y = tile.tileStartY; y < tile.tileEndY; ++y) {
 			samplerClone->createCameraSamples(Point2(x, y), settings.samples);
 			for (unsigned int s = 0; s < settings.samples; ++s) {
 				cameraSample = samplerClone->getCameraSample(Point2(x, y));
-				ray = camera->generateRay(cameraSample);
+				camera->generateRay(&ray, cameraSample);
 				if (x > freeBoxStart.x && x < freeBoxEnd.x
 					&& y > freeBoxStart.y && y < freeBoxEnd.y) {
 					m_frame->addUnfilteredSample(

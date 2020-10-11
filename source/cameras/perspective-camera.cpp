@@ -10,14 +10,14 @@ PerspectiveCamera::PerspectiveCamera(const std::shared_ptr<Transformation>& came
 	std::make_shared<Transformation>(transform::perspectiveProjection(fov, 0.01f, 1000.0f)),
 	lensRadius, focalDistance) { }
 
-Ray PerspectiveCamera::unproject(const Point2& filmPosition) const {
-	Point3 unprojected = m_projection->applyInversePoint(Point3(filmPosition, 0.0f));
-	Vector3 fp(unprojected);
+void PerspectiveCamera::unproject(Ray* filmPositionRay) const {
+	filmPositionRay->direction = glm::normalize(m_projection->applyInversePoint(filmPositionRay->origin));
+	filmPositionRay->dxDirection = glm::normalize(m_projection->applyInversePoint(filmPositionRay->dxOrigin));
+	filmPositionRay->dyDirection = glm::normalize(m_projection->applyInversePoint(filmPositionRay->dyOrigin));
 
-	Ray r;
-	r.origin = Point3(0.0f);
-	r.direction = glm::normalize(fp);
-	return r;
+	filmPositionRay->origin = Point3(0.0f);
+	filmPositionRay->dxOrigin = Point3(0.0f);
+	filmPositionRay->dyOrigin = Point3(0.0f);
 }
 
 std::unique_ptr<Camera> PerspectiveCamera::clone() const {

@@ -6,7 +6,7 @@ class ProjectiveCamera;
 
 class ProjectiveCamera : public Camera {
 private:
-	Ray applyDOF(const Ray& ray, const Point2& lensPosition) const;
+	void applyDOF(Ray* ray, const Point2& lensPosition) const;
 
 protected:
 	std::shared_ptr<Transformation> m_projection;
@@ -21,8 +21,8 @@ public:
 		const std::shared_ptr<Transformation>& projection,
 		float lensRadius, float focalDistance);
 
-	Ray generateRay(const CameraSample& sample) const;
-	virtual Ray unproject(const Point2& filmPosition) const = 0;
+	void generateRay(Ray* ray, const CameraSample& sample) const;
+	virtual void unproject(Ray* filmPositionRay) const = 0;
 	virtual std::unique_ptr<Camera> clone() const = 0;
 };
 
