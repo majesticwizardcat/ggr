@@ -39,13 +39,13 @@ bool FilmSamplingIntegrator::render(const Scene* scene, const Camera* camera, Sa
 					&& y > freeBoxStart.y && y < freeBoxEnd.y) {
 					m_frame->addUnfilteredSample(
 						UnfilteredFilmSample(cameraSample.filmPosition,
-						traceRay(ray, scene, camera, samplerClone.get()),
+						traceRay(&ray, scene, camera, samplerClone.get()),
 						ray.weight));
 				}
 				else {
 					tile.samples.push_back(
 						UnfilteredFilmSample(cameraSample.filmPosition,
-						traceRay(ray, scene, camera, samplerClone.get()),
+						traceRay(&ray, scene, camera, samplerClone.get()),
 						ray.weight));
 				}
 				if (tile.samples.size() > 0 && m_filmLock.try_lock()) {

@@ -33,8 +33,8 @@ Spectrum BSDF::evaluate(const Vector3& worldWo, const Vector3& worldWi) const {
 		return Spectrum();
 	}
 	Spectrum result;
-	Vector3 wo = glm::normalize(m_worldToShading.applyVector(worldWo));
-	Vector3 wi = glm::normalize(m_worldToShading.applyVector(worldWi));
+	Vector3 wo = m_worldToShading.applyVector(worldWo);
+	Vector3 wi = m_worldToShading.applyVector(worldWi);
 
 	BXDFType type = glm::dot(m_geometricNormal, worldWo) * glm::dot(m_geometricNormal, worldWi) > 0
 		? BXDFType::REFLECTION : BXDFType::REFRACTION;
@@ -84,7 +84,7 @@ BSDFSample BSDF::sample(Sampler* sampler, const Vector3& worldWo) const {
 	if (m_bxdfs.empty()) {
 		return BSDFSample();
 	}
-	Vector3 wo = glm::normalize(m_worldToShading.applyVector(worldWo));
+	Vector3 wo = m_worldToShading.applyVector(worldWo);
 	int choice = sampler->getSample() * m_bxdfs.size();
 	if (m_bxdfs[choice]->getType() == BXDFType::EMISSION) {
 		return BSDFSample();
@@ -97,7 +97,7 @@ BSDFSample BSDF::sample(Sampler* sampler, const Vector3& worldWo) const {
 	}
 
 	Vector3 wi = sample.sampledDirection;
-	Vector3 worldWi = glm::normalize(m_worldToShading.applyInverseVector(wi));
+	Vector3 worldWi = m_worldToShading.applyInverseVector(wi);
 	sample.sampledDirection = worldWi;
 
 	BXDFType type = glm::dot(m_geometricNormal, worldWo) * glm::dot(m_geometricNormal, worldWi) > 0

@@ -29,8 +29,8 @@ public:
 	void addLight(const TriangleMesh* mesh, const EmissionMaterial* emissionMat);
 	void initializeAccelerator();
 
-	Intersection intersects(const Ray& ray) const;
-	Intersection intersects(const Ray& ray, float maxT) const;
+	Intersection intersects(Ray* ray) const;
+	Intersection intersects(Ray* ray, float maxT) const;
 	Intersection intersects(const SurfacePoint& surface, const Vector3& direction) const;
 	Intersection intersects(const SurfacePoint& surface, const Vector3& direction, float maxT) const;
 

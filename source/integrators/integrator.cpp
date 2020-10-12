@@ -31,7 +31,7 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 		LightSample lightSample = light->sample(sampler, surfacePoint.point);
 		lightSample.pdf /= (float) lights;
 
-		if (!util::equals(lightSample.pdf, 0.0f)
+		if (util::equals(lightSample.pdf, 0.0f)
 			&& !lightSample.emission.isZero()
 			&& scene->areUnoccluded(surfacePoint, lightSample.sampledPoint)) {
 

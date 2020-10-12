@@ -3,11 +3,11 @@
 
 #include <algorithm>
 
-Spectrum PathIntegrator::traceRay(const Ray& ray, const Scene* scene, const Camera* camera, Sampler* sampler) {
+Spectrum PathIntegrator::traceRay(Ray* ray, const Scene* scene, const Camera* camera, Sampler* sampler) {
 	Spectrum L;
 	Spectrum throughput(1.0f);
 	Intersection intersection = scene->intersects(ray);
-	Vector3 rayDirection = ray.direction;
+	Vector3 rayDirection = ray->direction;
 	bool cameraRay = true;
 	bool lastDistDelta = false;
 	

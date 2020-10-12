@@ -38,7 +38,7 @@ inline bool sameHemisphere(const Vector3& v0, const Vector3& v1) {
 }
 
 inline Vector3 reflect(const Vector3& w, const Vector3& n) {
-	return glm::normalize(n * 2.0f * glm::dot(n, w) - w);
+	return n * 2.0f * glm::dot(n, w) - w;
 }
 
 inline Vector3 refract(const Vector3& w, const Vector3& n, float IORin, float IORout) {
@@ -49,7 +49,7 @@ inline Vector3 refract(const Vector3& w, const Vector3& n, float IORin, float IO
 		return Vector3(0.0f);
 	}
 	float cosThetaT = std::sqrt(1.0f - sin2ThetaEta2);
-	return glm::normalize(-w * eta + n * (eta * cosThetaI - cosThetaT));
+	return -w * eta + n * (eta * cosThetaI - cosThetaT);
 }
 
 inline float cosTheta(const Vector3& w) {

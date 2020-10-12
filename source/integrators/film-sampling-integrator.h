@@ -25,6 +25,6 @@ public:
 	float getCompletion() const;
 
 	virtual void reset();
-	virtual Spectrum traceRay(const Ray& ray, const Scene* scene, const Camera* camera, Sampler* sampler) = 0;
+	virtual Spectrum traceRay(Ray* ray, const Scene* scene, const Camera* camera, Sampler* sampler) = 0;
 };
 

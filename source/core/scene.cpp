@@ -33,20 +33,19 @@ void Scene::initializeAccelerator() {
 	m_accelerator.initialize(m_entities.data(), m_entities.size());
 }
 
-Intersection Scene::intersects(const Ray& ray) const {
+Intersection Scene::intersects(Ray* ray) const {
 	return intersects(ray, std::numeric_limits<float>::max());
 }
 
-Intersection Scene::intersects(const Ray& ray, float maxT) const {
-	Ray r(ray);
-	r.createRaySpace();
+Intersection Scene::intersects(Ray* ray, float maxT) const {
+	ray->createRaySpace();
 
 	Intersection result;
 	result.t = maxT;
-	result.wo = -ray.direction;
+	result.wo = -ray->direction;
 
-	m_accelerator.intersects(r, &result);
-	result.calculateScreenDifferentials(ray);
+	m_accelerator.intersects(*ray, &result);
+	result.calculateScreenDifferentials(*ray);
 	return result;
 }
 
@@ -68,7 +67,12 @@ Intersection Scene::intersects(const SurfacePoint& surface, const Vector3& direc
 
 bool Scene::areUnoccluded(const SurfacePoint& p0, const SurfacePoint& p1) const {
 	Vector3 p0p1 = p1.point - p0.point;
-	Intersection i = intersects(p0, glm::normalize(p0p1), std::numeric_limits<float>::max());
+	float l = glm::length(p0p1);
+	if (l < 0.1f) {
+		return true;
+	}
+
+	Intersection i = intersects(p0, p0p1 * (1.0f / l), l + 2.0f * ERROR);
 	return i.hit && i.intersectionPoint.meshID == p1.meshID;
 }
 
