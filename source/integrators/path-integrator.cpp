@@ -6,11 +6,12 @@
 Spectrum PathIntegrator::traceRay(Ray* ray, const Scene* scene, const Camera* camera, Sampler* sampler) {
 	Spectrum L;
 	Spectrum throughput(1.0f);
-	Intersection intersection = scene->intersects(ray);
+	Intersection intersection;
 	Vector3 rayDirection = ray->direction;
 	bool cameraRay = true;
 	bool lastDistDelta = false;
-	
+	scene->intersects(ray, &intersection);
+
 	while (true) {
 		if (!intersection.hit || intersection.light) {
 			if (cameraRay || lastDistDelta) {
@@ -52,7 +53,7 @@ Spectrum PathIntegrator::traceRay(Ray* ray, const Scene* scene, const Camera* ca
 
 		cameraRay = false;
 		rayDirection = bsdfSample.sampledDirection;
-		intersection = scene->intersects(intersection.intersectionPoint, bsdfSample.sampledDirection);
+		scene->intersects(intersection.intersectionPoint, bsdfSample.sampledDirection, &intersection);
 	}
 
 	return L;

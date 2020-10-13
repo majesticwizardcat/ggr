@@ -103,12 +103,11 @@ void BBAccelerator::initialize(const std::unique_ptr<Entity>* entities, size_t n
 	}
 }
 
-float BBAccelerator::intersectNode(BBNode* node, const Ray& ray, size_t ignoreID, Intersection* result) const {
+float BBAccelerator::intersectNode(BBNode* node, const Ray& ray, size_t ignoreID, EntityIntersection* result) const {
 	if (node->isLeaf()) {
 		if (m_entities[node->itemIndex]->getID() != ignoreID) {
 			float lastT = result->t;
-			m_entities[node->itemIndex]->intersects(ray, result->t, result);
-			if (result->hit && result->t != lastT) {
+			if (m_entities[node->itemIndex]->intersects(ray, result->t, result) && result->t != lastT) {
 				return result->t;
 			}
 		}
@@ -117,7 +116,7 @@ float BBAccelerator::intersectNode(BBNode* node, const Ray& ray, size_t ignoreID
 	return m_boundingBoxes[node->itemIndex].intersects(ray, result->t);
 }
 
-void BBAccelerator::intersects(const Ray& ray, size_t ignoreID, Intersection* result) const {
+bool BBAccelerator::intersects(const Ray& ray, size_t ignoreID, EntityIntersection* result) const {
 	std::priority_queue<std::pair<float, BBNode*>, std::vector<std::pair<float, BBNode*>>,
 		std::greater<std::pair<float, BBNode*>>> tq;
 	tq.push(std::make_pair(0.0f, m_root.get()));
@@ -129,7 +128,7 @@ void BBAccelerator::intersects(const Ray& ray, size_t ignoreID, Intersection* re
 		}
 		current = tq.top().second;
 		if (current->isLeaf()) {
-			break;
+			return true;
 		}
 		tq.pop();
 
@@ -143,14 +142,7 @@ void BBAccelerator::intersects(const Ray& ray, size_t ignoreID, Intersection* re
 			tq.push(std::make_pair(t, current->right.get()));
 		}
 	}
-}
-
-void BBAccelerator::intersects(const Ray& ray, Intersection* result) const {
-	intersects(ray, -1, result);
-}
-
-void BBAccelerator::intersects(const Ray& ray, const SurfacePoint& surface, Intersection* result) const {
-	intersects(ray, surface.meshID, result);
+	return false;
 }
 
 bool BBAccelerator::intersectEntityAny(BBNode* node, const Ray& ray, size_t ignoreID, float maxT) const {
@@ -158,7 +150,7 @@ bool BBAccelerator::intersectEntityAny(BBNode* node, const Ray& ray, size_t igno
 		&& m_entities[node->itemIndex]->intersects(ray, maxT);
 }
 
-bool BBAccelerator::intersects(const Ray& ray, const SurfacePoint& surface, float maxT) const {
+bool BBAccelerator::intersectsAny(const Ray& ray, const SurfacePoint& surface, float maxT) const {
 	std::vector<BBNode*> hits;
 	BBNode* current;
 	std::pair<bool, bool> res;

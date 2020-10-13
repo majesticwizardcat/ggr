@@ -3,6 +3,7 @@
 class BBAccelerator;
 
 #include "accelerators/bounding-box.h"
+#include "intersection/entity-intersection.h"
 
 #include <utility>
 #include <memory>
@@ -40,17 +41,22 @@ private:
 	float calculateGapAverage(std::vector<Point3>& midPoints, const Axis& axis) const;
 	Axis findSortAxis(const std::vector<std::pair<BoundingBox, size_t>>& boxes,
 		size_t startIndex, size_t endIndex) const;
-	void intersects(const Ray& ray, size_t ignoreID, Intersection* result) const;
-	float intersectNode(BBNode* node, const Ray& ray, size_t ignoreID, Intersection* result) const;
+	bool intersects(const Ray& ray, size_t ignoreID, EntityIntersection* result) const;
+	float intersectNode(BBNode* node, const Ray& ray, size_t ignoreID, EntityIntersection* result) const;
 	bool intersectEntityAny(BBNode* node, const Ray& ray, size_t ignoreID, float maxT) const;
 
 public:
 	BBAccelerator() : m_entities(nullptr) { }
 	BBAccelerator(const BBAccelerator& other) = delete;
 
+	inline bool intersects(const Ray& ray, EntityIntersection* result) const {
+		return intersects(ray, -1, result);
+	}
+	inline bool intersects(const Ray& ray, const SurfacePoint& surface, EntityIntersection* result) const {
+		return intersects(ray, surface.meshID, result);
+	}
+
 	void initialize(const std::unique_ptr<Entity>* entities, size_t numberOfEntites);
-	void intersects(const Ray& ray, Intersection* result) const;
-	void intersects(const Ray& ray, const SurfacePoint& surface, Intersection* result) const;
-	bool intersects(const Ray& ray, const SurfacePoint& surface, float maxT) const;
+	bool intersectsAny(const Ray& ray, const SurfacePoint& surface, float maxT) const;
 };
 

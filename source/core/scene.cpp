@@ -33,51 +33,53 @@ void Scene::initializeAccelerator() {
 	m_accelerator.initialize(m_entities.data(), m_entities.size());
 }
 
-Intersection Scene::intersects(Ray* ray) const {
-	return intersects(ray, std::numeric_limits<float>::max());
+void Scene::fillIntersectionFromEntity(const EntityIntersection& entityIntersection,
+	Intersection* result) const {
+		entityIntersection.entity->fillMeshIntersection(entityIntersection.triangleWeights.w0,
+			entityIntersection.triangleWeights.w1, entityIntersection.triangleWeights.w2, result);
+		result->hit = true;
+		result->light = entityIntersection.entity->getLight();
+		result->intersectionPoint.meshID = entityIntersection.entity->getID();
+		result->material = entityIntersection.entity->getMaterial();
 }
 
-Intersection Scene::intersects(Ray* ray, float maxT) const {
+void Scene::intersects(Ray* ray, Intersection* result, float maxT) const {
+	EntityIntersection entityIntersection;
 	ray->createRaySpace();
-
-	Intersection result;
-	result.t = maxT;
-	result.wo = -ray->direction;
-
-	m_accelerator.intersects(*ray, &result);
-	result.calculateScreenDifferentials(*ray);
-	return result;
+	if (m_accelerator.intersects(*ray, &entityIntersection)) {
+		fillIntersectionFromEntity(entityIntersection, result);
+		result->wo = -ray->direction;
+		return;
+	}
+	result->light = nullptr;
+	result->hit = false;
 }
 
-Intersection Scene::intersects(const SurfacePoint& surface, const Vector3& direction) const {
-	return intersects(surface, direction, std::numeric_limits<float>::max());
-}
-
-Intersection Scene::intersects(const SurfacePoint& surface, const Vector3& direction, float maxT) const {
-	Ray r(surface.point, direction);
-	r.createRaySpace();
-
-	Intersection result;
-	result.t = maxT;
-	result.wo = -direction;
-
-	m_accelerator.intersects(r, surface, &result);
-	return result;
+void Scene::intersects(const SurfacePoint& surface, const Vector3& direction,
+	Intersection* result, float maxT) const {
+	Ray ray(surface.point, direction);
+	EntityIntersection entityIntersection;
+	ray.createRaySpace();
+	if (m_accelerator.intersects(ray, surface, &entityIntersection)) {
+		fillIntersectionFromEntity(entityIntersection, result);
+		result->wo = -ray.direction;
+		return;
+	}
+	result->light = nullptr;
+	result->hit = false;
 }
 
 bool Scene::areUnoccluded(const SurfacePoint& p0, const SurfacePoint& p1) const {
+	EntityIntersection result;
 	Vector3 p0p1 = p1.point - p0.point;
 	float l = glm::length(p0p1);
-	if (l < 0.1f) {
-		return true;
-	}
-
-	Intersection i = intersects(p0, p0p1 * (1.0f / l), l + 2.0f * ERROR);
-	return i.hit && i.intersectionPoint.meshID == p1.meshID;
+	Ray ray(p0.point, p0p1 * (1.0f / l));
+	return m_accelerator.intersects(ray, p0, &result)
+		&& result.entity->getID() == p1.meshID;
 }
 
 bool Scene::isIntersected(const SurfacePoint& surface, const Vector3& direction) const {
 	Ray r(surface.point, direction);
 	r.createRaySpace();
-	return m_accelerator.intersects(r, surface, std::numeric_limits<float>::max());
+	return m_accelerator.intersectsAny(r, surface, std::numeric_limits<float>::max());
 }

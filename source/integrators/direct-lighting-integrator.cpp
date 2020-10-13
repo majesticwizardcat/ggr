@@ -1,7 +1,8 @@
 #include "integrators/direct-lighting-integrator.h"
 
 Spectrum DirectLightingIntegrator::traceRay(Ray* ray, const Scene* scene, const Camera* camera, Sampler* sampler) {
-	Intersection intersection = scene->intersects(ray);
+	Intersection intersection;
+	scene->intersects(ray, &intersection);
 	Spectrum L;
 
 	if (!intersection.hit) {

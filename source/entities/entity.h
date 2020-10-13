@@ -18,12 +18,21 @@ protected:
 
 public:
 	Entity() = delete;
-	Entity(const Entity& other);
-	Entity(const Triangle* mesh, const Material* material, int meshID);
+	Entity(const Entity& other) : Entity(other.m_mesh, other.m_material, other.m_id) { }
+	Entity(const Triangle* mesh, const Material* material, int id) : m_mesh(mesh),
+		m_material(material), m_id(id) { }
 
-	virtual void intersects(const Ray& ray, float maxT, Intersection* result) const;
-	bool intersects(const Ray& ray, float maxT) const;
-	int getID() const;
+	void fillMeshIntersection(float w0, float w1, float w2, Intersection* result) const;
 	BoundingBox createBoundingBox() const;
+	bool intersects(const Ray& ray, float maxT, EntityIntersection* result) const;
+
+	inline bool intersects(const Ray& ray, float maxT) const {
+		return intersects(ray, maxT, nullptr);
+	}
+
+	inline const Material* getMaterial() const { return m_material; }
+	inline int getID() const { return m_id; }
+
+	virtual inline const LightEntity* getLight() const { return nullptr; }
 };
 

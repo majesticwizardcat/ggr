@@ -2,19 +2,6 @@
 
 #include <glm/gtx/norm.hpp>
 
-LightEntity::LightEntity(const LightEntity& other) : Entity(other) { }
-LightEntity::LightEntity(const Triangle* mesh, const EmissionMaterial* material, int meshID)
-	: Entity(mesh, material, meshID) { }
-
-void LightEntity::intersects(const Ray& ray, float maxT, Intersection* result) const {
-	if (m_mesh->intersects(ray, maxT, result)) {
-		result->hit = true;
-		result->material = m_material;
-		result->light = this;
-		result->intersectionPoint.meshID = m_id;
-	}
-}
-
 Spectrum LightEntity::emission(const Point3& surfacePoint, const SurfacePoint& lightPoint) const {
 	Vector3 direction = surfacePoint - lightPoint.point;
 	return m_material->createBSDF(lightPoint, direction).evaluate(direction, direction);

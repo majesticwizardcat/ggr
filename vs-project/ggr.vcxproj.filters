@@ -303,6 +303,9 @@
     <ClInclude Include="..\source\meshes\mesh-loader.h">
       <Filter>source\meshes</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\intersection\entity-intersection.h">
+      <Filter>source\intersection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\accelerators\bb-accelerator.cpp">
@@ -361,9 +364,6 @@
     </ClCompile>
     <ClCompile Include="..\source\core\scene.cpp">
       <Filter>source\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\entities\entity.cpp">
-      <Filter>source\entities</Filter>
     </ClCompile>
     <ClCompile Include="..\source\entities\light-entity.cpp">
       <Filter>source\entities</Filter>
@@ -508,6 +508,9 @@
     </ClCompile>
     <ClCompile Include="..\source\ggr.cpp">
       <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\entities\entity.cpp">
+      <Filter>source\entities</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -5,6 +5,7 @@ class Triangle;
 #include "primitives/transformation.h"
 #include "meshes/vertex.h"
 #include "intersection/ray.h"
+#include "intersection/entity-intersection.h"
 #include "intersection/intersection.h"
 #include "samplers/sampler.h"
 
@@ -29,10 +30,8 @@ public:
 	Triangle(const Vertex* v0, const Vertex* v1, const Vertex* v2);
 
 	void calculateGeometry();
-	Vertex interpolate(float w0, float w1, float w2) const;
-	bool intersects(const Ray& ray, Intersection* result) const;
-	bool intersects(const Ray& ray, float maxT, Intersection* result) const;
-	bool intersects(const Ray& ray, float maxT) const;
+	bool intersects(const Ray& ray, float maxT, EntityIntersection* result) const;
+	void fillIntersection(float w0, float w1, float w2, Intersection* result) const;
 	SurfacePoint samplePoint(Sampler* sampler) const;
 
 	inline float getArea() const { return m_area; }

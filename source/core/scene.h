@@ -20,6 +20,9 @@ private:
 	Skybox* m_skybox;
 	int m_nextID;
 
+	void fillIntersectionFromEntity(const EntityIntersection& entityIntersection,
+		Intersection* result) const;
+
 public:
 	Scene() = delete;
 	Scene(const Scene& other) = delete;
@@ -29,11 +32,18 @@ public:
 	void addLight(const TriangleMesh* mesh, const EmissionMaterial* emissionMat);
 	void initializeAccelerator();
 
-	Intersection intersects(Ray* ray) const;
-	Intersection intersects(Ray* ray, float maxT) const;
-	Intersection intersects(const SurfacePoint& surface, const Vector3& direction) const;
-	Intersection intersects(const SurfacePoint& surface, const Vector3& direction, float maxT) const;
+	inline void intersects(Ray* ray, Intersection* result) const {
+		intersects(ray, result, std::numeric_limits<float>::max());
+	}
 
+	inline void intersects(const SurfacePoint& surface,
+		const Vector3& direction, Intersection* result) const {
+		intersects(surface, direction, result, std::numeric_limits<float>::max());
+	}
+
+	void intersects(Ray* ray, Intersection* result, float maxT) const;
+	void intersects(const SurfacePoint& surface, const Vector3& direction,
+		Intersection* result, float maxT) const;
 	bool areUnoccluded(const SurfacePoint& p0, const SurfacePoint& p1) const;
 	bool isIntersected(const SurfacePoint& surface, const Vector3& direction) const;
 

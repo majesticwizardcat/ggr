@@ -50,7 +50,8 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 		return L;
 	}
 
-	Intersection intersection = scene->intersects(surfacePoint, bsdfSample.sampledDirection);
+	Intersection intersection;
+	scene->intersects(surfacePoint, bsdfSample.sampledDirection, &intersection);
 	if (!intersection.hit) {
 		float pdfSkybox = skybox->pdf(bsdfSample.sampledDirection) / lights;
 		float MISWeight = bsdfSample.pdf / (bsdfSample.pdf + pdfSkybox);

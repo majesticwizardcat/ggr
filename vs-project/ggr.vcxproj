@@ -167,6 +167,7 @@
     <ClInclude Include="..\source\integrators\film-sampling-integrator.h" />
     <ClInclude Include="..\source\integrators\integrator.h" />
     <ClInclude Include="..\source\integrators\path-integrator.h" />
+    <ClInclude Include="..\source\intersection\entity-intersection.h" />
     <ClInclude Include="..\source\intersection\intersection.h" />
     <ClInclude Include="..\source\intersection\ray.h" />
     <ClInclude Include="..\source\intersection\surface-point.h" />
