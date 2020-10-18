@@ -10,9 +10,9 @@ class FilmSamplingIntegrator;
 
 class FilmSamplingIntegrator : public Integrator {
 private:
-	std::vector<UnfilteredFilmTile> m_tiles;
-	std::mutex m_tilesLock;
+	std::vector<FilmBounds> m_filmTiles;
 	std::mutex m_filmLock;
+	std::mutex m_boundsLock;
 	size_t m_initialSize;
 
 public:
@@ -20,7 +20,7 @@ public:
 	FilmSamplingIntegrator(const Integrator& other) = delete;
 
 	void setup(const Scene* scene, const Camera* camera, Sampler* sampler, const RenderSettings& settings);
-	bool render(const Scene* scene, const Camera* camera, Sampler* sampler, const RenderSettings& settings);
+	void render(const Scene* scene, const Camera* camera, Sampler* sampler, const RenderSettings& settings);
 	Image combine();
 	float getCompletion() const;
 

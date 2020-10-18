@@ -135,12 +135,6 @@
     <ClInclude Include="..\source\film\film.h">
       <Filter>source\film</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\film\film-sample.h">
-      <Filter>source\film</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\film\unfiltered-film-tile.h">
-      <Filter>source\film</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\filters\box-filter.h">
       <Filter>source\filters</Filter>
     </ClInclude>
@@ -369,12 +363,6 @@
       <Filter>source\entities</Filter>
     </ClCompile>
     <ClCompile Include="..\source\film\film.cpp">
-      <Filter>source\film</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\film\film-sample.cpp">
-      <Filter>source\film</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\film\unfiltered-film-tile.cpp">
       <Filter>source\film</Filter>
     </ClCompile>
     <ClCompile Include="..\source\filters\box-filter.cpp">

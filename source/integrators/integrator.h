@@ -24,7 +24,7 @@ public:
 		const Scene* scene, Sampler* sampler) const;
 
 	virtual void setup(const Scene* scene, const Camera* camera, Sampler* sampler, const RenderSettings& settings) = 0;
-	virtual bool render(const Scene* scene, const Camera* camera, Sampler* sampler, const RenderSettings& settings) = 0 ;
+	virtual void render(const Scene* scene, const Camera* camera, Sampler* sampler, const RenderSettings& settings) = 0;
 	virtual Image combine() = 0;
 	virtual float getCompletion() const = 0;
 	virtual void reset() = 0;

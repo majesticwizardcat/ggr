@@ -8,40 +8,39 @@ Film::Film(float resolutionWidth, float resolutionHeight, const Filter* filter) 
 	m_resolutionWidth(resolutionWidth + 2.0f * std::ceil(filter->getWidth())),
 	m_resolutionHeight(resolutionHeight + 2.0f * std::ceil(filter->getHeight())),
 	m_filter(filter) {
-	m_filmPixels = std::make_unique<FilteredFilmSample[]>(
+	m_filmPixels = std::make_unique<FilteredSample[]>(
 		(int) (m_resolutionWidth) * (int) m_resolutionHeight);
 }
 
-int Film::index(int x, int y) const {
-	return x * m_resolutionHeight + y;
-}
-
-void Film::addUnfilteredSample(const UnfilteredFilmSample& sample) {
-	Point2 rasterPosition(sample.filmPosition.x * m_resolutionWidth, sample.filmPosition.y * m_resolutionHeight);
+void Film::addUnfilteredSample(const Point2& filmPosition, const Spectrum& radiance, float rayWeight) {
+	Point2 rasterPosition(filmPosition.x * m_resolutionWidth, filmPosition.y * m_resolutionHeight);
 	int startX = (int) std::max(0.0f, std::floor(rasterPosition.x - m_filter->getWidth()));
 	int startY = (int) std::max(0.0f, std::floor(rasterPosition.y - m_filter->getHeight()));
 	int endX = (int) std::min(m_resolutionWidth, std::ceil(rasterPosition.x + m_filter->getWidth()));
 	int endY = (int) std::min(m_resolutionHeight, std::ceil(rasterPosition.y + m_filter->getHeight()));
+	float filterWeight = 0.0f;
 
 	for (int x = startX; x < endX; ++x) {
 		for (int y = startY; y < endY; ++y) {
 			Point2 centered = Point2((rasterPosition.x - (float) x) + 0.5f,
 				(rasterPosition.y - (float) y) + 0.5f);
-			float filterWeight = m_filter->evaluate2D(centered);
-			Spectrum unormFltrRad = sample.radiance * sample.cameraWeight * filterWeight;
-			m_filmPixels[index(x, y)] += FilteredFilmSample(unormFltrRad, filterWeight);
+			filterWeight = m_filter->evaluate2D(centered);
+			m_filmPixels[index(x, y)].filterWeightSum += filterWeight;
+			m_filmPixels[index(x, y)].unnormalizedFilteredRadiance +=
+				radiance * (rayWeight * filterWeight);
 		}
 	}
 }
 
-void Film::mergeFilmTile(const UnfilteredFilmTile& tile) {
-	for (const UnfilteredFilmSample& sample : tile.samples) {
-		addUnfilteredSample(sample);
+void Film::addUnfilteredSampleVector(std::vector<UnfilteredSample>* samples) {
+	while (!samples->empty()) {
+		addUnfilteredSample(samples->back().filmPosition, samples->back().radiance, samples->back().rayWeight);
+		samples->pop_back();
 	}
 }
 
-std::vector<UnfilteredFilmTile> Film::createUnfilteredFilmTiles(int tileSize) const {
-	std::vector<UnfilteredFilmTile> tiles;
+std::vector<FilmBounds> Film::splitToTiles(int tileSize) const {
+	std::vector<FilmBounds> tiles;
 	int filmResW = m_resolutionWidth;
 	int filmResH = m_resolutionHeight;
 	int tileWidth = std::min(tileSize, filmResW);
@@ -50,11 +49,9 @@ std::vector<UnfilteredFilmTile> Film::createUnfilteredFilmTiles(int tileSize) co
 	int x, y;
 	for (x = 0; x < filmResW / tileWidth; ++x) {
 		for (y = 0; y < filmResH / tileHeight; ++y) {
-			tiles.push_back(UnfilteredFilmTile(
-					x * tileWidth,
-					y * tileHeight, 
-					(x + 1) * tileWidth,
-					(y + 1) * tileHeight));
+			tiles.push_back(FilmBounds(
+				std::make_pair(x * tileWidth, y * tileHeight),
+				std::make_pair((x + 1) * tileWidth, (y + 1) * tileHeight)));
 		}
 	}
 
@@ -62,28 +59,22 @@ std::vector<UnfilteredFilmTile> Film::createUnfilteredFilmTiles(int tileSize) co
 
 	if (filmResW % tileWidth != 0) {
 		shouldPad = true;
-		tiles.push_back(UnfilteredFilmTile(
-					x * tileWidth,
-					0,
-					filmResW,
-					y * tileHeight));
+		tiles.push_back(FilmBounds(
+					std::make_pair(x * tileWidth, 0),
+					std::make_pair(filmResW, y * tileHeight)));
 	}
 
 	if (filmResH % tileHeight != 0) {
 		shouldPad = true;
-		tiles.push_back(UnfilteredFilmTile(
-					0,
-					y * tileHeight,
-					x * tileWidth,
-					filmResH));
+		tiles.push_back(FilmBounds(
+					std::make_pair(0, y * tileHeight),
+					std::make_pair(x * tileWidth, filmResH)));
 	}
 
 	if (shouldPad) {
-		tiles.push_back(UnfilteredFilmTile(
-					x * tileWidth,
-					y * tileHeight,
-					filmResW,
-					filmResH));
+		tiles.push_back(FilmBounds(
+					std::make_pair(x * tileWidth, y * tileHeight),
+					std::make_pair(filmResW, filmResH)));
 	}
 
 	return tiles;

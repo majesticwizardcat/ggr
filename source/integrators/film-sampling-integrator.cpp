@@ -4,75 +4,64 @@
 
 void FilmSamplingIntegrator::setup(const Scene* scene, const Camera* camera, Sampler* sampler, const RenderSettings& settings) {
 	m_frame = std::make_unique<Film>(settings.resolutionWidth, settings.resolutionHeight, settings.filter);
-	m_tiles = m_frame->createUnfilteredFilmTiles(settings.tileSize);
-	m_initialSize = m_tiles.size();
+	m_filmTiles = m_frame->splitToTiles(settings.tileSize);
+	m_initialSize = m_filmTiles.size();
 }
 
-bool FilmSamplingIntegrator::render(const Scene* scene, const Camera* camera, Sampler* sampler, const RenderSettings& settings) {
-	m_tilesLock.lock();
-	if (m_tiles.empty()) {
-		m_tilesLock.unlock();
-		return true;
-	}
-
-	UnfilteredFilmTile tile = m_tiles.back();
-	m_tiles.pop_back();
-	m_tilesLock.unlock();
-
-	float padX = std::ceil(2.0f + settings.filter->getWidth());
-	float padY = std::ceil(2.0f + settings.filter->getHeight());
-	Point2 freeBoxStart(tile.tileStartX + padX, tile.tileStartY + padY);
-	Point2 freeBoxEnd(std::max(freeBoxStart.x, tile.tileEndX - padX),
-			  std::max(freeBoxStart.y, tile.tileEndY - padY));
-
-	std::unique_ptr<Sampler> samplerClone = sampler->clone();
+void FilmSamplingIntegrator::render(const Scene* scene, const Camera* camera, Sampler* sampler, const RenderSettings& settings) {
+	std::vector<UnfilteredSample> boundSamples;
 	CameraSample cameraSample;
 	Ray ray;
+	Spectrum radiance;
+	std::unique_ptr<Sampler> samplerClone = sampler->clone();
 
-	for (unsigned int x = tile.tileStartX; x < tile.tileEndX; ++x) {
-		for (unsigned int y = tile.tileStartY; y < tile.tileEndY; ++y) {
-			samplerClone->createCameraSamples(Point2(x, y), settings.samples);
-			for (unsigned int s = 0; s < settings.samples; ++s) {
-				cameraSample = samplerClone->getCameraSample(Point2(x, y));
-				camera->generateRay(&ray, cameraSample);
-				if (x > freeBoxStart.x && x < freeBoxEnd.x
-					&& y > freeBoxStart.y && y < freeBoxEnd.y) {
-					m_frame->addUnfilteredSample(
-						UnfilteredFilmSample(cameraSample.filmPosition,
-						traceRay(&ray, scene, camera, samplerClone.get()),
-						ray.weight));
-				}
-				else {
-					tile.samples.push_back(
-						UnfilteredFilmSample(cameraSample.filmPosition,
-						traceRay(&ray, scene, camera, samplerClone.get()),
-						ray.weight));
-				}
-				if (tile.samples.size() > 0 && m_filmLock.try_lock()) {
-					m_frame->mergeFilmTile(tile);
-					m_filmLock.unlock();
-					tile.samples.clear();
+	while(true) {
+		m_boundsLock.lock();
+		if (m_filmTiles.empty()) {
+			m_boundsLock.unlock();
+			return;
+		}
+		FilmBounds bounds = m_filmTiles.back();
+		m_filmTiles.pop_back();
+		m_boundsLock.unlock();
+
+		float padX = std::ceil(2.0f + settings.filter->getWidth());
+		float padY = std::ceil(2.0f + settings.filter->getHeight());
+		Point2 freeBoxStart(bounds.start.first + padX, bounds.start.second + padY);
+		Point2 freeBoxEnd(std::max(freeBoxStart.x, bounds.end.first - padX),
+				  std::max(freeBoxStart.y, bounds.end.second - padY));
+		for (unsigned int x = bounds.start.first; x < bounds.end.first; ++x) {
+			for (unsigned int y = bounds.start.second; y < bounds.end.second; ++y) {
+				samplerClone->createCameraSamples(Point2(x, y), settings.samples);
+				for (unsigned int s = 0; s < settings.samples; ++s) {
+					cameraSample = samplerClone->getCameraSample(Point2(x, y));
+					camera->generateRay(&ray, cameraSample);
+					radiance = traceRay(&ray, scene, camera, samplerClone.get());
+					if (x > freeBoxStart.x && x < freeBoxEnd.x
+						&& y > freeBoxStart.y && y < freeBoxEnd.y) {
+						m_frame->addUnfilteredSample(cameraSample.filmPosition, radiance, ray.weight);
+					}
+
+					else {
+						boundSamples.push_back(UnfilteredSample(cameraSample.filmPosition, radiance, ray.weight));
+					}
 				}
 			}
 		}
+		if (boundSamples.size() > 0 && m_filmLock.try_lock()) {
+			m_frame->addUnfilteredSampleVector(&boundSamples);
+			m_filmLock.unlock();
+		}
 	}
-
-	bool finished = false;
-	while (!m_filmLock.try_lock()) {
-		finished = render(scene, camera, sampler, settings);
-	}
-	m_frame->mergeFilmTile(tile);
-	m_filmLock.unlock();
-	return finished;
 }
 
 void FilmSamplingIntegrator::reset() {
-	m_tiles.clear();
+	m_filmTiles.clear();
 	m_initialSize = 0;
 }
 
 float FilmSamplingIntegrator::getCompletion() const {
-	return (float) (m_initialSize - m_tiles.size()) / (float) m_initialSize;
+	return (float) (m_initialSize - m_filmTiles.size()) / (float) m_initialSize;
 }
 
 Image FilmSamplingIntegrator::combine() {

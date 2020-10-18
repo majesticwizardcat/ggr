@@ -152,9 +152,7 @@
     <ClInclude Include="..\source\core\scene.h" />
     <ClInclude Include="..\source\entities\entity.h" />
     <ClInclude Include="..\source\entities\light-entity.h" />
-    <ClInclude Include="..\source\film\film-sample.h" />
     <ClInclude Include="..\source\film\film.h" />
-    <ClInclude Include="..\source\film\unfiltered-film-tile.h" />
     <ClInclude Include="..\source\filters\box-filter.h" />
     <ClInclude Include="..\source\filters\filter.h" />
     <ClInclude Include="..\source\filters\gaussian-filter.h" />
@@ -237,9 +235,7 @@
     <ClCompile Include="..\source\core\scene.cpp" />
     <ClCompile Include="..\source\entities\entity.cpp" />
     <ClCompile Include="..\source\entities\light-entity.cpp" />
-    <ClCompile Include="..\source\film\film-sample.cpp" />
     <ClCompile Include="..\source\film\film.cpp" />
-    <ClCompile Include="..\source\film\unfiltered-film-tile.cpp" />
     <ClCompile Include="..\source\filters\box-filter.cpp" />
     <ClCompile Include="..\source\filters\filter.cpp" />
     <ClCompile Include="..\source\filters\gaussian-filter.cpp" />

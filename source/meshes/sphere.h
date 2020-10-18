@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+
 class Sphere;
 
 const size_t DEFAULT_CIRCLES = 8;
