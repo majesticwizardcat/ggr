@@ -45,6 +45,7 @@ void Scene::fillIntersectionFromEntity(const EntityIntersection& entityIntersect
 
 void Scene::intersects(Ray* ray, Intersection* result, float maxT) const {
 	EntityIntersection entityIntersection;
+	entityIntersection.t = maxT;
 	ray->createRaySpace();
 	if (m_accelerator.intersects(*ray, &entityIntersection)) {
 		fillIntersectionFromEntity(entityIntersection, result);
@@ -59,6 +60,7 @@ void Scene::intersects(const SurfacePoint& surface, const Vector3& direction,
 	Intersection* result, float maxT) const {
 	Ray ray(surface.point, direction);
 	EntityIntersection entityIntersection;
+	entityIntersection.t = maxT;
 	ray.createRaySpace();
 	if (m_accelerator.intersects(ray, surface, &entityIntersection)) {
 		fillIntersectionFromEntity(entityIntersection, result);
@@ -73,6 +75,7 @@ bool Scene::areUnoccluded(const SurfacePoint& p0, const SurfacePoint& p1) const 
 	EntityIntersection result;
 	Vector3 p0p1 = p1.point - p0.point;
 	float l = glm::length(p0p1);
+	result.t = l;
 	Ray ray(p0.point, p0p1 * (1.0f / l));
 	return m_accelerator.intersects(ray, p0, &result)
 		&& result.entity->getID() == p1.meshID;

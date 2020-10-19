@@ -1,10 +1,9 @@
 #include "materials/material.h"
 
-SurfacePoint Material::bump(const SurfacePoint& point) const {
+void Material::bump(SurfacePoint* point) const {
 	if (m_bumpMap) {
 		return m_bumpMap->bump(point);
 	}
-	return point;
 }
 
 void Material::setBumpMap(const BumpMap* bumpMap) {

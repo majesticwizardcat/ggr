@@ -17,7 +17,7 @@ public:
 	Material(const Material& other) : m_bumpMap(other.m_bumpMap) { }
 	Material(const BumpMap* bumpMap) : m_bumpMap(bumpMap) { }
 
-	SurfacePoint bump(const SurfacePoint& point) const;
+	void bump(SurfacePoint* point) const;
 	void setBumpMap(const BumpMap* bumpMap);
 
 	virtual BSDF createBSDF(const SurfacePoint& point, const Vector3& wo) const = 0;

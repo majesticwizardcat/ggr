@@ -6,6 +6,6 @@ class BumpMap;
 
 class BumpMap {
 public:
-	virtual SurfacePoint bump(const SurfacePoint& point) const = 0;
+	virtual void bump(SurfacePoint* point) const = 0;
 };
 

@@ -14,6 +14,6 @@ public:
 	HeightMap(const HeightMap& other) = delete;
 	HeightMap(const MipMap* mipmap);
 
-	SurfacePoint bump(const SurfacePoint& point) const;
+	void bump(SurfacePoint* point) const;
 };
 

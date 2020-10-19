@@ -28,7 +28,7 @@ Spectrum PathIntegrator::traceRay(Ray* ray, const Scene* scene, const Camera* ca
 			break;
 		}
 
-		intersection.intersectionPoint = intersection.material->bump(intersection.intersectionPoint);
+		intersection.material->bump(&intersection.intersectionPoint);
 		BSDF bsdf = intersection.material->createBSDF(intersection.intersectionPoint, intersection.wo);
 		BSDFSample bsdfSample = bsdf.sample(sampler, intersection.wo);
 		float cosTheta = glm::dot(intersection.intersectionPoint.shadingNormal, bsdfSample.sampledDirection);
