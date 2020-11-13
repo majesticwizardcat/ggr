@@ -2,10 +2,6 @@
 #include "tools/shading-functions.h"
 #include "tools/primes.h"
 
-HaltonSampler::HaltonSampler(const HaltonSampler& other) : Sampler(other) {
-	initBases();
-}
-
 HaltonSampler::HaltonSampler(float resolutionWidth, float resolutionHeight) :
 	Sampler(resolutionWidth, resolutionHeight) {
 	initBases();
@@ -50,7 +46,7 @@ Sample2D HaltonSampler::getSample2D() {
 }
 
 std::unique_ptr<Sampler> HaltonSampler::clone() const {
-	return std::make_unique<HaltonSampler>(*this);
+	return std::make_unique<HaltonSampler>(m_resolutionWidth, m_resolutionHeight);
 }
 
 std::unique_ptr<Sampler> HaltonSampler::clone(int resW, int resH) const {

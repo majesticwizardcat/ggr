@@ -1,10 +1,6 @@
 #include "samplers/sampler.h"
 #include "tools/shading-functions.h"
 
-Sampler::Sampler(const Sampler& other) :
-	m_resolutionWidth(other.m_resolutionWidth),
-	m_resolutionHeight(other.m_resolutionHeight),
-	m_samples(other.m_samples) { }
 Sampler::Sampler(float resolutionWidth, float resolutionHeight) :
 	m_resolutionWidth(resolutionWidth), m_resolutionHeight(resolutionHeight) { }
 

@@ -19,7 +19,7 @@ protected:
 
 public:
 	Sampler() = delete;
-	Sampler(const Sampler& other);
+	Sampler(const Sampler& other) = delete;
 	Sampler(float resolutionWidth, float resolutionHeight);
 
 	CameraSample getCameraSample(const Point2& rasterPosition);

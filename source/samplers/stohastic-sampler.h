@@ -12,7 +12,7 @@ private:
 
 public:
 	StohasticSampler() = delete;
-	StohasticSampler(const StohasticSampler& other);
+	StohasticSampler(const StohasticSampler& other) = delete;
 	StohasticSampler(float resolutionWidth, float resolutionHeight);
 
 	float getSample();

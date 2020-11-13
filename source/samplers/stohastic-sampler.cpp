@@ -1,6 +1,5 @@
 #include "samplers/stohastic-sampler.h"
 
-StohasticSampler::StohasticSampler(const StohasticSampler& other) : Sampler(other) { }
 StohasticSampler::StohasticSampler(float resolutionWidth, float resolutionHeight) :
 	Sampler(resolutionWidth, resolutionHeight) { }
 
@@ -13,7 +12,7 @@ Sample2D StohasticSampler::getSample2D() {
 }
 
 std::unique_ptr<Sampler> StohasticSampler::clone() const {
-	return std::make_unique<StohasticSampler>(*this);
+	return std::make_unique<StohasticSampler>(m_resolutionWidth, m_resolutionHeight);
 }
 
 std::unique_ptr<Sampler> StohasticSampler::clone(int resW, int resH) const {

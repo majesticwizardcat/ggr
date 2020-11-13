@@ -19,7 +19,7 @@ private:
 
 public:
 	HaltonSampler() = delete;
-	HaltonSampler(const HaltonSampler& other);
+	HaltonSampler(const HaltonSampler& other) = delete;
 	HaltonSampler(float resolutionWidth, float resolutionHeight);
 
 	void createCameraSamples(const Point2& rasterPosition, int samples);
