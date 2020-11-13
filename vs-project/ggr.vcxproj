@@ -153,6 +153,7 @@
     <ClInclude Include="..\source\entities\entity.h" />
     <ClInclude Include="..\source\entities\light-entity.h" />
     <ClInclude Include="..\source\film\film.h" />
+    <ClInclude Include="..\source\film\render-tile.h" />
     <ClInclude Include="..\source\filters\box-filter.h" />
     <ClInclude Include="..\source\filters\filter.h" />
     <ClInclude Include="..\source\filters\gaussian-filter.h" />

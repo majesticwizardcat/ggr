@@ -11,7 +11,6 @@ class Camera;
 class Camera {
 protected:
 	std::shared_ptr<Transformation> m_cameraToWorld;
-	float m_aspectRatio;
 	float m_dx;
 	float m_dy;
 

@@ -5,9 +5,6 @@ class OrthographicCamera;
 #include "cameras/projective-camera.h"
 
 class OrthographicCamera : public ProjectiveCamera {
-private:
-	float m_scale;
-
 public:
 	OrthographicCamera() = delete;
 	OrthographicCamera(const OrthographicCamera& other);

@@ -7,7 +7,8 @@ PerspectiveCamera::PerspectiveCamera(const std::shared_ptr<Transformation>& came
 	int resolutionWidth, int resolutionHeight,
 	float lensRadius, float focalDistance, float fov) :
 	ProjectiveCamera(cameraToWorld, resolutionWidth, resolutionHeight,
-	std::make_shared<Transformation>(transform::perspectiveProjection(fov, 0.01f, 1000.0f)),
+	std::make_shared<Transformation>(transform::perspectiveProjection(
+		fov, (float) resolutionWidth / (float) resolutionHeight, 0.01f, 1000.0f)),
 	lensRadius, focalDistance) { }
 
 void PerspectiveCamera::unproject(Ray* filmPositionRay) const {

@@ -12,10 +12,10 @@ ProjectiveCamera::ProjectiveCamera(const std::shared_ptr<Transformation>& camera
 	m_projection(projection), m_lensRadius(lensRadius), m_focalDistance(focalDistance) { }
 
 void ProjectiveCamera::generateRay(Ray* ray, const CameraSample& sample) const {
-	ray->origin.x = (2.0f * sample.filmPosition.x - 1.0f) * m_aspectRatio;
+	ray->origin.x = 2.0f * sample.filmPosition.x - 1.0f;
 	ray->origin.y = 1.0f - 2.0f * sample.filmPosition.y;
 	ray->origin.z = 0.0f;
-	ray->dxOrigin.x = ray->origin.x + 2.0f * m_dx * m_aspectRatio;
+	ray->dxOrigin.x = ray->origin.x + 2.0f * m_dx;
 	ray->dxOrigin.y = ray->origin.y;
 	ray->dxOrigin.z = 0.0f;
 	ray->dyOrigin.x = ray->origin.x;

@@ -79,11 +79,11 @@ Transformation transform::view(const Point3& position, const Point3& look, const
 	return lookAt(position, look, up).inverse();
 }
 
-Transformation transform::perspectiveProjection(float fov, float near, float far) {
-	return Transformation(glm::perspective(fov, 1.0f, near, far));
+Transformation transform::perspectiveProjection(float fov, float aspectRatio, float near, float far) {
+	return Transformation(glm::perspective(fov, aspectRatio, near, far));
 }
 
-Transformation transform::orthographicProjection(float near, float far) {
-	return Transformation(glm::ortho(0.0f, 1.0f, 0.0f, 1.0f));
+Transformation transform::orthographicProjection(float near, float far, float scaleX, float scaleY) {
+	return Transformation(glm::ortho(0.0f, scaleX, 0.0f, scaleY));
 }
 
