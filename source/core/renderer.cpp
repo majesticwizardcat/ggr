@@ -34,7 +34,6 @@ Image Renderer::render() {
 	}
 
 	std::cout << "\rCompleted: 100%" << std::endl;
-	std::cout << "Combining result" << std::endl;
 	timer.stop();
 	std::cout << "Finished rendering in: " << timer.getDuration().count() << " seconds" << std::endl;
 	return film->getImage();

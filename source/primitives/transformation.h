@@ -151,6 +151,5 @@ Transformation transform(float x, float y, float z,
 Transformation lookAt(const Point3& position, const Point3& look, const Vector3& up);
 Transformation view(const Point3& position, const Point3& look, const Vector3& up);
 Transformation perspectiveProjection(float fov, float aspectRatio, float near, float far);
-Transformation orthographicProjection(float near, float far, float scaleX, float scaleY);
+Transformation orthographicProjection(float startX, float startY, float endX, float endY);
 }
-

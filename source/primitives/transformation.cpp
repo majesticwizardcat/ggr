@@ -83,7 +83,7 @@ Transformation transform::perspectiveProjection(float fov, float aspectRatio, fl
 	return Transformation(glm::perspective(fov, aspectRatio, near, far));
 }
 
-Transformation transform::orthographicProjection(float near, float far, float scaleX, float scaleY) {
-	return Transformation(glm::ortho(0.0f, scaleX, 0.0f, scaleY));
+Transformation transform::orthographicProjection(float startX, float startY, float endX, float endY) {
+	return Transformation(glm::ortho(startX, endX, startY, endY));
 }
 

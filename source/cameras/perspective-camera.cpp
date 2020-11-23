@@ -3,25 +3,27 @@
 
 PerspectiveCamera::PerspectiveCamera(const PerspectiveCamera& other) :
 	ProjectiveCamera(other) { }
-PerspectiveCamera::PerspectiveCamera(const std::shared_ptr<Transformation>& cameraToWorld,
+PerspectiveCamera::PerspectiveCamera(const Transformation* cameraToWorld,
 	int resolutionWidth, int resolutionHeight,
 	float lensRadius, float focalDistance, float fov) :
 	ProjectiveCamera(cameraToWorld, resolutionWidth, resolutionHeight,
-	std::make_shared<Transformation>(transform::perspectiveProjection(
-		fov, (float) resolutionWidth / (float) resolutionHeight, 0.01f, 1000.0f)),
+	transform::perspectiveProjection(fov, (float) resolutionWidth / (float) resolutionHeight, 0.01f, 1000.0f),
 	lensRadius, focalDistance) { }
 
-void PerspectiveCamera::unproject(Ray* filmPositionRay) const {
-	filmPositionRay->direction = glm::normalize(m_projection->applyInversePoint(filmPositionRay->origin));
-	filmPositionRay->dxDirection = glm::normalize(m_projection->applyInversePoint(filmPositionRay->dxOrigin));
-	filmPositionRay->dyDirection = glm::normalize(m_projection->applyInversePoint(filmPositionRay->dyOrigin));
-
-	filmPositionRay->origin = Point3(0.0f);
-	filmPositionRay->dxOrigin = Point3(0.0f);
-	filmPositionRay->dyOrigin = Point3(0.0f);
+void PerspectiveCamera::generateRay(Ray* ray, const CameraSample& sample) const {
+	ray->direction = glm::normalize(m_projection.applyInversePoint(Point3(sample.filmPosition, 0.0f)));
+	ray->origin = Point3(0.0f);
+	applyDOF(ray, sample.lensPosition);
+	ray->direction = m_cameraToWorld->applyVector(ray->direction);
+	ray->origin = m_cameraToWorld->applyPoint(ray->origin);
+	ray->dxDirection = ray->direction + m_dx;
+	ray->dyDirection = ray->direction + m_dy;
+	ray->dxOrigin = ray->origin;
+	ray->dyOrigin = ray->origin;
+	ray->weight = 1.0f;
+	ray->isCameraRay = true;
 }
 
 std::unique_ptr<Camera> PerspectiveCamera::clone() const {
 	return std::make_unique<PerspectiveCamera>(*this);
 }
-

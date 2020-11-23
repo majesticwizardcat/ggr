@@ -97,8 +97,10 @@ int main(int args, char** argv) {
 	auto filter = std::make_unique<GaussianFilter>(1.5f, 2.0f);
 	RenderSettings settings(500, 500, 64, samples, threads, filter.get());
 	auto sampler = std::make_unique<HaltonSampler>(settings.resolutionWidth, settings.resolutionHeight);
-	auto camera = std::make_unique<PerspectiveCamera>(std::make_shared<Transformation>(
-		transform::view(Point3(0.0f, -5.0f, 1.5f), Point3(0.0f, 0.0f, 1.5f), Vector3(0.0f, 0.0f, 1.0f))),
+	auto cameraTransform =
+		std::make_unique<Transformation>(
+		transform::view(Point3(0.0f, -5.0f, 1.5f), Point3(0.0f, 0.0f, 1.5f), Vector3(0.0f, 0.0f, 1.0f)));
+	auto camera = std::make_unique<PerspectiveCamera>(cameraTransform.get(),
 		settings.resolutionWidth, settings.resolutionHeight,
 		0.0f, 0.0f, PI_OVER_TWO);
 	std::unique_ptr<Integrator> integrator = std::make_unique<PathIntegrator>();

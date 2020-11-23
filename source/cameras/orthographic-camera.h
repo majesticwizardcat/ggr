@@ -8,11 +8,11 @@ class OrthographicCamera : public ProjectiveCamera {
 public:
 	OrthographicCamera() = delete;
 	OrthographicCamera(const OrthographicCamera& other);
-	OrthographicCamera(const std::shared_ptr<Transformation>& cameraToWorld,
+	OrthographicCamera(const Transformation* cameraToWorld,
 		int resolutionWidth, int resolutionHeight,
 		float lensRadius, float focalDistance, float scale);
 
-	void unproject(Ray* filmPositionRay) const;
+	void generateRay(Ray* ray, const CameraSample& sample) const;
 	std::unique_ptr<Camera> clone() const;
 };
 

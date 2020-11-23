@@ -2,20 +2,25 @@
 #include "primitives/transformation.h"
 
 OrthographicCamera::OrthographicCamera(const OrthographicCamera& other) : ProjectiveCamera(other) { }
-OrthographicCamera::OrthographicCamera(const std::shared_ptr<Transformation>& cameraToWorld,
+OrthographicCamera::OrthographicCamera(const Transformation* cameraToWorld,
 	int resolutionWidth, int resolutionHeight,
 	float lensRadius, float focalDistance, float scale) :
 	ProjectiveCamera(cameraToWorld, resolutionWidth, resolutionHeight,
-	std::make_shared<Transformation>(transform::orthographicProjection(0.1f, scale, scale, 1000.0f)),
+	transform::orthographicProjection(-scale / 2.0f, -scale / 2.0f, scale / 2.0f, scale / 2.0f),
 	lensRadius, focalDistance) { }
 
-void OrthographicCamera::unproject(Ray* filmPositionRay) const {
-	filmPositionRay->origin = m_projection->applyInversePoint(Point4(filmPositionRay->origin, 1.0f));
-	filmPositionRay->direction = Vector3(0.0f, 0.0f, 1.0f);
-	filmPositionRay->dxOrigin = m_projection->applyInversePoint(Point4(filmPositionRay->dxOrigin, 1.0f));
-	filmPositionRay->dxDirection = Vector3(0.0f, 0.0f, 1.0f);
-	filmPositionRay->dyOrigin = m_projection->applyInversePoint(Point4(filmPositionRay->dyOrigin, 1.0f));
-	filmPositionRay->dyDirection = Vector3(0.0f, 0.0f, 1.0f);
+void OrthographicCamera::generateRay(Ray* ray, const CameraSample& sample) const {
+	ray->origin = Point3(m_projection.applyInversePoint(Point3(sample.filmPosition, 0.0f)));
+	ray->direction = Point3(0.0f, 0.0f, -1.0f);
+	applyDOF(ray, sample.lensPosition);
+	ray->direction = m_cameraToWorld->applyVector(ray->direction);
+	ray->origin = m_cameraToWorld->applyPoint(ray->origin);
+	ray->dxDirection = ray->direction;
+	ray->dyDirection = ray->direction;
+	ray->dxOrigin = ray->origin + m_dx;
+	ray->dyOrigin = ray->origin + m_dy;
+	ray->weight = 1.0f;
+	ray->isCameraRay = true;
 }
 
 std::unique_ptr<Camera> OrthographicCamera::clone() const {

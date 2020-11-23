@@ -8,11 +8,11 @@ class PerspectiveCamera : public ProjectiveCamera {
 public:
 	PerspectiveCamera() = delete;
 	PerspectiveCamera(const PerspectiveCamera& other);
-	PerspectiveCamera(const std::shared_ptr<Transformation>& cameraToWorld,
+	PerspectiveCamera(const Transformation* cameraToWorld,
 		int resolutionWidth, int resolutionHeight,
 		float lensRadius, float focalDistance, float fov);
 
-	void unproject(Ray* filmPositionRay) const;
+	void generateRay(Ray* ray, const CameraSample& sample) const;
 	std::unique_ptr<Camera> clone() const;
 };
 

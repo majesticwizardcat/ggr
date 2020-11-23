@@ -10,14 +10,14 @@ class Camera;
 
 class Camera {
 protected:
-	std::shared_ptr<Transformation> m_cameraToWorld;
-	float m_dx;
-	float m_dy;
+	const Transformation* m_cameraToWorld;
+	Point3 m_dx;
+	Point3 m_dy;
 
 public:
 	Camera() = delete;
 	Camera(const Camera& other);
-	Camera(const std::shared_ptr<Transformation>& cameraToWorld, int resolutionWidth,
+	Camera(const Transformation* cameraToWorld, int resolutionWidth,
 		int resolutionHeight);
 
 	virtual void generateRay(Ray* ray, const CameraSample& sample) const = 0;
