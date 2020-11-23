@@ -28,8 +28,8 @@ void FilmSamplingIntegrator::render(const Scene* scene, const Camera* camera, Fi
 		m_filmTiles.pop_back();
 		m_boundsLock.unlock();
 
-		float padX = std::ceil(2.0f + settings.filter->getWidth());
-		float padY = std::ceil(2.0f + settings.filter->getHeight());
+		float padX = std::ceil(2.0f + settings.filter->getRadius());
+		float padY = std::ceil(2.0f + settings.filter->getRadius());
 		Point2 freeBoxStart(bounds.start.first + padX, bounds.start.second + padY);
 		Point2 freeBoxEnd(std::max(freeBoxStart.x, bounds.end.first - padX),
 				  std::max(freeBoxStart.y, bounds.end.second - padY));

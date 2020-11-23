@@ -5,8 +5,8 @@
 #include <algorithm>
 
 Film::Film(float resolutionWidth, float resolutionHeight, const Filter* filter) :
-	m_resolutionWidth(resolutionWidth + 2.0f * std::ceil(filter->getWidth())),
-	m_resolutionHeight(resolutionHeight + 2.0f * std::ceil(filter->getHeight())),
+	m_resolutionWidth(resolutionWidth + 2.0f * std::ceil(filter->getRadius())),
+	m_resolutionHeight(resolutionHeight + 2.0f * std::ceil(filter->getRadius())),
 	m_filter(filter) {
 	m_filmPixels = std::make_unique<FilteredSample[]>(
 		(int) (m_resolutionWidth) * (int) m_resolutionHeight);
@@ -14,10 +14,10 @@ Film::Film(float resolutionWidth, float resolutionHeight, const Filter* filter) 
 
 void Film::addUnfilteredSample(const Point2& filmPosition, const Spectrum& radiance, float rayWeight) {
 	Point2 rasterPosition(filmPosition.x * m_resolutionWidth, filmPosition.y * m_resolutionHeight);
-	int startX = (int) std::max(0.0f, std::floor(rasterPosition.x - m_filter->getWidth()));
-	int startY = (int) std::max(0.0f, std::floor(rasterPosition.y - m_filter->getHeight()));
-	int endX = (int) std::min(m_resolutionWidth, std::ceil(rasterPosition.x + m_filter->getWidth()));
-	int endY = (int) std::min(m_resolutionHeight, std::ceil(rasterPosition.y + m_filter->getHeight()));
+	int startX = (int) std::max(0.0f, std::floor(rasterPosition.x - m_filter->getRadius()));
+	int startY = (int) std::max(0.0f, std::floor(rasterPosition.y - m_filter->getRadius()));
+	int endX = (int) std::min(m_resolutionWidth, std::ceil(rasterPosition.x + m_filter->getRadius()));
+	int endY = (int) std::min(m_resolutionHeight, std::ceil(rasterPosition.y + m_filter->getRadius()));
 	float filterWeight = 0.0f;
 
 	for (int x = startX; x < endX; ++x) {
@@ -81,8 +81,8 @@ std::vector<FilmBounds> Film::splitToTiles(int tileSize) const {
 }
 
 Image Film::getImage() const {
-	int filterW = std::ceil(m_filter->getWidth());
-	int filterH = std::ceil(m_filter->getHeight());
+	int filterW = std::ceil(m_filter->getRadius());
+	int filterH = std::ceil(m_filter->getRadius());
 	int startX = filterW;
 	int startY = filterH;
 	int endX = m_resolutionWidth - filterW;

@@ -368,9 +368,6 @@
     <ClCompile Include="..\source\filters\box-filter.cpp">
       <Filter>source\filters</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\filters\filter.cpp">
-      <Filter>source\filters</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\filters\gaussian-filter.cpp">
       <Filter>source\filters</Filter>
     </ClCompile>

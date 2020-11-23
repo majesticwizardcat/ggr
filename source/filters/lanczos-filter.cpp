@@ -4,9 +4,9 @@
 #include <cmath>
 #include <algorithm>
 
-LanczosFilter::LanczosFilter() { }
+LanczosFilter::LanczosFilter() : Filter() { }
 LanczosFilter::LanczosFilter(const LanczosFilter& other) : Filter(other) { }
-LanczosFilter::LanczosFilter(float width, float height) : Filter(width, height) { }
+LanczosFilter::LanczosFilter(float radius) : Filter(radius) { }
 
 float LanczosFilter::L(float x, float alpha) const {
 	if (util::equals(x, 0.0f)) {
@@ -27,14 +27,13 @@ float LanczosFilter::L(float x, float alpha) const {
 }
 
 float LanczosFilter::evaluate1D(float centeredSamplePoint) const {
-	return L(centeredSamplePoint, m_width);
+	return L(centeredSamplePoint, m_radius);
 }
 
 float LanczosFilter::evaluate2D(const Point2& centeredSamplePoint) const {
-	return L(centeredSamplePoint.x, m_width) * L(centeredSamplePoint.y, m_height);
+	return L(centeredSamplePoint.x, m_radius) * L(centeredSamplePoint.y, m_radius);
 }
 
 std::unique_ptr<Filter> LanczosFilter::clone() const {
 	return std::make_unique<LanczosFilter>(*this);
 }
-

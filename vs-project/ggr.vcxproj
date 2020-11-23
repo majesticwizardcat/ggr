@@ -237,7 +237,6 @@
     <ClCompile Include="..\source\entities\light-entity.cpp" />
     <ClCompile Include="..\source\film\film.cpp" />
     <ClCompile Include="..\source\filters\box-filter.cpp" />
-    <ClCompile Include="..\source\filters\filter.cpp" />
     <ClCompile Include="..\source\filters\gaussian-filter.cpp" />
     <ClCompile Include="..\source\filters\lanczos-filter.cpp" />
     <ClCompile Include="..\source\ggr.cpp">

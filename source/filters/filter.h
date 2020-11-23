@@ -2,7 +2,7 @@
 
 class Filter;
 
-const float MIN_FILTER_SIZE = 0.5f;
+const float MIN_FILTER_RADIUS = 0.5f;
 
 #include "primitives/point.h"
 
@@ -10,20 +10,16 @@ const float MIN_FILTER_SIZE = 0.5f;
 
 class Filter {
 protected:
-	float m_width;
-	float m_height;
+	float m_radius;
 
 public:
-	Filter();
-	Filter(const Filter& other);
-	Filter(float width, float height);
-	Filter(float size);
+	Filter() : m_radius(MIN_FILTER_RADIUS) { }
+	Filter(const Filter& other) : m_radius(other.m_radius) { }
+	Filter(float radius) : m_radius(radius) { }
 
-	float getWidth() const;
-	float getHeight() const;
+	inline float getRadius() const { return m_radius; }
 
 	virtual float evaluate1D(float centeredSamplePoint) const = 0;
 	virtual float evaluate2D(const Point2& centeredSamplePoint) const = 0;
 	virtual std::unique_ptr<Filter> clone() const = 0;
 };
-

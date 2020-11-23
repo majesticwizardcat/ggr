@@ -94,7 +94,7 @@ int main(int args, char** argv) {
 
 	floorMaterial->setBumpMap(floorBumpMap.get());
 
-	auto filter = std::make_unique<GaussianFilter>(1.5f, 1.5f, 2.0f);
+	auto filter = std::make_unique<GaussianFilter>(1.5f, 2.0f);
 	RenderSettings settings(500, 500, 64, samples, threads, filter.get());
 	auto sampler = std::make_unique<HaltonSampler>(settings.resolutionWidth, settings.resolutionHeight);
 	auto camera = std::make_unique<PerspectiveCamera>(std::make_shared<Transformation>(

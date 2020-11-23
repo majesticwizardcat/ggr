@@ -11,10 +11,9 @@ private:
 public:
 	LanczosFilter();
 	LanczosFilter(const LanczosFilter& other);
-	LanczosFilter(float width, float height);
+	LanczosFilter(float radius);
 
 	float evaluate1D(float centeredSamplePoint) const;
 	float evaluate2D(const Point2& centeredSamplePoint) const;
 	std::unique_ptr<Filter> clone() const;
 };
-

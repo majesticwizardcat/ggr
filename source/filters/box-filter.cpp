@@ -3,8 +3,7 @@
 
 BoxFilter::BoxFilter() : Filter() { }
 BoxFilter::BoxFilter(const BoxFilter& other) : Filter(other) { }
-BoxFilter::BoxFilter(float width, float height) : Filter(width, height) { }
-BoxFilter::BoxFilter(float size) : Filter(size) { }
+BoxFilter::BoxFilter(float radius) : Filter(radius) { }
 
 float BoxFilter::evaluate1D(float centeredSamplePoint) const {
 	return 1.0f;
