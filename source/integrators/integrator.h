@@ -13,9 +13,6 @@ class Integrator;
 #include <memory>
 
 class Integrator {
-protected:
-	std::unique_ptr<Film> m_frame;
-
 public:
 	Integrator() { }
 	Integrator(const Integrator& other) = delete;
@@ -23,9 +20,10 @@ public:
 	Spectrum sampleDirectLighting(const SurfacePoint& point, const Vector3& wo, const BSDF& surfaceBSDF,
 		const Scene* scene, Sampler* sampler) const;
 
-	virtual void setup(const Scene* scene, const Camera* camera, Sampler* sampler, const RenderSettings& settings) = 0;
-	virtual void render(const Scene* scene, const Camera* camera, Sampler* sampler, const RenderSettings& settings) = 0;
-	virtual Image combine() = 0;
+	virtual void setup(const Scene* scene, const Camera* camera, Film* film,
+		Sampler* sampler, const RenderSettings& settings) = 0;
+	virtual void render(const Scene* scene, const Camera* camera, Film* film,
+		Sampler* sampler, const RenderSettings& settings) = 0;
 	virtual float getCompletion() const = 0;
 	virtual void reset() = 0;
 };

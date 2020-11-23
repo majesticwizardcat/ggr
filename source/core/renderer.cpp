@@ -11,12 +11,13 @@ Renderer::Renderer(Scene* scene, Camera* camera, Integrator* integrator,
 
 Image Renderer::render() {
 	Timer timer;
-	std::unique_ptr<Sampler> sampler = m_sampler->clone(m_settings.resolutionWidth, m_settings.resolutionHeight);
+	auto film = std::make_unique<Film>(m_settings.resolutionWidth, m_settings.resolutionHeight, m_settings.filter);
+	auto sampler = m_sampler->clone(m_settings.resolutionWidth, m_settings.resolutionHeight);
 	m_scene->initializeAccelerator();
-	m_integrator->setup(m_scene, m_camera, sampler.get(), m_settings);
+	m_integrator->setup(m_scene, m_camera, film.get(), sampler.get(), m_settings);
 
 	auto worker = [&] () {
-		m_integrator->render(m_scene, m_camera, sampler.get(), m_settings);
+		m_integrator->render(m_scene, m_camera, film.get(), sampler.get(), m_settings);
 	};
 
 	std::cout << "Starting rendering with: " << m_settings.samples
@@ -34,9 +35,8 @@ Image Renderer::render() {
 
 	std::cout << "\rCompleted: 100%" << std::endl;
 	std::cout << "Combining result" << std::endl;
-	Image renderedFrame = m_integrator->combine();
 	timer.stop();
 	std::cout << "Finished rendering in: " << timer.getDuration().count() << " seconds" << std::endl;
-	return renderedFrame;
+	return film->getImage();
 }
 

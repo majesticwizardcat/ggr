@@ -19,9 +19,10 @@ public:
 	FilmSamplingIntegrator() { }
 	FilmSamplingIntegrator(const Integrator& other) = delete;
 
-	void setup(const Scene* scene, const Camera* camera, Sampler* sampler, const RenderSettings& settings);
-	void render(const Scene* scene, const Camera* camera, Sampler* sampler, const RenderSettings& settings);
-	Image combine();
+	void setup(const Scene* scene, const Camera* camera, Film* film,
+		Sampler* sampler, const RenderSettings& settings);
+	void render(const Scene* scene, const Camera* camera, Film* film,
+		Sampler* sampler, const RenderSettings& settings);
 	float getCompletion() const;
 
 	virtual void reset();
