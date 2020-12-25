@@ -9,10 +9,11 @@
 namespace shading {
 inline Point3 uniformSampleSphere(const Sample2D& sample) {
 	float phi = sample.s * TWO_PI;
-	float sinTheta = std::sqrt(1.0f - sample.t * sample.t);
+	float cosTheta = 1.0f - 2.0f * sample.t;
+	float sinTheta = std::sqrt(1.0f - cosTheta * cosTheta);
 	return Point3(sinTheta * std::cos(phi),
 		sinTheta * std::sin(phi),
-		sample.t);
+		cosTheta);
 }
 
 inline Point3 fromSpherical(float phi, float theta) {

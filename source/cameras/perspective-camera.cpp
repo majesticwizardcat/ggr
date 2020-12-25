@@ -11,10 +11,10 @@ PerspectiveCamera::PerspectiveCamera(const Transformation* cameraToWorld,
 	lensRadius, focalDistance) { }
 
 void PerspectiveCamera::generateRay(Ray* ray, const CameraSample& sample) const {
-	ray->direction = glm::normalize(m_projection.applyInversePoint(Point3(sample.filmPosition, 0.0f)));
+	ray->direction = m_unprojection.applyPoint(Point3(sample.filmPosition, 0.0f));
 	ray->origin = Point3(0.0f);
 	applyDOF(ray, sample.lensPosition);
-	ray->direction = m_cameraToWorld->applyVector(ray->direction);
+	ray->direction = glm::normalize(m_cameraToWorld->applyVector(ray->direction));
 	ray->origin = m_cameraToWorld->applyPoint(ray->origin);
 	ray->dxDirection = ray->direction + m_dx;
 	ray->dyDirection = ray->direction + m_dy;

@@ -4,49 +4,45 @@
 #include <cmath>
 #include <algorithm>
 
-Film::Film(float resolutionWidth, float resolutionHeight, const Filter* filter) :
-	m_resolutionWidth(resolutionWidth + 2.0f * std::ceil(filter->getRadius())),
-	m_resolutionHeight(resolutionHeight + 2.0f * std::ceil(filter->getRadius())),
-	m_filter(filter) {
-	m_filmPixels = std::make_unique<FilteredSample[]>(
-		(int) (m_resolutionWidth) * (int) m_resolutionHeight);
+Film::Film(unsigned int resolutionWidth, unsigned int resolutionHeight, const Filter* filter) :
+	m_resolutionWidth(resolutionWidth), m_resolutionHeight(resolutionHeight) {
+	m_filmPixels = std::make_unique<FilteredSample[]>(m_resolutionWidth * m_resolutionHeight);
+	createFilterTable(filter);
 }
 
-void Film::addUnfilteredSample(const Point2& filmPosition, const Spectrum& radiance, float rayWeight) {
-	Point2 rasterPosition(filmPosition.x * m_resolutionWidth, filmPosition.y * m_resolutionHeight);
-	int startX = (int) std::max(0.0f, std::floor(rasterPosition.x - m_filter->getRadius()));
-	int startY = (int) std::max(0.0f, std::floor(rasterPosition.y - m_filter->getRadius()));
-	int endX = (int) std::min(m_resolutionWidth, std::ceil(rasterPosition.x + m_filter->getRadius()));
-	int endY = (int) std::min(m_resolutionHeight, std::ceil(rasterPosition.y + m_filter->getRadius()));
-	float filterWeight = 0.0f;
-
-	for (int x = startX; x < endX; ++x) {
-		for (int y = startY; y < endY; ++y) {
-			Point2 centered = Point2((rasterPosition.x - (float) x) + 0.5f,
-				(rasterPosition.y - (float) y) + 0.5f);
-			filterWeight = m_filter->evaluate2D(centered);
-			m_filmPixels[index(x, y)].filterWeightSum += filterWeight;
-			m_filmPixels[index(x, y)].unnormalizedFilteredRadiance +=
-				radiance * (rayWeight * filterWeight);
+void Film::createFilterTable(const Filter* filter) {
+	unsigned int size = (unsigned int)std::ceil(filter->getRadius() + 0.5f) + 1;
+	m_tableWidth = size;
+	m_filterTable = std::make_unique<float[]>(size * size);
+	for (unsigned int i = 0; i < size; ++i) {
+		for (unsigned int j = 0; j < size; ++j) {
+			m_filterTable[i * size + j] = filter->evaluate2D(Point2((float)i, (float)j));
 		}
 	}
 }
 
-void Film::addUnfilteredSampleVector(std::vector<UnfilteredSample>* samples) {
-	while (!samples->empty()) {
-		addUnfilteredSample(samples->back().filmPosition, samples->back().radiance, samples->back().rayWeight);
-		samples->pop_back();
+std::unique_ptr<RenderTile> Film::createTile(const FilmBounds& bounds) const {
+	return std::make_unique<RenderTile>(bounds, m_filterTable.get(), m_tableWidth);
+}
+
+void Film::mergeRenderTile(const RenderTile* tile) {
+	for (unsigned int i = tile->sampleBounds.start.first; i < tile->sampleBounds.end.first; ++i) {
+		for (unsigned int j = tile->sampleBounds.start.second; j < tile->sampleBounds.end.second; ++j) {
+			const FilteredSample& sample = tile->getPixel(i, j);
+			m_filmPixels[index(i, j)].unnormalizedFilteredRadiance += sample.unnormalizedFilteredRadiance;
+			m_filmPixels[index(i, j)].filterWeightSum += sample.filterWeightSum;
+		}
 	}
 }
 
-std::vector<FilmBounds> Film::splitToTiles(int tileSize) const {
+std::vector<FilmBounds> Film::splitToTiles(unsigned int tileSize) const {
 	std::vector<FilmBounds> tiles;
-	int filmResW = m_resolutionWidth;
-	int filmResH = m_resolutionHeight;
-	int tileWidth = std::min(tileSize, filmResW);
-	int tileHeight = std::min(tileSize, filmResH);
+	unsigned int filmResW = m_resolutionWidth;
+	unsigned int filmResH = m_resolutionHeight;
+	unsigned int tileWidth = std::min(tileSize, filmResW);
+	unsigned int tileHeight = std::min(tileSize, filmResH);
 
-	int x, y;
+	unsigned int x, y;
 	for (x = 0; x < filmResW / tileWidth; ++x) {
 		for (y = 0; y < filmResH / tileHeight; ++y) {
 			tiles.push_back(FilmBounds(
@@ -81,22 +77,11 @@ std::vector<FilmBounds> Film::splitToTiles(int tileSize) const {
 }
 
 Image Film::getImage() const {
-	int filterW = std::ceil(m_filter->getRadius());
-	int filterH = std::ceil(m_filter->getRadius());
-	int startX = filterW;
-	int startY = filterH;
-	int endX = m_resolutionWidth - filterW;
-	int endY = m_resolutionHeight - filterH;
-
-	Image image(m_resolutionWidth - 2.0f * filterW,
-		m_resolutionHeight - 2.0f * filterH);
-
-	for (int x = startX; x < endX; ++x) {
-		for (int y = startY; y < endY; ++y) {
-			image.setPixel(x - filterW, y - filterH, m_filmPixels[index(x, y)].getRadiance().getRGB());
+	Image image(m_resolutionWidth, m_resolutionHeight);
+	for (unsigned int x = 0; x < m_resolutionWidth; ++x) {
+		for (unsigned int y = 0; y < m_resolutionHeight; ++y) {
+			image.setPixel(x, y, m_filmPixels[index(x, y)].getRadiance().getRGB());
 		}
 	}
-
 	return image;
 }
-

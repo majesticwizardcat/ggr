@@ -20,13 +20,13 @@ private:
 public:
 	HaltonSampler() = delete;
 	HaltonSampler(const HaltonSampler& other) = delete;
-	HaltonSampler(float resolutionWidth, float resolutionHeight);
+	HaltonSampler(const Filter* filmFilter) : Sampler(filmFilter) {
+		initBases();
+	}
 
 	void createCameraSamples(const Point2& rasterPosition, int samples);
 
 	float getSample();
 	Sample2D getSample2D();
 	std::unique_ptr<Sampler> clone() const;
-	std::unique_ptr<Sampler> clone(int resW, int resH) const;
 };
-

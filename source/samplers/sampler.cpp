@@ -1,15 +1,8 @@
 #include "samplers/sampler.h"
 #include "tools/shading-functions.h"
 
-Sampler::Sampler(float resolutionWidth, float resolutionHeight) :
-	m_resolutionWidth(resolutionWidth), m_resolutionHeight(resolutionHeight) { }
-
 CameraSample Sampler::createCameraSample(const Point2& rasterPosition) {
-	Point2 filmPos = getSample2D() + rasterPosition;
-	filmPos.x /= m_resolutionWidth;
-	filmPos.y /= m_resolutionHeight;
-	Point2 lesPos = shading::diskSample(getSample2D());
-	return CameraSample(filmPos, lesPos);
+	return CameraSample(rasterPosition + m_filmFilter->sample(getSample2D()), getSample2D());
 }
 
 CameraSample Sampler::getCameraSample(const Point2& rasterPosition) {
@@ -26,4 +19,3 @@ void Sampler::createCameraSamples(const Point2& rasterPosition, int samples) {
 		m_samples.push(createCameraSample(rasterPosition));
 	}
 }
-

@@ -226,7 +226,6 @@
     <ClCompile Include="..\source\bsdfs\microfacet-distribution.cpp" />
     <ClCompile Include="..\source\bsdfs\refraction-btdf.cpp" />
     <ClCompile Include="..\source\bsdfs\specular-brdf.cpp" />
-    <ClCompile Include="..\source\cameras\camera-sample.cpp" />
     <ClCompile Include="..\source\cameras\camera.cpp" />
     <ClCompile Include="..\source\cameras\orthographic-camera.cpp" />
     <ClCompile Include="..\source\cameras\perspective-camera.cpp" />

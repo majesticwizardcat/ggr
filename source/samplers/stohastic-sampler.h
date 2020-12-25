@@ -12,12 +12,10 @@ private:
 
 public:
 	StohasticSampler() = delete;
+	StohasticSampler(const Filter* filmFilter) : Sampler(filmFilter) { }
 	StohasticSampler(const StohasticSampler& other) = delete;
-	StohasticSampler(float resolutionWidth, float resolutionHeight);
 
 	float getSample();
 	Sample2D getSample2D();
 	std::unique_ptr<Sampler> clone() const;
-	std::unique_ptr<Sampler> clone(int resW, int resH) const;
 };
-

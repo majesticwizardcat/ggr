@@ -6,7 +6,7 @@ class ProjectiveCamera;
 
 class ProjectiveCamera : public Camera {
 protected:
-	Transformation m_projection;
+	Transformation m_unprojection;
 	float m_lensRadius;
 	float m_focalDistance;
 
@@ -17,8 +17,7 @@ public:
 	ProjectiveCamera(const ProjectiveCamera& other);
 	ProjectiveCamera(const Transformation*  cameraToWorld,
 		int resolutionWidth, int resolutionHeight,
-		const Transformation& projection,
-		float lensRadius, float focalDistance);
+		const Transformation& projection, float lensRadius, float focalDistance);
 
 	void generateRay(Ray* ray, const CameraSample& sample) const = 0;
 	virtual std::unique_ptr<Camera> clone() const = 0;

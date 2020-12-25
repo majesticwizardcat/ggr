@@ -11,14 +11,13 @@ void FilmSamplingIntegrator::setup(const Scene* scene, const Camera* camera, Fil
 
 void FilmSamplingIntegrator::render(const Scene* scene, const Camera* camera, Film* film,
 		Sampler* sampler, const RenderSettings& settings) {
-	std::vector<UnfilteredSample> boundSamples;
 	CameraSample cameraSample;
 	Ray ray;
 	Spectrum radiance;
 	std::unique_ptr<Sampler> samplerClone = sampler->clone();
 
 	while(true) {
-		std::cout << "\rCompleted: " << (int) getCompletion() * 100 << "%";
+		std::cout << "\rCompleted: " << (int) (getCompletion() * 100.0f) << "%";
 		m_boundsLock.lock();
 		if (m_filmTiles.empty()) {
 			m_boundsLock.unlock();
@@ -27,34 +26,20 @@ void FilmSamplingIntegrator::render(const Scene* scene, const Camera* camera, Fi
 		FilmBounds bounds = m_filmTiles.back();
 		m_filmTiles.pop_back();
 		m_boundsLock.unlock();
+		auto tile = film->createTile(bounds);
 
-		float padX = std::ceil(2.0f + settings.filter->getRadius());
-		float padY = std::ceil(2.0f + settings.filter->getRadius());
-		Point2 freeBoxStart(bounds.start.first + padX, bounds.start.second + padY);
-		Point2 freeBoxEnd(std::max(freeBoxStart.x, bounds.end.first - padX),
-				  std::max(freeBoxStart.y, bounds.end.second - padY));
-		for (unsigned int x = bounds.start.first; x < bounds.end.first; ++x) {
-			for (unsigned int y = bounds.start.second; y < bounds.end.second; ++y) {
-				samplerClone->createCameraSamples(Point2(x, y), settings.samples);
+		for (unsigned int x = tile->sampleBounds.start.first; x < tile->sampleBounds.end.first; ++x) {
+			for (unsigned int y = tile->sampleBounds.start.second; y < tile->sampleBounds.end.second; ++y) {
+				samplerClone->createCameraSamples(Point2((float)x, (float)y), settings.samples);
 				for (unsigned int s = 0; s < settings.samples; ++s) {
 					cameraSample = samplerClone->getCameraSample(Point2(x, y));
 					camera->generateRay(&ray, cameraSample);
 					radiance = traceRay(&ray, scene, camera, samplerClone.get());
-					if (x > freeBoxStart.x && x < freeBoxEnd.x
-						&& y > freeBoxStart.y && y < freeBoxEnd.y) {
-						film->addUnfilteredSample(cameraSample.filmPosition, radiance, ray.weight);
-					}
-
-					else {
-						boundSamples.push_back(UnfilteredSample(cameraSample.filmPosition, radiance, ray.weight));
-					}
+					tile->addSample(x, y, cameraSample.filmPosition, radiance, ray.weight);
 				}
 			}
 		}
-		if (boundSamples.size() > 0 && m_filmLock.try_lock()) {
-			film->addUnfilteredSampleVector(&boundSamples);
-			m_filmLock.unlock();
-		}
+		film->mergeRenderTile(tile.get());
 	}
 }
 

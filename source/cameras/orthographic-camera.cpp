@@ -10,7 +10,7 @@ OrthographicCamera::OrthographicCamera(const Transformation* cameraToWorld,
 	lensRadius, focalDistance) { }
 
 void OrthographicCamera::generateRay(Ray* ray, const CameraSample& sample) const {
-	ray->origin = Point3(m_projection.applyInversePoint(Point3(sample.filmPosition, 0.0f)));
+	ray->origin = Point3(m_unprojection.applyPoint(Point3(sample.filmPosition, 0.0f)));
 	ray->direction = Point3(0.0f, 0.0f, -1.0f);
 	applyDOF(ray, sample.lensPosition);
 	ray->direction = m_cameraToWorld->applyVector(ray->direction);

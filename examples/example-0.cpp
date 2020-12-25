@@ -27,6 +27,7 @@
 #include "core/renderer.h"
 #include "core/render-settings.h"
 #include "filters/gaussian-filter.h"
+#include "samplers/stohastic-sampler.h"
 
 #include <iostream>
 #include <memory>
@@ -77,7 +78,6 @@ int main(int args, char** argv) {
 	auto greenTexture = std::make_unique<ColorTexture>(Spectrum(RGBColor(0.0f, 0.85f, 0.15f)));
 	auto roughness0 = std::make_unique<ColorTexture>(Spectrum(0.225f));
 	auto roughness1 = std::make_unique<ColorTexture>(Spectrum(0.2f));
-	auto roughness2 = std::make_unique<ColorTexture>(Spectrum(0.7f));
 
 	auto floorBumpMap = std::make_unique<HeightMap>(floorHeightMip.get());
 
@@ -94,9 +94,9 @@ int main(int args, char** argv) {
 
 	floorMaterial->setBumpMap(floorBumpMap.get());
 
-	auto filter = std::make_unique<GaussianFilter>(1.5f, 2.0f);
+	auto filter = std::make_unique<GaussianFilter>(1.0f);
 	RenderSettings settings(500, 500, 64, samples, threads, filter.get());
-	auto sampler = std::make_unique<HaltonSampler>(settings.resolutionWidth, settings.resolutionHeight);
+	auto sampler = std::make_unique<StohasticSampler>(filter.get());
 	auto cameraTransform =
 		std::make_unique<Transformation>(
 		transform::view(Point3(0.0f, -5.0f, 1.5f), Point3(0.0f, 0.0f, 1.5f), Vector3(0.0f, 0.0f, 1.0f)));

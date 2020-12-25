@@ -23,18 +23,6 @@ struct FilmBounds {
 		const std::pair<unsigned int, unsigned int>& end) : start(start), end(end) { }
 };
 
-struct UnfilteredSample {
-	Point2 filmPosition;
-	Spectrum radiance;
-	float rayWeight;
-
-	UnfilteredSample() = delete;
-	UnfilteredSample(const UnfilteredSample& other) : filmPosition(other.filmPosition),
-		radiance(other.radiance), rayWeight(other.rayWeight) { }
-	UnfilteredSample(const Point2 pos, const Spectrum radiance, float weight) :
-		filmPosition(pos), radiance(radiance), rayWeight(weight) { }
-};
-
 struct FilteredSample {
 	Spectrum unnormalizedFilteredRadiance;
 	float filterWeightSum;
@@ -53,22 +41,66 @@ struct FilteredSample {
 	}
 };
 
+class RenderTile {
+private:
+	unsigned int m_tileHeight;
+	unsigned int m_tableWidth;
+	const float* m_filterTable;
+
+	inline unsigned int index(unsigned int x, unsigned int y) const {
+		return x * m_tileHeight + y;
+	}
+
+	inline unsigned int filterIndex(unsigned int pixelX, unsigned int pixelY, const Point2& rasterLocation) const {
+		unsigned int x = (unsigned int)std::floor(std::abs(rasterLocation.x - (float)pixelX));
+		unsigned int y = (unsigned int)std::floor(std::abs(rasterLocation.y - (float)pixelY));
+		return x * m_tableWidth + y;
+	}
+
+public:
+	FilmBounds sampleBounds;
+	std::unique_ptr<FilteredSample[]> samples;
+
+	RenderTile() = delete;
+	RenderTile(const RenderTile& other) = delete;
+	RenderTile(const FilmBounds& bounds, const float* filterTable, unsigned int tableWidth) :
+		sampleBounds(bounds), m_filterTable(filterTable), m_tableWidth(tableWidth) {
+		m_tileHeight = sampleBounds.end.second - sampleBounds.start.second;
+		samples = std::make_unique<FilteredSample[]>((sampleBounds.end.first - sampleBounds.start.first)
+			* (sampleBounds.end.second - sampleBounds.start.second));
+	}
+
+	inline void addSample(unsigned int pixelX, unsigned int pixelY, const Point2& rasterLocation,
+		const Spectrum& radiance, float rayWeight) {
+		unsigned int indx = index(pixelX - sampleBounds.start.first, pixelY - sampleBounds.start.second);
+		float filterValue = m_filterTable[filterIndex(pixelX, pixelY, rasterLocation)];
+		samples[indx].unnormalizedFilteredRadiance += radiance * (rayWeight * filterValue);
+		samples[indx].filterWeightSum += filterValue;
+	}
+
+	inline const FilteredSample& getPixel(unsigned int x, unsigned int y) const {
+		return samples[index(x - sampleBounds.start.first, y - sampleBounds.start.second)];
+	}
+};
+
 class Film {
 private:
-	float m_resolutionWidth;
-	float m_resolutionHeight;
-	const Filter* m_filter;
+	unsigned int m_resolutionWidth;
+	unsigned int m_resolutionHeight;
+	unsigned int m_tableWidth;
+	std::unique_ptr<float[]> m_filterTable;
 	std::unique_ptr<FilteredSample[]> m_filmPixels;
 
-	inline int index(int x, int y) const { return x * (int) m_resolutionHeight + y; }
+	inline int index(int x, int y) const { return x * m_resolutionHeight + y; }
+	void createFilterTable(const Filter* filter);
 
 public:
 	Film() = delete;
 	Film(const Film& other) = delete;
-	Film(float resolutionWidth, float resolutionHeight, const Filter* filter);
+	Film(unsigned int resolutionWidth, unsigned int resolutionHeight, const Filter* filter);
 
-	void addUnfilteredSample(const Point2& filmPosition, const Spectrum& radiance, float rayWeight);
-	void addUnfilteredSampleVector(std::vector<UnfilteredSample>* samples);
-	std::vector<FilmBounds> splitToTiles(int tileSize) const;
+	std::unique_ptr<RenderTile> createTile(const FilmBounds& bounds) const;
+	std::vector<FilmBounds> splitToTiles(unsigned int tileSize) const;
+	void mergeRenderTile(const RenderTile* tile);
 	Image getImage() const;
 };

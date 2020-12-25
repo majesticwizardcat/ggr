@@ -12,7 +12,7 @@ Renderer::Renderer(Scene* scene, Camera* camera, Integrator* integrator,
 Image Renderer::render() {
 	Timer timer;
 	auto film = std::make_unique<Film>(m_settings.resolutionWidth, m_settings.resolutionHeight, m_settings.filter);
-	auto sampler = m_sampler->clone(m_settings.resolutionWidth, m_settings.resolutionHeight);
+	auto sampler = m_sampler->clone();
 	m_scene->initializeAccelerator();
 	m_integrator->setup(m_scene, m_camera, film.get(), sampler.get(), m_settings);
 
