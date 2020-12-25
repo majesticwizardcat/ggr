@@ -59,7 +59,7 @@ to obtain the result. This result is then weighted using the balanced heuristic.
 low discrepancy samples for any dimension using Halton sequences. More samplers will be added in the future like a 
 stratified sampler or a Sobol sampler.
 For filtering, ggr currently supports a simple box filter, a Gaussian filter and a Lanczos filter but will add more
-in the future.
+in the future. All samples for camera are also generated using the filter's distribution to minimize radiance.
 
 ### Cameras
 The only camera models that ggr currently supports are the typical projective camera models: perspective and orthographic
