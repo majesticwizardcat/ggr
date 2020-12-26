@@ -161,7 +161,6 @@
     <ClInclude Include="..\source\images\image-io.h" />
     <ClInclude Include="..\source\images\image.h" />
     <ClInclude Include="..\source\images\mipmap.h" />
-    <ClInclude Include="..\source\integrators\direct-lighting-integrator.h" />
     <ClInclude Include="..\source\integrators\film-sampling-integrator.h" />
     <ClInclude Include="..\source\integrators\integrator.h" />
     <ClInclude Include="..\source\integrators\path-integrator.h" />
@@ -247,7 +246,6 @@
     <ClCompile Include="..\source\images\image-io.cpp" />
     <ClCompile Include="..\source\images\image.cpp" />
     <ClCompile Include="..\source\images\mipmap.cpp" />
-    <ClCompile Include="..\source\integrators\direct-lighting-integrator.cpp" />
     <ClCompile Include="..\source\integrators\film-sampling-integrator.cpp" />
     <ClCompile Include="..\source\integrators\integrator.cpp" />
     <ClCompile Include="..\source\integrators\path-integrator.cpp" />

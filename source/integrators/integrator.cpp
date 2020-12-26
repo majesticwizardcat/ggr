@@ -4,73 +4,62 @@
 #include <algorithm>
 
 Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, const Vector3& wo,
-	const BSDF& surfaceBSDF, const Scene* scene, Sampler* sampler) const {
-	Spectrum L;
-	const Skybox* skybox = scene->getSkybox();
-	int lights = scene->getNumberOfLights() + 1;
-	int choice = lights * sampler->getSample();
-	if (choice == lights - 1) {
-		SkyboxSample skySample = skybox->sample(sampler);
-		skySample.pdf /= (float) lights;
-
-		if (!util::equals(skySample.pdf, 0.0f)
-			&& !skySample.emission.isZero()
-			&& !scene->isIntersected(surfacePoint, skySample.sampledDirection)) {
-
-			float MISWeight = skySample.pdf
-				/ (skySample.pdf + surfaceBSDF.pdf(wo, skySample.sampledDirection));
-			L += (surfaceBSDF.evaluate(wo, skySample.sampledDirection)
-				* skySample.emission
-				* std::abs(glm::dot(surfacePoint.shadingNormal, skySample.sampledDirection))
-				* MISWeight) / skySample.pdf;
-		}
-	}
-
-	else {
-		const LightEntity* light = scene->getLight(choice);
-		LightSample lightSample = light->sample(sampler, surfacePoint.point);
-		lightSample.pdf /= (float) lights;
-
-		if (util::equals(lightSample.pdf, 0.0f)
-			&& !lightSample.emission.isZero()
-			&& scene->areUnoccluded(surfacePoint, lightSample.sampledPoint)) {
-
-			Vector3 wl = glm::normalize(lightSample.sampledPoint.point - surfacePoint.point);
-			float MISWeight = lightSample.pdf / (lightSample.pdf + surfaceBSDF.pdf(wo, wl));
-
-			L += (surfaceBSDF.evaluate(wo, wl)
-				* lightSample.emission
-				* std::abs(glm::dot(surfacePoint.shadingNormal, wl))
-				* MISWeight) / lightSample.pdf;
-		}
-	}
-
+	const BSDF& surfaceBSDF, const Scene* scene, Sampler* sampler, Intersection* sampleIntersection,
+	Spectrum* nextThroughput, bool* nextDistDelta) const {
+	Spectrum L(0.0f);
 	BSDFSample bsdfSample = surfaceBSDF.sample(sampler, wo);
-	if (util::equals(bsdfSample.pdf, 0.0f) || bsdfSample.value.isZero()) {
+	scene->intersects(surfacePoint, bsdfSample.sampledDirection, sampleIntersection);
+
+	// Next throughput is bsdf * cosTheta / pdf, pdf is divided after sampling the bsdf
+	// since the terms "bsdf * cosTheta" are being used in the sampling later
+	*nextThroughput = bsdfSample.value
+		* std::abs(glm::dot(surfacePoint.shadingNormal, bsdfSample.sampledDirection));
+	*nextDistDelta = bsdfSample.isDeltaDist;
+
+	if (bsdfSample.isDeltaDist) {
+		*nextThroughput /= bsdfSample.pdf;
 		return L;
 	}
 
-	Intersection intersection;
-	scene->intersects(surfacePoint, bsdfSample.sampledDirection, &intersection);
-	if (!intersection.hit) {
-		float pdfSkybox = skybox->pdf(bsdfSample.sampledDirection) / lights;
-		float MISWeight = bsdfSample.pdf / (bsdfSample.pdf + pdfSkybox);
-		L += (bsdfSample.value
-			* skybox->emission(bsdfSample.sampledDirection)
-			* std::abs(glm::dot(surfacePoint.shadingNormal, bsdfSample.sampledDirection))
-			* MISWeight) / bsdfSample.pdf;
+	int lights = scene->getNumberOfLights();
+	int choice = (int)std::floor((float)lights * sampler->getSample());
+	const LightEntity* light = scene->getLight(choice);
+	LightSample lightSample = light->sample(sampler, surfacePoint.point);
+
+	// Division with pdf is omitted since the balance heuristic weight
+	// has the pdf on the numerator (both on light and bsdf MIS sampling)
+	// MISWeight = pdf / (lpdf + bsdfPdf)
+	// L = Le * bsdf * cosTheta * Weight / pdf
+	// => L = Le * bsdf * cosTheta / (lpdf + bsdfPdf)
+
+	if (util::equals(lightSample.pdf, 0.0f)
+		&& !lightSample.emission.isZero()
+		&& scene->areUnoccluded(surfacePoint, lightSample.sampledPoint)) {
+		Vector3 wl = glm::normalize(lightSample.sampledPoint.point - surfacePoint.point);
+		float MISWeight = 1.0f / (lightSample.pdf + surfaceBSDF.pdf(wo, wl));
+		L += surfaceBSDF.evaluate(wo, wl)
+			* lightSample.emission
+			* std::abs(glm::dot(surfacePoint.shadingNormal, wl))
+			* MISWeight
+			* (float)lights;
 	}
 
-	else if (intersection.light) {
-		Spectrum lightEmission = intersection.light->emission(surfacePoint.point, intersection.intersectionPoint);
-		float pdfLight = intersection.light->pdf(surfacePoint.point, intersection.intersectionPoint) / lights;
-		float MISWeight = bsdfSample.pdf / (bsdfSample.pdf + pdfLight);
-		L += (bsdfSample.value
+	if (util::equals(bsdfSample.pdf, 0.0f) || bsdfSample.value.isZero()) {
+		*nextThroughput = Spectrum(0.0);
+		return L;
+	}
+
+	if (sampleIntersection->hit && sampleIntersection->light) {
+		Spectrum lightEmission = sampleIntersection->light->
+			emission(surfacePoint.point, sampleIntersection->intersectionPoint);
+		float pdfLight = sampleIntersection->light->pdf(surfacePoint.point, sampleIntersection->intersectionPoint);
+		float MISWeight = 1.0f / (bsdfSample.pdf + pdfLight);
+		L += *nextThroughput
 			* lightEmission
-			* std::abs(glm::dot(surfacePoint.shadingNormal, bsdfSample.sampledDirection))
-			* MISWeight) / bsdfSample.pdf;
+			* MISWeight;
 	}
 
+	*nextThroughput /= bsdfSample.pdf;
 	return L;
 }
 

@@ -6,6 +6,9 @@ class Spectrum;
 
 #include <glm/vec3.hpp>
 #include <glm/common.hpp>
+#include <glm/geometric.hpp>
+
+const glm::vec3 TO_Y(0.2126f, 0.7252f, 0.0722f);
 
 class Spectrum {
 private:
@@ -75,8 +78,8 @@ public:
 		return m_rgb.r;
 	}
 
-	inline float luminance() const {
-		return 0.2126f * m_rgb.r + 0.7152f * m_rgb.g + 0.0722f * m_rgb.b;
+	inline float luminosity() const {
+		return glm::dot(m_rgb, TO_Y);
 	}
 };
 

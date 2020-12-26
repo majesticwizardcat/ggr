@@ -18,7 +18,8 @@ public:
 	Integrator(const Integrator& other) = delete;
 
 	Spectrum sampleDirectLighting(const SurfacePoint& point, const Vector3& wo, const BSDF& surfaceBSDF,
-		const Scene* scene, Sampler* sampler) const;
+		const Scene* scene, Sampler* sampler, Intersection* sampleIntersection,
+		Spectrum* sampleThroughput, bool* nextDistDelta) const;
 
 	virtual void setup(const Scene* scene, const Camera* camera, Film* film,
 		Sampler* sampler, const RenderSettings& settings) = 0;

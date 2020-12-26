@@ -10,6 +10,10 @@ Spectrum LightEntity::emission(const Point3& surfacePoint, const SurfacePoint& l
 float LightEntity::pdf(const Point3& surfacePoint, const SurfacePoint& lightPoint) const {
 	Vector3 direction = surfacePoint - lightPoint.point;
 	float distance = glm::length(direction);
+	if (distance == 0.0f) {
+		return 0.0;
+	}
+
 	direction /= distance;
 	float denom = glm::dot(lightPoint.shadingNormal, direction) * lightPoint.surfaceArea;
 	if (denom <= 0.0f) {

@@ -159,9 +159,6 @@
     <ClInclude Include="..\source\images\mipmap.h">
       <Filter>source\images</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\integrators\direct-lighting-integrator.h">
-      <Filter>source\integrators</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\integrators\film-sampling-integrator.h">
       <Filter>source\integrators</Filter>
     </ClInclude>
@@ -382,9 +379,6 @@
     </ClCompile>
     <ClCompile Include="..\source\images\mipmap.cpp">
       <Filter>source\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\integrators\direct-lighting-integrator.cpp">
-      <Filter>source\integrators</Filter>
     </ClCompile>
     <ClCompile Include="..\source\integrators\film-sampling-integrator.cpp">
       <Filter>source\integrators</Filter>

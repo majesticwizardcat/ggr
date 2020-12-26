@@ -1,5 +1,4 @@
 #include "integrators/path-integrator.h"
-#include "integrators/direct-lighting-integrator.h"
 #include "entities/entity.h"
 #include "entities/light-entity.h"
 #include "meshes/cube.h"
