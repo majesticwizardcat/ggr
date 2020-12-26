@@ -9,9 +9,6 @@ was entirely written from scratch it had its linear algebra classes replaced wit
 
 ## Features
 ### Integrators
-- **Direct lighting integrator**: A simple integrator that calculates only direct light. This integrator
-does not support any reflections/refractions nor global illumination.
-
 - **Path Tracer**: This integrator computes light paths (radiance paths) that start from the camera. It
 uses the surface's BRDF to increment the path with each bounce and Russian roulette to decide when to
 end it. This integrator supports every material and can estimate both direct and indirect lighting.
