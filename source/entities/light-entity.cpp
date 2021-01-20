@@ -26,10 +26,20 @@ LightSample LightEntity::sample(Sampler* sampler, const Point3& surfacePoint) co
 	LightSample ls;
 	ls.sampledPoint = m_mesh->samplePoint(sampler);
 	ls.sampledPoint.meshID = m_id;
-	ls.pdf = pdf(surfacePoint, ls.sampledPoint);
-	if (ls.pdf > 0.0f) {
-		ls.emission = emission(surfacePoint, ls.sampledPoint);
+	ls.pdf = 0.0f;
+	Vector3 dir = surfacePoint - ls.sampledPoint.point;
+	float distance = glm::length(dir);
+	float dist2 = distance * distance;
+	float p = 1.0f / (1.0 + dist2);
+	if (distance == 0.0f || sampler->getSample() > p) {
+		return ls;
 	}
+	dir /= distance;
+	float denom = glm::dot(ls.sampledPoint.shadingNormal, dir) * ls.sampledPoint.surfaceArea;
+	if (denom <= 0.0f) {
+		return ls;
+	}
+	ls.pdf = p * dist2 / denom;
+	ls.emission = emission(surfacePoint, ls.sampledPoint);
 	return ls;
 }
-
