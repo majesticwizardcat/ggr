@@ -45,7 +45,6 @@ int main(int args, char** argv) {
 	auto mirror = std::make_unique<Cube>();
 	auto diffuse = std::make_unique<Cube>();
 	auto light = std::make_unique<Cube>();
-	auto glass = std::make_unique<Cube>();
 	auto transparent = std::make_unique<Cube>();
 	auto bluePlastic = std::make_unique<Cube>();
 	auto greenPlastic = std::make_unique<Cube>();
@@ -53,7 +52,6 @@ int main(int args, char** argv) {
 
 	mirror->transform(transform::translate(2.0f, 0.0f, 0.0f));
 	diffuse->transform(transform::translate(-2.0f, 0.0f, 0.0f));
-	glass->transform(transform::translate(0.0, -1.0f, 2.0f));
 	transparent->transform(transform::translate(0.0f, -2.0f, 0.2f).combine(transform::scale(1.2f, 1.2f, 1.2f)));
 	bluePlastic->transform(transform::translate(-2.0f, 0.0f, 3.0f));
 	greenPlastic->transform(transform::translate(2.0f, 0.0f, 3.0f));
@@ -83,17 +81,15 @@ int main(int args, char** argv) {
 	auto redMatte = std::make_unique<MatteMaterial>(redTexture.get());
 	auto metalMaterial = std::make_unique<MetalMaterial>(whiteTexture.get(), roughness0.get());
 	auto mirrorMaterial = std::make_unique<MirrorMaterial>(whiteTexture.get());
-	auto glassMaterial = std::make_unique<GlassMaterial>(whiteTexture.get(), roughness0.get(), 1.8f);
-	auto transparentMaterial = std::make_unique<TransparentMaterial>(whiteTexture.get(), 1.5f);
-	auto whitePlasticMaterial = std::make_unique<PlasticMaterial>(whiteTexture.get(), roughness1.get());
-	auto bluePlasticMaterial = std::make_unique<PlasticMaterial>(blueTexture.get(), roughness1.get());
+	auto glassMaterial = std::make_unique<GlassMaterial>(whiteTexture.get(), roughness0.get(), 1.33);
+	auto bluePlasticMaterial = std::make_unique<PlasticMaterial>(blueTexture.get(), roughness1.get(), 0.5f);
 	auto greenPlasticMaterial = std::make_unique<PlasticMaterial>(greenTexture.get(), roughness1.get());
-	auto floorMaterial = std::make_unique<PlasticMaterial>(floorTexture.get(), roughness1.get());
+	auto floorMaterial = std::make_unique<PlasticMaterial>(floorTexture.get(), roughness1.get(), 0.5f);
 	auto emissionMat = std::make_unique<EmissionMaterial>(whiteTexture.get(), 3.5f);
 
 	floorMaterial->setBumpMap(floorBumpMap.get());
 
-	auto filter = std::make_unique<GaussianFilter>(1.0f);
+	auto filter = std::make_unique<GaussianFilter>(1.75f);
 	RenderSettings settings(500, 500, 64, samples, threads, filter.get());
 	auto sampler = std::make_unique<StohasticSampler>(filter.get());
 	auto cameraTransform =
@@ -112,8 +108,7 @@ int main(int args, char** argv) {
 	scene.addEntity(back.get(), metalMaterial.get());
 	scene.addEntity(bluePlastic.get(), bluePlasticMaterial.get());
 	scene.addEntity(greenPlastic.get(), greenPlasticMaterial.get());
-	scene.addEntity(glass.get(), glassMaterial.get());
-	scene.addEntity(transparent.get(), transparentMaterial.get());
+	scene.addEntity(transparent.get(), glassMaterial.get());
 	scene.addLight(light.get(), emissionMat.get());
 	scene.addLight(light2ndFloor.get(), emissionMat.get());
 

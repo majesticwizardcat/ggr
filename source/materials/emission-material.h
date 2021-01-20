@@ -4,6 +4,7 @@ class EmissionMaterial;
 
 #include "materials/material.h"
 #include "textures/texture.h"
+#include "shaders/emission-shader.h"
 
 #include <memory>
 
@@ -19,6 +20,9 @@ public:
 	EmissionMaterial(const Texture* emission, float intensity) : Material(),
 		m_emission(emission), m_intensity(intensity) { }
 
-	BSDF createBSDF(const SurfacePoint& point, const Vector3& wo) const;
+	std::unique_ptr<Shader> createShader(const SurfacePoint& point, const Vector3& wo) const {
+		return std::make_unique<EmissionShader>(point.shadingNormal, point.tangent, point.bitangent,
+			m_emission->sample(point) * m_intensity);
+	}
 };
 

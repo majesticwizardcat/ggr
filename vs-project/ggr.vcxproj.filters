@@ -7,9 +7,6 @@
     <Filter Include="source\accelerators">
       <UniqueIdentifier>{77797f64-5d32-4e5d-8e63-c85570ecc25d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\bsdfs">
-      <UniqueIdentifier>{82c7f9c0-f94f-47a8-9752-b436b2ecca10}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\cameras">
       <UniqueIdentifier>{fc1dd62b-d18a-4039-91a2-606a20bff043}</UniqueIdentifier>
     </Filter>
@@ -61,6 +58,9 @@
     <Filter Include="examples">
       <UniqueIdentifier>{499a98b4-34e8-41f1-ae5a-b7ce3a2ee569}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\shaders">
+      <UniqueIdentifier>{6cc9be18-e0f9-474f-8c58-f123c9914bf7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\accelerators\bb-accelerator.h">
@@ -68,39 +68,6 @@
     </ClInclude>
     <ClInclude Include="..\source\accelerators\bounding-box.h">
       <Filter>source\accelerators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\bsdfs\bsdf.h">
-      <Filter>source\bsdfs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\bsdfs\bsdf-sample.h">
-      <Filter>source\bsdfs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\bsdfs\bxdf.h">
-      <Filter>source\bsdfs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\bsdfs\diffuse-brdf.h">
-      <Filter>source\bsdfs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\bsdfs\emission-bxdf.h">
-      <Filter>source\bsdfs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\bsdfs\fresnel.h">
-      <Filter>source\bsdfs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\bsdfs\microfacet-brdf.h">
-      <Filter>source\bsdfs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\bsdfs\microfacet-btdf.h">
-      <Filter>source\bsdfs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\bsdfs\microfacet-distribution.h">
-      <Filter>source\bsdfs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\bsdfs\refraction-btdf.h">
-      <Filter>source\bsdfs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\bsdfs\specular-brdf.h">
-      <Filter>source\bsdfs</Filter>
     </ClInclude>
     <ClInclude Include="..\source\cameras\camera.h">
       <Filter>source\cameras</Filter>
@@ -297,6 +264,36 @@
     <ClInclude Include="..\source\intersection\entity-intersection.h">
       <Filter>source\intersection</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\shaders\shader.h">
+      <Filter>source\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\shaders\diffuse-shader.h">
+      <Filter>source\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\shaders\specular-shader.h">
+      <Filter>source\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\shaders\fresnel.h">
+      <Filter>source\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\shaders\mix-shader.h">
+      <Filter>source\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\shaders\refraction-shader.h">
+      <Filter>source\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\shaders\microfacet-distribution.h">
+      <Filter>source\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\shaders\mf-reflection-shader.h">
+      <Filter>source\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\shaders\mf-refraction-shader.h">
+      <Filter>source\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\shaders\emission-shader.h">
+      <Filter>source\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\accelerators\bb-accelerator.cpp">
@@ -304,36 +301,6 @@
     </ClCompile>
     <ClCompile Include="..\source\accelerators\bounding-box.cpp">
       <Filter>source\accelerators</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\bsdfs\bsdf.cpp">
-      <Filter>source\bsdfs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\bsdfs\bsdf-sample.cpp">
-      <Filter>source\bsdfs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\bsdfs\diffuse-brdf.cpp">
-      <Filter>source\bsdfs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\bsdfs\emission-bxdf.cpp">
-      <Filter>source\bsdfs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\bsdfs\fresnel.cpp">
-      <Filter>source\bsdfs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\bsdfs\microfacet-brdf.cpp">
-      <Filter>source\bsdfs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\bsdfs\microfacet-btdf.cpp">
-      <Filter>source\bsdfs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\bsdfs\microfacet-distribution.cpp">
-      <Filter>source\bsdfs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\bsdfs\refraction-btdf.cpp">
-      <Filter>source\bsdfs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\bsdfs\specular-brdf.cpp">
-      <Filter>source\bsdfs</Filter>
     </ClCompile>
     <ClCompile Include="..\source\cameras\camera.cpp">
       <Filter>source\cameras</Filter>
@@ -404,19 +371,10 @@
     <ClCompile Include="..\source\lighting\skybox-sample.cpp">
       <Filter>source\lighting</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\materials\emission-material.cpp">
-      <Filter>source\materials</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\materials\glass-material.cpp">
       <Filter>source\materials</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\materials\matte-material.cpp">
-      <Filter>source\materials</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\materials\metal-material.cpp">
-      <Filter>source\materials</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\materials\mirror-material.cpp">
       <Filter>source\materials</Filter>
     </ClCompile>
     <ClCompile Include="..\source\materials\plastic-material.cpp">
@@ -470,9 +428,6 @@
     <ClCompile Include="..\examples\example-0.cpp">
       <Filter>examples</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\materials\material.cpp">
-      <Filter>source\materials</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\textures\height-map.cpp">
       <Filter>source\textures</Filter>
     </ClCompile>
@@ -487,6 +442,15 @@
     </ClCompile>
     <ClCompile Include="..\source\entities\entity.cpp">
       <Filter>source\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\shaders\refraction-shader.cpp">
+      <Filter>source\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\shaders\mf-reflection-shader.cpp">
+      <Filter>source\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\shaders\mf-refraction-shader.cpp">
+      <Filter>source\shaders</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

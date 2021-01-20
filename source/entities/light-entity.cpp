@@ -4,7 +4,7 @@
 
 Spectrum LightEntity::emission(const Point3& surfacePoint, const SurfacePoint& lightPoint) const {
 	Vector3 direction = surfacePoint - lightPoint.point;
-	return m_material->createBSDF(lightPoint, direction).evaluate(direction, direction);
+	return m_material->createShader(lightPoint, direction)->evaluate(direction, direction);
 }
 
 float LightEntity::pdf(const Point3& surfacePoint, const SurfacePoint& lightPoint) const {

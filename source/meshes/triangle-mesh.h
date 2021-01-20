@@ -22,6 +22,7 @@ protected:
 public:
 	TriangleMesh(const TriangleMesh& other) = delete;
 	TriangleMesh(const std::vector<Vertex>& vertices, const std::vector<int>& indices);
+	virtual ~TriangleMesh() { }
 
 	void transform(const Transformation& transformation);
 	inline const std::unique_ptr<Triangle>* getTriangles() const { return m_triangles.data(); }

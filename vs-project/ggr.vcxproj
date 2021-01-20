@@ -131,17 +131,6 @@
   <ItemGroup>
     <ClInclude Include="..\source\accelerators\bb-accelerator.h" />
     <ClInclude Include="..\source\accelerators\bounding-box.h" />
-    <ClInclude Include="..\source\bsdfs\bsdf-sample.h" />
-    <ClInclude Include="..\source\bsdfs\bsdf.h" />
-    <ClInclude Include="..\source\bsdfs\bxdf.h" />
-    <ClInclude Include="..\source\bsdfs\diffuse-brdf.h" />
-    <ClInclude Include="..\source\bsdfs\emission-bxdf.h" />
-    <ClInclude Include="..\source\bsdfs\fresnel.h" />
-    <ClInclude Include="..\source\bsdfs\microfacet-brdf.h" />
-    <ClInclude Include="..\source\bsdfs\microfacet-btdf.h" />
-    <ClInclude Include="..\source\bsdfs\microfacet-distribution.h" />
-    <ClInclude Include="..\source\bsdfs\refraction-btdf.h" />
-    <ClInclude Include="..\source\bsdfs\specular-brdf.h" />
     <ClInclude Include="..\source\cameras\camera-sample.h" />
     <ClInclude Include="..\source\cameras\camera.h" />
     <ClInclude Include="..\source\cameras\orthographic-camera.h" />
@@ -195,6 +184,16 @@
     <ClInclude Include="..\source\samplers\sample-2d.h" />
     <ClInclude Include="..\source\samplers\sampler.h" />
     <ClInclude Include="..\source\samplers\stohastic-sampler.h" />
+    <ClInclude Include="..\source\shaders\diffuse-shader.h" />
+    <ClInclude Include="..\source\shaders\emission-shader.h" />
+    <ClInclude Include="..\source\shaders\fresnel.h" />
+    <ClInclude Include="..\source\shaders\mf-reflection-shader.h" />
+    <ClInclude Include="..\source\shaders\mf-refraction-shader.h" />
+    <ClInclude Include="..\source\shaders\microfacet-distribution.h" />
+    <ClInclude Include="..\source\shaders\mix-shader.h" />
+    <ClInclude Include="..\source\shaders\refraction-shader.h" />
+    <ClInclude Include="..\source\shaders\shader.h" />
+    <ClInclude Include="..\source\shaders\specular-shader.h" />
     <ClInclude Include="..\source\spectra\spectrum.h" />
     <ClInclude Include="..\source\textures\bump-map.h" />
     <ClInclude Include="..\source\textures\color-texture.h" />
@@ -215,16 +214,6 @@
     </ClCompile>
     <ClCompile Include="..\source\accelerators\bb-accelerator.cpp" />
     <ClCompile Include="..\source\accelerators\bounding-box.cpp" />
-    <ClCompile Include="..\source\bsdfs\bsdf-sample.cpp" />
-    <ClCompile Include="..\source\bsdfs\bsdf.cpp" />
-    <ClCompile Include="..\source\bsdfs\diffuse-brdf.cpp" />
-    <ClCompile Include="..\source\bsdfs\emission-bxdf.cpp" />
-    <ClCompile Include="..\source\bsdfs\fresnel.cpp" />
-    <ClCompile Include="..\source\bsdfs\microfacet-brdf.cpp" />
-    <ClCompile Include="..\source\bsdfs\microfacet-btdf.cpp" />
-    <ClCompile Include="..\source\bsdfs\microfacet-distribution.cpp" />
-    <ClCompile Include="..\source\bsdfs\refraction-btdf.cpp" />
-    <ClCompile Include="..\source\bsdfs\specular-brdf.cpp" />
     <ClCompile Include="..\source\cameras\camera.cpp" />
     <ClCompile Include="..\source\cameras\orthographic-camera.cpp" />
     <ClCompile Include="..\source\cameras\perspective-camera.cpp" />
@@ -254,12 +243,8 @@
     <ClCompile Include="..\source\lighting\light-sample.cpp" />
     <ClCompile Include="..\source\lighting\skybox-sample.cpp" />
     <ClCompile Include="..\source\lighting\skybox.cpp" />
-    <ClCompile Include="..\source\materials\emission-material.cpp" />
     <ClCompile Include="..\source\materials\glass-material.cpp" />
-    <ClCompile Include="..\source\materials\material.cpp" />
-    <ClCompile Include="..\source\materials\matte-material.cpp" />
     <ClCompile Include="..\source\materials\metal-material.cpp" />
-    <ClCompile Include="..\source\materials\mirror-material.cpp" />
     <ClCompile Include="..\source\materials\plastic-material.cpp" />
     <ClCompile Include="..\source\materials\transparent-material.cpp" />
     <ClCompile Include="..\source\meshes\cube.cpp" />
@@ -273,6 +258,9 @@
     <ClCompile Include="..\source\samplers\halton-sampler.cpp" />
     <ClCompile Include="..\source\samplers\sampler.cpp" />
     <ClCompile Include="..\source\samplers\stohastic-sampler.cpp" />
+    <ClCompile Include="..\source\shaders\mf-reflection-shader.cpp" />
+    <ClCompile Include="..\source\shaders\mf-refraction-shader.cpp" />
+    <ClCompile Include="..\source\shaders\refraction-shader.cpp" />
     <ClCompile Include="..\source\spectra\spectrum.cpp" />
     <ClCompile Include="..\source\textures\color-texture.cpp" />
     <ClCompile Include="..\source\textures\height-map.cpp" />

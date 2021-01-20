@@ -26,8 +26,8 @@ public:
 	XYZColor getXYZ() const;
 	RGBColor getRGB() const;
 
-	inline void clamp() {
-		glm::clamp(m_rgb, 0.0f, 1.0f);
+	inline void clamp(float min, float max) {
+		glm::clamp(m_rgb, min, max);
 	}
 
 	inline bool isZero() const {

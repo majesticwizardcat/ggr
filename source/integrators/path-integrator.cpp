@@ -1,5 +1,6 @@
 #include "integrators/path-integrator.h"
 #include "tools/util.h"
+#include "shaders/shader.h"
 
 #include <algorithm>
 
@@ -9,8 +10,8 @@ Spectrum PathIntegrator::traceRay(Ray* ray, const Scene* scene, const Camera* ca
 	Spectrum nextThroughput;
 	Intersection intersection;
 	Vector3 rayDirection = ray->direction;
-	BSDF bsdf;
-	bool cameraRay = true;
+	std::unique_ptr<Shader> surfaceShader;
+	int depth = 0;
 	bool lastDistDelta = false;
 	scene->intersects(ray, &intersection);
 
@@ -21,30 +22,31 @@ Spectrum PathIntegrator::traceRay(Ray* ray, const Scene* scene, const Camera* ca
 		}
 
 		if (intersection.light) {
-			if (cameraRay || lastDistDelta) {
-				bsdf = intersection.material->createBSDF(intersection.intersectionPoint,
+			if (depth == 0 || lastDistDelta) {
+				surfaceShader = intersection.material->createShader(intersection.intersectionPoint,
 					intersection.wo);
-				L += throughput * bsdf.evaluate(intersection.wo, intersection.wo);
+				L += throughput * surfaceShader->evaluate(intersection.wo, intersection.wo);
 			}
 			break;
 		}
 
 		intersection.material->bump(&intersection.intersectionPoint);
-		bsdf = intersection.material->createBSDF(intersection.intersectionPoint, intersection.wo);
+		surfaceShader = intersection.material->createShader(intersection.intersectionPoint, intersection.wo);
 
 		L += throughput * sampleDirectLighting(
 			SurfacePoint(intersection.intersectionPoint), Vector3(intersection.wo),
-			bsdf, scene, sampler, &intersection, &nextThroughput, &lastDistDelta);
+			surfaceShader.get(), scene, sampler, &intersection, &nextThroughput, &lastDistDelta);
 
 		throughput *= nextThroughput;
-		float rrProb = std::max(0.05f, 1.0f - throughput.luminosity());
-		if (sampler->getSample() < rrProb) {
-			break;
+		if (depth > 4) {
+			float rrProb = std::max(0.05f, 1.0f - throughput.luminosity());
+			if (sampler->getSample() < rrProb) {
+				break;
+			}
+			throughput /= std::max((1.0f - rrProb), 0.1f);
 		}
-		throughput /= std::max((1.0f - rrProb), 0.1f);
-		cameraRay = false;
+		depth++;
 	}
-
 	return L;
 }
 

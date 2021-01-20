@@ -17,6 +17,6 @@ public:
 	float pdf(const Point3& surfacePoint, const SurfacePoint& lightPoint) const;
 	LightSample sample(Sampler* sampler, const Point3& surfacePoint) const;
 
-	virtual inline const LightEntity* getLight() const { return this; }
+	inline const LightEntity* getLight() const { return this; }
 };
 

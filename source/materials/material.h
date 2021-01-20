@@ -2,7 +2,7 @@
 
 class Material;
 
-#include "bsdfs/bsdf.h"
+#include "shaders/shader.h"
 #include "intersection/surface-point.h"
 #include "textures/bump-map.h"
 
@@ -16,10 +16,17 @@ public:
 	Material() : m_bumpMap(nullptr) { }
 	Material(const Material& other) : m_bumpMap(other.m_bumpMap) { }
 	Material(const BumpMap* bumpMap) : m_bumpMap(bumpMap) { }
+	virtual ~Material() { }
 
-	void bump(SurfacePoint* point) const;
-	void setBumpMap(const BumpMap* bumpMap);
+	inline void bump(SurfacePoint* point) const {
+		if (m_bumpMap) {
+			return m_bumpMap->bump(point);
+		}
+	}
 
-	virtual BSDF createBSDF(const SurfacePoint& point, const Vector3& wo) const = 0;
+	inline void setBumpMap(const BumpMap* bumpMap) {
+		m_bumpMap = bumpMap;
+	}
+	virtual std::unique_ptr<Shader>
+		createShader(const SurfacePoint& point, const Vector3& wo) const = 0;
 };
-

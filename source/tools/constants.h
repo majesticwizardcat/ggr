@@ -12,5 +12,5 @@ static const float PI_OVER_TWO = PI / 2.0f;
 static const float PI_OVER_THREE = PI / 3.0f;
 static const float PI_OVER_FOUR = PI / 4.0f;
 static const float PI_OVER_SIX = PI / 6.0f;
-static const float ERROR = 0.005f;
+static const float ERROR = 0.0005f;
 

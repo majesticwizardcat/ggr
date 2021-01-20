@@ -34,35 +34,16 @@ inline Point2 toSpherical(const Vector3& v) {
 		std::abs(std::acos(v.z)));
 }
 
-inline bool sameHemisphere(const Vector3& v0, const Vector3& v1) {
-	return v0.z * v1.z >= 0.0f;
+inline Vector3 reflect(const Vector3& w, const Vector3& n, float NoW) {
+	return n * 2.0f * NoW - w;
 }
 
-inline Vector3 reflect(const Vector3& w, const Vector3& n) {
-	return n * 2.0f * glm::dot(n, w) - w;
-}
-
-inline Vector3 refract(const Vector3& w, const Vector3& n, float IORin, float IORout) {
-	float eta = IORin / IORout;
-	float cosThetaI = glm::dot(n, w);
-	float sin2ThetaEta2 = eta * eta * (1.0f - cosThetaI * cosThetaI);
+inline Vector3 refract(const Vector3& w, const Vector3& n, float oneOverEta, float cosThetaW) {
+	float sin2ThetaEta2 = oneOverEta * oneOverEta * (1.0f - cosThetaW * cosThetaW);
 	if (sin2ThetaEta2 > 1.0f) {
 		return Vector3(0.0f);
 	}
 	float cosThetaT = std::sqrt(1.0f - sin2ThetaEta2);
-	return -w * eta + n * (eta * cosThetaI - cosThetaT);
-}
-
-inline float cosTheta(const Vector3& w) {
-	return w.z;
-}
-
-inline float cos2Theta(const Vector3& w) {
-	return w.z * w.z;
-}
-
-inline float absCosTheta(const Vector3& w) {
-	return std::abs(w.z);
+	return -w * oneOverEta + n * (oneOverEta * cosThetaW - cosThetaT);
 }
 }
-

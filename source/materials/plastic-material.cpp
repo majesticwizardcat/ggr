@@ -1,34 +1,31 @@
 #include "materials/plastic-material.h"
-#include "bsdfs/microfacet-brdf.h"
-#include "bsdfs/diffuse-brdf.h"
-#include "bsdfs/specular-brdf.h"
 #include "tools/util.h"
+#include "shaders/specular-shader.h"
+#include "shaders/mf-reflection-shader.h"
+#include "shaders/diffuse-shader.h"
+#include "shaders/mix-shader.h"
 
 PlasticMaterial::PlasticMaterial(const Texture* color, const Texture* roughness) :
 	PlasticMaterial(color, roughness, 0.5f) { }
-PlasticMaterial::PlasticMaterial(const Texture* color, const Texture* roughness, float ratio)
-	: Material(), m_color(color), m_roughness(roughness), m_ratio(ratio) {
-	m_fresnel = std::make_unique<FresnelSchlick>(Spectrum(1.0f));
-	m_distribution = std::make_unique<GGXDistribution>();
+PlasticMaterial::PlasticMaterial(const Texture* color, const Texture* roughness, float blend)
+	: Material(), m_color(color), m_roughness(roughness), m_blend(blend) {
 }
 
-BSDF PlasticMaterial::createBSDF(const SurfacePoint& point, const Vector3& wo) const {
-	BSDF bsdf(point);
+std::unique_ptr<Shader> PlasticMaterial::createShader(const SurfacePoint& point, const Vector3& wo) const {
 	Spectrum color = m_color->sample(point);
 	float roughness = util::clamp(m_roughness->sample(point).value(), 0.0f, 1.0f);
 	roughness *= roughness;
-	std::unique_ptr<BXDF> diffuse = std::make_unique<DiffuseBRDF>(color * (1.0f - m_ratio));
-	std::unique_ptr<BXDF> gloss;
-	
+	std::unique_ptr<Shader> diffuse =
+		std::make_unique<DiffuseShader>(point.shadingNormal, point.tangent,
+		point.bitangent, color);
+	std::unique_ptr<Shader> gloss;
 	if (util::equals(roughness, 0.0f)) {
-		gloss = std::make_unique<SpecularBRDF>(Spectrum(m_ratio), m_fresnel.get());
+		gloss = std::make_unique<SpecularShader>(point.shadingNormal, point.tangent,
+			point.bitangent, color);
 	}
 	else {
-		gloss = std::make_unique<MicrofacetBRDF>(m_distribution.get(),
-			m_fresnel.get(), roughness, Spectrum(m_ratio));
+		gloss = std::make_unique<MFReflectionShader>(point.shadingNormal, point.tangent,
+			point.bitangent, color, roughness);
 	}
-	bsdf.addBXDF(diffuse);
-	bsdf.addBXDF(gloss);
-	return bsdf;
+	return std::make_unique<MixShader>(diffuse, gloss, m_blend);
 }
-
