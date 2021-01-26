@@ -18,7 +18,7 @@ public:
 	std::unique_ptr<BBNode> left;
 	std::unique_ptr<BBNode> right;
 
-	BBNode() { }
+	BBNode() : left(nullptr), right(nullptr) { }
 	BBNode(const BBNode& other) = delete;
 	BBNode(int itemIndex);
 
