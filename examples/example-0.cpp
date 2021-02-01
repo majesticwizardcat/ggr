@@ -77,6 +77,8 @@ int main(int args, char** argv) {
 	auto roughness1 = std::make_unique<ColorTexture>(Spectrum(0.2f));
 
 	auto floorBumpMap = std::make_unique<HeightMap>(floorHeightMip.get());
+	floorTexture->setUVScale(1.5f, 1.5f);
+	floorBumpMap->setUVScale(1.5f, 1.5f);
 
 	auto redMatte = std::make_unique<MatteMaterial>(redTexture.get());
 	auto metalMaterial = std::make_unique<MetalMaterial>(whiteTexture.get(), roughness0.get());

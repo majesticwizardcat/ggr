@@ -127,15 +127,15 @@ Spectrum MipMap::bilinear(int level, const Point2& uv) const {
 		+ get(level, s0 + 1, t0 + 1) * s * t;
 }
 
-Spectrum MipMap::trilinear(const SurfacePoint& point) const {
-	float width = std::max(point.dUVdx.length(), point.dUVdy.length());
+Spectrum MipMap::trilinear(const Point2& uv, const Vector2& dUVdx, const Vector2& dUVdy) const {
+	float width = std::max(dUVdx.length(), dUVdy.length());
 	if (util::equals(width, 0.0f)) {
-		return bilinear(0, point.uv);	
+		return bilinear(0, uv);	
 	}
 
 	float level = m_mipmaps.size() - 1 + std::log2(width);
 	if (level < 0) {
-		return bilinear(0, point.uv);
+		return bilinear(0, uv);
 	}
 
 	if (level >= m_mipmaps.size() - 1) {
@@ -144,7 +144,7 @@ Spectrum MipMap::trilinear(const SurfacePoint& point) const {
 
 	int lod = (int) std::floor(level);
 	float t = level - lod;
-	return bilinear(lod, point.uv) * (1.0f - t) + bilinear(lod + 1, point.uv) * t;
+	return bilinear(lod, uv) * (1.0f - t) + bilinear(lod + 1, uv) * t;
 }
 
 Spectrum MipMap::ewa(int level, const Point2& uv, const Vector2& minorAxis,
@@ -198,29 +198,29 @@ Spectrum MipMap::ewa(int level, const Point2& uv, const Vector2& minorAxis,
 	return sum / filterSum;
 }
 
-Spectrum MipMap::sample(const SurfacePoint& point) const {
+Spectrum MipMap::sample(const Point2& uv, const Vector2& dUVdx, const Vector2& dUVdy) const {
 	if (m_anisotropicLevel < 2) {
-		return trilinear(point);
+		return trilinear(uv, dUVdx, dUVdy);
 	}
 
 	Vector2 minorAxis;
 	Vector2 majorAxis;
 
-	if (glm::length2(point.dUVdx) < glm::length2(point.dUVdy)) {
-		minorAxis = point.dUVdx;
-		majorAxis = point.dUVdy;
+	if (glm::length2(dUVdx) < glm::length2(dUVdy)) {
+		minorAxis = dUVdx;
+		majorAxis = dUVdy;
 	}
 
 	else {
-		minorAxis = point.dUVdy;
-		majorAxis = point.dUVdx;
+		minorAxis = dUVdy;
+		majorAxis = dUVdx;
 	}
 
 	float minorAxisL = glm::length(minorAxis);
 	float majorAxisL = glm::length(majorAxis);
 
 	if (minorAxisL == 0.0f || majorAxisL == 0.0f) {
-		return bilinear(0, point.uv);
+		return bilinear(0, uv);
 	}
 
 	if (minorAxisL * m_anisotropicLevel < majorAxisL) {
@@ -234,12 +234,11 @@ Spectrum MipMap::sample(const SurfacePoint& point) const {
 	}
 
 	if (level < 0) {
-		return ewa(0, point.uv, minorAxis, majorAxis);
+		return ewa(0, uv, minorAxis, majorAxis);
 	}
 
 	int lod = (int) std::floor(level);
 	float t = level - lod;
-	return ewa(lod, point.uv, minorAxis, majorAxis) * (1.0f - t)
-		+ ewa(lod + 1, point.uv, minorAxis, majorAxis) * t;
+	return ewa(lod, uv, minorAxis, majorAxis) * (1.0f - t)
+		+ ewa(lod + 1, uv, minorAxis, majorAxis) * t;
 }
-

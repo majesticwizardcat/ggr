@@ -37,7 +37,7 @@ private:
 
 	Spectrum get(int level, int x, int y) const;
 	Spectrum bilinear(int level, const Point2& uv) const;
-	Spectrum trilinear(const SurfacePoint& point) const;
+	Spectrum trilinear(const Point2& uv, const Vector2& dUVdx, const Vector2& dUVdy) const;
 	Spectrum ewa(int level, const Point2& uv, const Vector2& minorAxis,
 		const Vector2& majorAxis) const;
 
@@ -47,6 +47,6 @@ public:
 	MipMap(const Image& image);
 	MipMap(const Image& image, int anisotropicLevel);
 
-	Spectrum sample(const SurfacePoint& point) const;
+	Spectrum sample(const Point2& uv, const Vector2& dUVdx, const Vector2& dUVdy) const;
 };
 
