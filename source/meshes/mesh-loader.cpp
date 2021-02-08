@@ -22,8 +22,7 @@ std::unique_ptr<TriangleMesh> meshloader::loadObj(const char* location) {
 		std::exit(1);
 	}
 
-	while (file) {
-		file >> in;
+	while (file >> in) {
 		if (in == "v") {
 			float x, y, z;
 			file >> x;
@@ -56,18 +55,18 @@ std::unique_ptr<TriangleMesh> meshloader::loadObj(const char* location) {
 				file.ignore();
 				file >> n;
 				std::tuple<int, int, int> v = std::make_tuple(p - 1, t - 1, n - 1);
-
-				if (ptn.find(v) == ptn.end()) {
-					vertices.push_back(Vertex(positions[p - 1], uvs[t - 1], normals[n - 1]));
-					indices.push_back(indices.size());
-				}
-
-				else {
-					ptn[v] = indices.size();
+				if (ptn.find(v) != ptn.end()) {
 					indices.push_back(ptn[v]);
+				}
+				else {
+					indices.push_back(vertices.size());
+					ptn[v] = vertices.size();
+					vertices.push_back(Vertex(positions[p - 1], uvs[t - 1], normals[n - 1]));
 				}
 			}
 		}
 	}
+	std::cout << "Loaded obj with: " << vertices.size() << " vertices and " <<
+		indices.size() << " indices" << std::endl;
 	return std::make_unique<TriangleMesh>(vertices, indices);
 }

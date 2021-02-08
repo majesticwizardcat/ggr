@@ -7,6 +7,7 @@ TriangleMesh::TriangleMesh(const std::vector<Vertex>& vertices, const std::vecto
 			&m_vertices[indices[i]],
 			&m_vertices[indices[i + 1]],
 			&m_vertices[indices[i + 2]]));
+		m_triangles.back()->calculateGeometry();
 	}
 }
 

@@ -45,7 +45,6 @@ public:
 	void intersects(const SurfacePoint& surface, const Vector3& direction,
 		Intersection* result, float maxT) const;
 	bool areUnoccluded(const SurfacePoint& p0, const SurfacePoint& p1) const;
-	bool isIntersected(const SurfacePoint& surface, const Vector3& direction) const;
 
 	inline size_t getNumberOfLights() const { return m_lights.size(); }
 	inline const LightEntity* getLight(int index) const { return m_lights[index]; }

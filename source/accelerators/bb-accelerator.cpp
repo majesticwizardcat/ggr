@@ -145,38 +145,8 @@ bool BBAccelerator::intersects(const Ray& ray, size_t ignoreID, EntityIntersecti
 	return false;
 }
 
-bool BBAccelerator::intersectEntityAny(BBNode* node, const Ray& ray, size_t ignoreID, float maxT) const {
-	return m_entities[node->itemIndex]->getID() != ignoreID
-		&& m_entities[node->itemIndex]->intersects(ray, maxT);
-}
-
 bool BBAccelerator::intersectsAny(const Ray& ray, const SurfacePoint& surface, float maxT) const {
-	std::vector<BBNode*> hits;
-	BBNode* current;
-	std::pair<bool, bool> res;
-	hits.push_back(m_root.get());
-	while (true) {
-		if (hits.empty()) {
-			break;
-		}
-
-		current = hits.back();
-		hits.pop_back();
-		
-		if (current->isLeaf() && intersectEntityAny(current, ray,
-			surface.meshID, maxT)) {
-			return true;
-		}
-
-		else {
-			if (m_boundingBoxes[current->left->itemIndex].intersectsAny(ray, maxT)) {
-				hits.push_back(current->left.get());
-			}
-
-			if (m_boundingBoxes[current->right->itemIndex].intersectsAny(ray, maxT)) {
-				hits.push_back(current->right.get());
-			}
-		}
-	}
-	return false;
+	EntityIntersection result;
+	result.t = maxT;
+	return intersects(ray, surface.meshID, &result);
 }

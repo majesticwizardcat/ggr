@@ -72,17 +72,9 @@ void Scene::intersects(const SurfacePoint& surface, const Vector3& direction,
 }
 
 bool Scene::areUnoccluded(const SurfacePoint& p0, const SurfacePoint& p1) const {
-	EntityIntersection result;
 	Vector3 p0p1 = p1.point - p0.point;
 	float l = glm::length(p0p1);
-	result.t = l;
 	Ray ray(p0.point, p0p1 * (1.0f / l));
-	return m_accelerator.intersects(ray, p0, &result)
-		&& result.entity->getID() == p1.meshID;
-}
-
-bool Scene::isIntersected(const SurfacePoint& surface, const Vector3& direction) const {
-	Ray r(surface.point, direction);
-	r.createRaySpace();
-	return m_accelerator.intersectsAny(r, surface, std::numeric_limits<float>::max());
+	ray.createRaySpace();
+	return !m_accelerator.intersectsAny(ray, p0, l - ERROR);
 }

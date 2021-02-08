@@ -16,7 +16,7 @@ public:
 		: Shader(normal, tangent, bitangent), m_emission(emission) { }
 
 	Spectrum evaluate(const Vector3& wo, const Vector3& wi) const {
-		return glm::dot(wo, m_normal) > 0 ? m_emission : Spectrum(0.0f);
+		return m_emission;
 	}
 
 	float pdf(const Vector3& wo, const Vector3& wi) const {

@@ -43,7 +43,6 @@ private:
 		size_t startIndex, size_t endIndex) const;
 	bool intersects(const Ray& ray, size_t ignoreID, EntityIntersection* result) const;
 	float intersectNode(BBNode* node, const Ray& ray, size_t ignoreID, EntityIntersection* result) const;
-	bool intersectEntityAny(BBNode* node, const Ray& ray, size_t ignoreID, float maxT) const;
 
 public:
 	BBAccelerator() : m_entities(nullptr) { }
