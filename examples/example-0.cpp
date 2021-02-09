@@ -8,8 +8,6 @@
 #include "tools/constants.h"
 #include "materials/matte-material.h"
 #include "materials/emission-material.h"
-#include "materials/mirror-material.h"
-#include "materials/transparent-material.h"
 #include "materials/metal-material.h"
 #include "materials/plastic-material.h"
 #include "materials/glass-material.h"
@@ -75,6 +73,7 @@ int main(int args, char** argv) {
 	auto greenTexture = std::make_unique<ColorTexture>(Spectrum(RGBColor(0.0f, 0.85f, 0.15f)));
 	auto roughness0 = std::make_unique<ColorTexture>(Spectrum(0.225f));
 	auto roughness1 = std::make_unique<ColorTexture>(Spectrum(0.2f));
+	auto roughness2 = std::make_unique<ColorTexture>(Spectrum(0.0f));
 
 	auto floorBumpMap = std::make_unique<HeightMap>(floorHeightMip.get());
 	floorTexture->setUVScale(1.5f, 1.5f);
@@ -82,8 +81,8 @@ int main(int args, char** argv) {
 
 	auto redMatte = std::make_unique<MatteMaterial>(redTexture.get());
 	auto metalMaterial = std::make_unique<MetalMaterial>(whiteTexture.get(), roughness0.get());
-	auto mirrorMaterial = std::make_unique<MirrorMaterial>(whiteTexture.get());
-	auto glassMaterial = std::make_unique<GlassMaterial>(whiteTexture.get(), roughness0.get(), 1.33);
+	auto mirrorMaterial = std::make_unique<MetalMaterial>(whiteTexture.get(), roughness2.get());
+	auto glassMaterial = std::make_unique<GlassMaterial>(whiteTexture.get(), roughness0.get(), 1.33f);
 	auto bluePlasticMaterial = std::make_unique<PlasticMaterial>(blueTexture.get(), roughness1.get(), 0.5f);
 	auto greenPlasticMaterial = std::make_unique<PlasticMaterial>(greenTexture.get(), roughness1.get());
 	auto floorMaterial = std::make_unique<PlasticMaterial>(floorTexture.get(), roughness1.get(), 0.5f);
