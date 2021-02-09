@@ -21,12 +21,14 @@ ProjectiveCamera::ProjectiveCamera(const Transformation* cameraToWorld,
 	m_dy = worldDeltasY - originZero;
 }
 
+#include <iostream>
 void ProjectiveCamera::applyDOF(Ray* ray, const Point2& lensPosition) const {
 	if (m_lensRadius <= 0.0f) {
 		return;
 	}
 	Point2 lp = shading::diskSample(lensPosition);
-	Point3 fp = ray->point(m_focalDistance / ray->direction.z);
+	float ft = std::abs(m_focalDistance / ray->direction.z);
+	Point3 fp = ray->direction * ft;
 	ray->origin += Point3(lp * m_lensRadius, 0.0f);
 	ray->direction = glm::normalize(fp - ray->origin);
 }

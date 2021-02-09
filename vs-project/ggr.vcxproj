@@ -165,9 +165,7 @@
     <ClInclude Include="..\source\materials\material.h" />
     <ClInclude Include="..\source\materials\matte-material.h" />
     <ClInclude Include="..\source\materials\metal-material.h" />
-    <ClInclude Include="..\source\materials\mirror-material.h" />
     <ClInclude Include="..\source\materials\plastic-material.h" />
-    <ClInclude Include="..\source\materials\transparent-material.h" />
     <ClInclude Include="..\source\meshes\cube.h" />
     <ClInclude Include="..\source\meshes\mesh-loader.h" />
     <ClInclude Include="..\source\meshes\plane.h" />
@@ -246,7 +244,6 @@
     <ClCompile Include="..\source\materials\glass-material.cpp" />
     <ClCompile Include="..\source\materials\metal-material.cpp" />
     <ClCompile Include="..\source\materials\plastic-material.cpp" />
-    <ClCompile Include="..\source\materials\transparent-material.cpp" />
     <ClCompile Include="..\source\meshes\cube.cpp" />
     <ClCompile Include="..\source\meshes\mesh-loader.cpp" />
     <ClCompile Include="..\source\meshes\plane.cpp" />

@@ -168,13 +168,7 @@
     <ClInclude Include="..\source\materials\metal-material.h">
       <Filter>source\materials</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\materials\mirror-material.h">
-      <Filter>source\materials</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\materials\plastic-material.h">
-      <Filter>source\materials</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\materials\transparent-material.h">
       <Filter>source\materials</Filter>
     </ClInclude>
     <ClInclude Include="..\source\meshes\cube.h">
@@ -378,9 +372,6 @@
       <Filter>source\materials</Filter>
     </ClCompile>
     <ClCompile Include="..\source\materials\plastic-material.cpp">
-      <Filter>source\materials</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\materials\transparent-material.cpp">
       <Filter>source\materials</Filter>
     </ClCompile>
     <ClCompile Include="..\source\meshes\cube.cpp">

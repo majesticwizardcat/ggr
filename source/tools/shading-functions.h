@@ -24,7 +24,7 @@ inline Point3 fromSpherical(float phi, float theta) {
 }
 
 inline Point2 diskSample(const Sample2D& sample) {
-	float r = sample.s;
+	float r = std::sqrt(sample.s);
 	float phi = sample.t * TWO_PI;
 	return Point2(r * std::cos(phi), r * std::sin(phi));
 }
