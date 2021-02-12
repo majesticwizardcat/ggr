@@ -53,7 +53,6 @@ float BBAccelerator::pointAxisValue(const Point3& p, const Axis& axis) const {
 	case Axis::Z_AXIS:
 		return p.z;
 	};
-
 	std::cout << "Warning: Undefined axis, returning X_AXIS" << std::endl;
 	return p.x;
 }
@@ -92,15 +91,49 @@ Axis BBAccelerator::findSortAxis(const std::vector<std::pair<BoundingBox, size_t
 	return Axis::Z_AXIS;
 }
 
-void BBAccelerator::initialize(const std::unique_ptr<Entity>* entities, size_t numberOfEntities) {
-	m_entities = entities;
-	if (numberOfEntities > 0) {
-		std::vector<std::pair<BoundingBox, size_t>> boxes;
-		for (int i = 0; i < numberOfEntities; ++i) {
-			boxes.push_back(std::make_pair(m_entities[i]->createBoundingBox(), i));
+#include <iostream>
+void BBAccelerator::mergeRoots() {
+	auto sortNodes = [&](const std::unique_ptr<BBNode>& n0,
+		const std::unique_ptr<BBNode>& n1) {
+			return m_boundingBoxes[n0->itemIndex].mid().x <
+				m_boundingBoxes[n1->itemIndex].mid().x;
+	};
+	std::sort(m_roots.begin(), m_roots.end(), sortNodes);
+	while (m_roots.size() > 1) {
+		int endIndex = m_roots.size() - m_roots.size() % 2;
+		for (int i = 0; i < endIndex; i += 2) {
+			int nextIndex = m_boundingBoxes.size();
+			BoundingBox b;
+			b.addBoundingBox(m_boundingBoxes[m_roots[i]->itemIndex]);
+			b.addBoundingBox(m_boundingBoxes[m_roots[i + 1]->itemIndex]);
+			m_boundingBoxes.push_back(b);
+			std::unique_ptr<BBNode> n = std::make_unique<BBNode>();
+			n->itemIndex = nextIndex;
+			n->left = std::move(m_roots[i]);
+			n->right = std::move(m_roots[i + 1]);
+			m_roots[i] = std::move(n);
 		}
-		m_root = split(0, boxes.size(), boxes);
+		int pad = 0;
+		for (int i = 1; i < endIndex; i += 2) {
+			m_roots.erase(m_roots.begin() + i - pad);
+			pad++;
+		}
 	}
+	m_root = m_roots[0].get();
+}
+
+void BBAccelerator::initialize(const std::unique_ptr<Entity>* entities, size_t numberOfEntities,
+		const std::vector<int>& objects) {
+	m_entities = entities;
+	std::vector<std::pair<BoundingBox, size_t>> boxes;
+	for (int i = 0; i < numberOfEntities; ++i) {
+		boxes.push_back(std::make_pair(m_entities[i]->createBoundingBox(), i));
+	}
+	for (int i = 0; i < objects.size() - 1; ++i) {
+		m_roots.push_back(split(objects[i], objects[i + 1], boxes));
+	}
+	m_roots.push_back(split(objects.back(), numberOfEntities, boxes));
+	mergeRoots();
 }
 
 float BBAccelerator::intersectNode(BBNode* node, const Ray& ray, size_t ignoreID, EntityIntersection* result) const {
@@ -117,10 +150,10 @@ float BBAccelerator::intersectNode(BBNode* node, const Ray& ray, size_t ignoreID
 }
 
 bool BBAccelerator::intersects(const Ray& ray, size_t ignoreID, EntityIntersection* result) const {
-	std::priority_queue<std::pair<float, BBNode*>, std::vector<std::pair<float, BBNode*>>,
-		std::greater<std::pair<float, BBNode*>>> tq;
-	tq.push(std::make_pair(0.0f, m_root.get()));
-	BBNode* current;
+	std::priority_queue<std::pair<float, const BBNode*>, std::vector<std::pair<float, const BBNode*>>,
+		std::greater<std::pair<float, const BBNode*>>> tq;
+	tq.push(std::make_pair(0.0f, m_root));
+	const BBNode* current;
 	float t = -1.0f;
 	while (true) {
 		if (tq.empty()) {

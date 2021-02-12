@@ -15,6 +15,7 @@ class Scene;
 class Scene {
 private:
 	BBAccelerator m_accelerator;
+	std::vector<int> m_objectIndices;
 	std::vector<std::unique_ptr<Entity>> m_entities;
 	std::vector<LightEntity*> m_lights;
 	Skybox* m_skybox;

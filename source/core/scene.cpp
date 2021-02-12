@@ -8,6 +8,7 @@
 Scene::Scene(Skybox* skybox) : m_skybox(skybox), m_nextID(0) { }
 
 void Scene::addEntity(const TriangleMesh* mesh, const Material* material) {
+	m_objectIndices.push_back(m_entities.size());
 	const std::unique_ptr<Triangle>* triangles = mesh->getTriangles();
 	for (size_t i = 0; i < mesh->getNumberOfTriangles(); ++i) {
 		if (!triangles[i]->isDegenerate()) {
@@ -18,6 +19,7 @@ void Scene::addEntity(const TriangleMesh* mesh, const Material* material) {
 }
 
 void Scene::addLight(const TriangleMesh* mesh, const EmissionMaterial* emissionMat) {
+	m_objectIndices.push_back(m_entities.size());
 	const std::unique_ptr<Triangle>* triangles = mesh->getTriangles();
 	for (size_t i = 0; i < mesh->getNumberOfTriangles(); ++i) {
 		if (!triangles[i]->isDegenerate()) {
@@ -30,7 +32,7 @@ void Scene::addLight(const TriangleMesh* mesh, const EmissionMaterial* emissionM
 }
 
 void Scene::initializeAccelerator() {
-	m_accelerator.initialize(m_entities.data(), m_entities.size());
+	m_accelerator.initialize(m_entities.data(), m_entities.size(), m_objectIndices);
 }
 
 void Scene::fillIntersectionFromEntity(const EntityIntersection& entityIntersection,

@@ -18,7 +18,7 @@ public:
 	std::unique_ptr<BBNode> left;
 	std::unique_ptr<BBNode> right;
 
-	BBNode() : left(nullptr), right(nullptr) { }
+	BBNode() : left(nullptr), right(nullptr), itemIndex(0) { }
 	BBNode(const BBNode& other) = delete;
 	BBNode(int itemIndex);
 
@@ -29,7 +29,8 @@ class BBAccelerator {
 private:
 	const std::unique_ptr<Entity>* m_entities;
 	std::vector<BoundingBox> m_boundingBoxes;
-	std::unique_ptr<BBNode> m_root;
+	std::vector<std::unique_ptr<BBNode>> m_roots;
+	const BBNode* m_root;
 
 	int findSplitIndex(size_t startIndex, size_t endIndex,
 		const std::vector<std::pair<BoundingBox, size_t>>& boxes, 
@@ -43,6 +44,7 @@ private:
 		size_t startIndex, size_t endIndex) const;
 	bool intersects(const Ray& ray, size_t ignoreID, EntityIntersection* result) const;
 	float intersectNode(BBNode* node, const Ray& ray, size_t ignoreID, EntityIntersection* result) const;
+	void mergeRoots();
 
 public:
 	BBAccelerator() : m_entities(nullptr) { }
@@ -55,7 +57,8 @@ public:
 		return intersects(ray, surface.meshID, result);
 	}
 
-	void initialize(const std::unique_ptr<Entity>* entities, size_t numberOfEntites);
+	void initialize(const std::unique_ptr<Entity>* entities, size_t numberOfEntites,
+		const std::vector<int>& objects);
 	bool intersectsAny(const Ray& ray, const SurfacePoint& surface, float maxT) const;
 };
 
