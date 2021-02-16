@@ -144,9 +144,6 @@
     <ClInclude Include="..\source\intersection\surface-point.h">
       <Filter>source\intersection</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\lighting\light-sample.h">
-      <Filter>source\lighting</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\lighting\skybox.h">
       <Filter>source\lighting</Filter>
     </ClInclude>
@@ -355,9 +352,6 @@
     </ClCompile>
     <ClCompile Include="..\source\intersection\ray.cpp">
       <Filter>source\intersection</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\lighting\light-sample.cpp">
-      <Filter>source\lighting</Filter>
     </ClCompile>
     <ClCompile Include="..\source\lighting\skybox.cpp">
       <Filter>source\lighting</Filter>

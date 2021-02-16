@@ -22,24 +22,23 @@ float LightEntity::pdf(const Point3& surfacePoint, const SurfacePoint& lightPoin
 	return distance * distance / denom;
 }
 
-LightSample LightEntity::sample(Sampler* sampler, const Point3& surfacePoint) const {
-	LightSample ls;
-	ls.sampledPoint = m_mesh->samplePoint(sampler);
-	ls.sampledPoint.meshID = m_id;
-	ls.pdf = 0.0f;
-	Vector3 dir = surfacePoint - ls.sampledPoint.point;
-	float distance = glm::length(dir);
-	float dist2 = distance * distance;
+Spectrum LightEntity::sample(Sampler* sampler, const Point3& surfacePoint, SurfacePoint* sampledPoint,
+	Vector3* direction, float* pdf, float* lightDist) const {
+	m_mesh->samplePoint(sampler, sampledPoint);
+	sampledPoint->meshID = m_id;
+	*pdf = 0.0f;
+	*direction = surfacePoint - sampledPoint->point;
+	*lightDist = glm::length(*direction);
+	float dist2 = *lightDist * *lightDist;
 	float p = 1.0f / (1.0 + dist2);
-	if (distance == 0.0f || sampler->getSample() > p) {
-		return ls;
+	if (dist2 == 0.0f || sampler->getSample() > p) {
+		return Spectrum(0.0f);
 	}
-	dir /= distance;
-	float denom = glm::dot(ls.sampledPoint.shadingNormal, dir) * ls.sampledPoint.surfaceArea;
+	*direction /= *lightDist;
+	float denom = glm::dot(sampledPoint->shadingNormal, *direction) * sampledPoint->surfaceArea;
 	if (denom <= 0.0f) {
-		return ls;
+		return Spectrum(0.0f);
 	}
-	ls.pdf = p * dist2 / denom;
-	ls.emission = emission(surfacePoint, ls.sampledPoint);
-	return ls;
+	*pdf = p * dist2 / denom;
+	return emission(surfacePoint, *sampledPoint);
 }

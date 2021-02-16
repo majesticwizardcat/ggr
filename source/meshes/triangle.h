@@ -32,7 +32,7 @@ public:
 	void calculateGeometry();
 	bool intersects(const Ray& ray, float maxT, EntityIntersection* result) const;
 	void fillIntersection(float w0, float w1, float w2, Intersection* result) const;
-	SurfacePoint samplePoint(Sampler* sampler) const;
+	void samplePoint(Sampler* sampler, SurfacePoint* sampledPoint) const;
 
 	inline float getArea() const { return m_area; }
 	inline bool isDegenerate() const { return m_degenerate; }

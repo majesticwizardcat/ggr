@@ -94,6 +94,12 @@ private:
 	inline int index(int x, int y) const { return x * m_resolutionHeight + y; }
 	void createFilterTable(const Filter* filter);
 
+	inline unsigned int filterIndex(unsigned int pixelX, unsigned int pixelY, const Point2& rasterLocation) const {
+		unsigned int x = (unsigned int)std::floor(std::abs(rasterLocation.x - (float)pixelX));
+		unsigned int y = (unsigned int)std::floor(std::abs(rasterLocation.y - (float)pixelY));
+		return x * m_tableWidth + y;
+	}
+
 public:
 	Film() = delete;
 	Film(const Film& other) = delete;
@@ -103,4 +109,14 @@ public:
 	std::vector<FilmBounds> splitToTiles(unsigned int tileSize) const;
 	void mergeRenderTile(const RenderTile* tile);
 	Image getImage() const;
+	inline unsigned int getWidth() { return m_resolutionWidth; }
+	inline unsigned int getHeight() { return m_resolutionHeight; }
+
+	inline void addSample(unsigned int pixelX, unsigned int pixelY, const Point2& rasterLocation,
+		const Spectrum& radiance, float rayWeight) {
+		unsigned int indx = index(pixelX, pixelY);
+		float filterValue = m_filterTable[filterIndex(pixelX, pixelY, rasterLocation)];
+		m_filmPixels[indx].unnormalizedFilteredRadiance += radiance * (rayWeight * filterValue);
+		m_filmPixels[indx].filterWeightSum += filterValue;
+	}
 };

@@ -72,11 +72,3 @@ void Scene::intersects(const SurfacePoint& surface, const Vector3& direction,
 	result->light = nullptr;
 	result->hit = false;
 }
-
-bool Scene::areUnoccluded(const SurfacePoint& p0, const SurfacePoint& p1) const {
-	Vector3 p0p1 = p1.point - p0.point;
-	float l = glm::length(p0p1);
-	Ray ray(p0.point, p0p1 * (1.0f / l));
-	ray.createRaySpace();
-	return !m_accelerator.intersectsAny(ray, p0, l - ERROR);
-}

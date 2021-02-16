@@ -157,7 +157,6 @@
     <ClInclude Include="..\source\intersection\intersection.h" />
     <ClInclude Include="..\source\intersection\ray.h" />
     <ClInclude Include="..\source\intersection\surface-point.h" />
-    <ClInclude Include="..\source\lighting\light-sample.h" />
     <ClInclude Include="..\source\lighting\skybox-sample.h" />
     <ClInclude Include="..\source\lighting\skybox.h" />
     <ClInclude Include="..\source\materials\emission-material.h" />
@@ -238,7 +237,6 @@
     <ClCompile Include="..\source\integrators\path-integrator.cpp" />
     <ClCompile Include="..\source\intersection\intersection.cpp" />
     <ClCompile Include="..\source\intersection\ray.cpp" />
-    <ClCompile Include="..\source\lighting\light-sample.cpp" />
     <ClCompile Include="..\source\lighting\skybox-sample.cpp" />
     <ClCompile Include="..\source\lighting\skybox.cpp" />
     <ClCompile Include="..\source\materials\glass-material.cpp" />

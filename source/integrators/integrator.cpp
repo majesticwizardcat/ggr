@@ -25,20 +25,25 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 	int lights = scene->getNumberOfLights();
 	int choice = (int)std::floor((float)lights * sampler->getSample());
 	const LightEntity* light = scene->getLight(choice);
-	LightSample lightSample = light->sample(sampler, surfacePoint.point);
+	SurfacePoint sampledPoint;
+	Vector3 lightDir;
+	float lightPdf;
+	float lightDist;
+	Spectrum emission = light->sample(sampler, surfacePoint.point, &sampledPoint,
+		&lightDir, &lightPdf, &lightDist);
+	lightDir = -lightDir;
 	// Division with pdf is omitted since the balance heuristic weight
 	// has the pdf on the numerator (both on light and bsdf MIS sampling)
 	// MISWeight = pdf / (lpdf + bsdfPdf)
 	// L = Le * bsdf * cosTheta * Weight / pdf
 	// => L = Le * bsdf * cosTheta / (lpdf + bsdfPdf)
-	if (lightSample.pdf > 0.0f
-		&& !lightSample.emission.isZero()
-		&& scene->areUnoccluded(surfacePoint, lightSample.sampledPoint)) {
-		Vector3 wl = glm::normalize(lightSample.sampledPoint.point - surfacePoint.point);
-		float MISWeight = 1.0f / (lightSample.pdf + surfaceShader->pdf(wo, wl));
-		L += surfaceShader->evaluate(wo, wl)
-			* lightSample.emission
-			* std::abs(glm::dot(surfacePoint.shadingNormal, wl))
+	if (lightPdf > 0.0f
+		&& !emission.isZero()
+		&& scene->areUnoccluded(surfacePoint, sampledPoint.point, lightDir, lightDist)) {
+		float MISWeight = 1.0f / (lightPdf + surfaceShader->pdf(wo, lightDir));
+		L += surfaceShader->evaluate(wo, lightDir)
+			* emission
+			* std::abs(glm::dot(surfacePoint.shadingNormal, lightDir))
 			* MISWeight
 			* (float)lights;
 	}

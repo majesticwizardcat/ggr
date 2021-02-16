@@ -4,7 +4,6 @@ class LightEntity;
 
 #include "entities/entity.h"
 #include "materials/emission-material.h"
-#include "lighting/light-sample.h"
 
 class LightEntity : public Entity {
 public:
@@ -15,7 +14,8 @@ public:
 
 	Spectrum emission(const Point3& surfacePoint, const SurfacePoint& lightPoint) const;
 	float pdf(const Point3& surfacePoint, const SurfacePoint& lightPoint) const;
-	LightSample sample(Sampler* sampler, const Point3& surfacePoint) const;
+	Spectrum sample(Sampler* sampler, const Point3& surfacePoint, SurfacePoint* sampledPoint,
+		Vector3* direction, float* pdf, float* lightDist) const;
 
 	inline const LightEntity* getLight() const { return this; }
 };

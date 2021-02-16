@@ -45,7 +45,19 @@ public:
 	void intersects(Ray* ray, Intersection* result, float maxT) const;
 	void intersects(const SurfacePoint& surface, const Vector3& direction,
 		Intersection* result, float maxT) const;
-	bool areUnoccluded(const SurfacePoint& p0, const SurfacePoint& p1) const;
+
+	inline bool areUnoccluded(const SurfacePoint& p0, const Point3& p,
+		const Vector3& dir, float distance) const {
+		Ray ray(p0.point, dir);
+		ray.createRaySpace();
+		return !m_accelerator.intersectsAny(ray, p0, distance - ERROR);
+	}
+
+	inline bool areUnoccluded(const SurfacePoint& p0, const SurfacePoint& p1) const {
+		Vector3 p0p1 = p1.point - p0.point;
+		float l = glm::length(p0p1);
+		return areUnoccluded(p0, p1.point, p0p1 / l, l);
+	}
 
 	inline size_t getNumberOfLights() const { return m_lights.size(); }
 	inline const LightEntity* getLight(int index) const { return m_lights[index]; }

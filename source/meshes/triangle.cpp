@@ -82,22 +82,16 @@ void Triangle::fillIntersection(float w0, float w1, float w2, Intersection* resu
 	result->intersectionPoint.surfaceArea = m_area;
 }
 
-SurfacePoint Triangle::samplePoint(Sampler* sampler) const {
+void Triangle::samplePoint(Sampler* sampler, SurfacePoint* sampledPoint) const {
 	float u0 = std::sqrt(sampler->getSample());
 	float w0 = 1.0f - u0;
 	float w1 = sampler->getSample() * u0;
 	float w2 = 1.0f - w0 - w1;
 
-	SurfacePoint sampled;
-	sampled.point = v0->position * w0 + v1->position * w1 + v2->position * w2;
-	sampled.uv = v0->uv * w0 + v1->uv * w1 + v2->uv * w2;
-	sampled.shadingNormal = glm::normalize(v0->normal * w0 + v1->normal * w1 + v2->normal * w2);
-	sampled.geometricNormal =
-		glm::dot(m_geometricNormal, sampled.shadingNormal) > 0.0f ? m_geometricNormal : -m_geometricNormal;
-	sampled.dpdu = m_dpdu;
-	sampled.dpdv = m_dpdv;
-	sampled.tangent = m_tangent;
-	sampled.bitangent = glm::cross(sampled.shadingNormal, m_tangent);
-	sampled.surfaceArea = m_area;
-	return sampled;
+	sampledPoint->point = v0->position * w0 + v1->position * w1 + v2->position * w2;
+	sampledPoint->uv = v0->uv * w0 + v1->uv * w1 + v2->uv * w2;
+	sampledPoint->shadingNormal = glm::normalize(v0->normal * w0 + v1->normal * w1 + v2->normal * w2);
+	sampledPoint->tangent = m_tangent;
+	sampledPoint->bitangent = glm::cross(sampledPoint->shadingNormal, m_tangent);
+	sampledPoint->surfaceArea = m_area;
 }
