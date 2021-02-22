@@ -48,10 +48,10 @@ void Scene::fillIntersectionFromEntity(const EntityIntersection& entityIntersect
 void Scene::intersects(Ray* ray, Intersection* result, float maxT) const {
 	EntityIntersection entityIntersection;
 	entityIntersection.t = maxT;
+	result->wo = -ray->direction;
 	ray->createRaySpace();
 	if (m_accelerator.intersects(*ray, &entityIntersection)) {
 		fillIntersectionFromEntity(entityIntersection, result);
-		result->wo = -ray->direction;
 		return;
 	}
 	result->light = nullptr;
@@ -63,10 +63,10 @@ void Scene::intersects(const SurfacePoint& surface, const Vector3& direction,
 	Ray ray(surface.point, direction);
 	EntityIntersection entityIntersection;
 	entityIntersection.t = maxT;
+	result->wo = -ray.direction;
 	ray.createRaySpace();
 	if (m_accelerator.intersects(ray, surface, &entityIntersection)) {
 		fillIntersectionFromEntity(entityIntersection, result);
-		result->wo = -ray.direction;
 		return;
 	}
 	result->light = nullptr;

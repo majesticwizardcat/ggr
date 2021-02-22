@@ -4,49 +4,62 @@
 
 #include <algorithm>
 
-Spectrum PathIntegrator::traceRay(Ray* ray, const Scene* scene, const Camera* camera, Sampler* sampler) {
-	Spectrum L;
-	Spectrum throughput(1.0f);
-	Spectrum nextThroughput;
+void PathIntegrator::renderPixel(const Scene* scene, const Camera* camera, Film* film,
+	Sampler* sampler, const Point2& pixel, unsigned int samples) const {
+	Ray ray;
 	Intersection intersection;
-	Vector3 rayDirection = ray->direction;
+	int depth;
+	bool lastDistDelta;
+	CameraSample cameraSample;
 	std::unique_ptr<Shader> surfaceShader;
-	int depth = 0;
-	bool lastDistDelta = false;
-	scene->intersects(ray, &intersection);
-
-	while (true) {
-		if (!intersection.hit) {
-			L += throughput * scene->getSkybox()->emission(rayDirection);
-			break;
-		}
-
-		if (intersection.light) {
-			if (depth == 0 || lastDistDelta) {
-				surfaceShader = intersection.material->createShader(intersection.intersectionPoint,
-					intersection.wo);
-				L += throughput * surfaceShader->evaluate(intersection.wo, intersection.wo);
-			}
-			break;
-		}
-
-		intersection.material->bump(&intersection.intersectionPoint);
-		surfaceShader = intersection.material->createShader(intersection.intersectionPoint, intersection.wo);
-
-		L += throughput * sampleDirectLighting(
-			SurfacePoint(intersection.intersectionPoint), Vector3(intersection.wo),
-			surfaceShader.get(), scene, sampler, &intersection, &nextThroughput, &lastDistDelta);
-
-		throughput *= nextThroughput;
-		if (depth > 4) {
-			float rrProb = std::max(0.05f, 1.0f - throughput.luminosity());
-			if (sampler->getSample() < rrProb) {
+	Spectrum L;
+	Spectrum throughput;
+	Spectrum nextThroughput;
+	SurfacePoint prevIntersectionP;
+	Vector3 prevWo;
+	for (unsigned int s = samples; s--;) {
+		cameraSample = sampler->getCameraSample(pixel);
+		camera->generateRay(&ray, cameraSample);
+		L = Spectrum(0.0f);
+		throughput = Spectrum(1.0f);
+		depth = 0;
+		lastDistDelta = false;
+		scene->intersects(&ray, &intersection);
+		while (true) {
+			if (!intersection.hit) {
+				L += throughput * scene->getSkybox()->emission(-intersection.wo);
 				break;
 			}
-			throughput /= std::max((1.0f - rrProb), 0.1f);
+
+			if (intersection.light) {
+				if (depth == 0 || lastDistDelta) {
+					surfaceShader = intersection.material->createShader(intersection.intersectionPoint,
+						intersection.wo);
+					L += throughput * surfaceShader->evaluate(intersection.wo, intersection.wo);
+				}
+				break;
+			}
+
+			intersection.material->bump(&intersection.intersectionPoint);
+			surfaceShader = intersection.material->createShader(intersection.intersectionPoint, intersection.wo);
+			prevIntersectionP = intersection.intersectionPoint;
+			prevWo = intersection.wo;
+
+			L += throughput * sampleDirectLighting(prevIntersectionP, prevWo,
+				surfaceShader.get(), scene, sampler, &intersection, &nextThroughput, &lastDistDelta);
+
+			throughput *= nextThroughput;
+			if (depth > 4) {
+				float rrProb = std::max(0.05f, 1.0f - throughput.luminosity());
+				if (sampler->getSample() < rrProb) {
+					break;
+				}
+				throughput /= std::max((1.0f - rrProb), 0.1f);
+			}
+			depth++;
 		}
-		depth++;
+		film->addSample(pixel.x, pixel.y,
+			cameraSample.filmPosition, L, ray.weight);
 	}
-	return L;
 }
 

@@ -54,6 +54,11 @@ public:
 		return Spectrum(m_rgb * (1.0f / scalar));
 	}
 
+	inline Spectrum& operator=(Spectrum right) noexcept {
+		std::swap(m_rgb, right.m_rgb);
+		return *this;
+	}
+
 	inline Spectrum& operator+=(const Spectrum& right) {
 		m_rgb += right.m_rgb;
 		return *this;

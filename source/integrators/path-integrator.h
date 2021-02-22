@@ -9,6 +9,6 @@ public:
 	PathIntegrator() { }
 	PathIntegrator(const PathIntegrator& other) = delete;
 
-	Spectrum traceRay(Ray* ray, const Scene* scene, const Camera* camera, Sampler* sampler);
+	void renderPixel(const Scene* scene, const Camera* camera, Film* film,
+		Sampler* sampler, const Point2& pixel, unsigned int samples) const;
 };
-

@@ -12,7 +12,7 @@ class FilmSamplingIntegrator;
 class FilmSamplingIntegrator : public Integrator {
 private:
 	std::atomic<int> m_nextWorkerIndex;
-	std::vector<std::vector<std::pair<unsigned int, unsigned int>>> m_renderArrays;
+	std::vector<std::vector<Point2>> m_renderArrays;
 	unsigned int m_initialSize;
 	unsigned int m_pixelsRendered;
 
@@ -28,6 +28,7 @@ public:
 	float getCompletion() const;
 
 	virtual void reset();
-	virtual Spectrum traceRay(Ray* ray, const Scene* scene, const Camera* camera, Sampler* sampler) = 0;
+	virtual void renderPixel(const Scene* scene, const Camera* camera, Film* film,
+		Sampler* sampler, const Point2& pixel, unsigned int samples) const = 0;
 };
 
