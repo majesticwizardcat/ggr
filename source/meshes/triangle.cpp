@@ -60,12 +60,10 @@ bool Triangle::intersects(const Ray& ray, float maxT, EntityIntersection* result
 		return false;
 	}
 
-	if (result) {
-		result->t = t;
-		result->triangleWeights.w0 = w0;
-		result->triangleWeights.w1 = w1;
-		result->triangleWeights.w2 = w2;
-	}
+	result->t = t;
+	result->triangleWeights.w0 = w0;
+	result->triangleWeights.w1 = w1;
+	result->triangleWeights.w2 = w2;
 	return true;
 }
 
@@ -90,7 +88,7 @@ void Triangle::samplePoint(Sampler* sampler, SurfacePoint* sampledPoint) const {
 
 	sampledPoint->point = v0->position * w0 + v1->position * w1 + v2->position * w2;
 	sampledPoint->uv = v0->uv * w0 + v1->uv * w1 + v2->uv * w2;
-	sampledPoint->shadingNormal = glm::normalize(v0->normal * w0 + v1->normal * w1 + v2->normal * w2);
+	sampledPoint->shadingNormal = m_geometricNormal;
 	sampledPoint->tangent = m_tangent;
 	sampledPoint->bitangent = glm::cross(sampledPoint->shadingNormal, m_tangent);
 	sampledPoint->surfaceArea = m_area;
