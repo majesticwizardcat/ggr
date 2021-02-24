@@ -383,9 +383,6 @@
     <ClCompile Include="..\source\meshes\triangle-mesh.cpp">
       <Filter>source\meshes</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\tools\random-generator.cpp">
-      <Filter>source\tools</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\tools\timing.cpp">
       <Filter>source\tools</Filter>
     </ClCompile>

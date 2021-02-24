@@ -260,7 +260,6 @@
     <ClCompile Include="..\source\textures\color-texture.cpp" />
     <ClCompile Include="..\source\textures\height-map.cpp" />
     <ClCompile Include="..\source\textures\image-texture.cpp" />
-    <ClCompile Include="..\source\tools\random-generator.cpp" />
     <ClCompile Include="..\source\tools\timing.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
