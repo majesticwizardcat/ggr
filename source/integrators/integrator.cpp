@@ -15,7 +15,7 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 	// since the terms "bsdf * cosTheta" are being used in the sampling later
 	*nextThroughput = bsdfValue * std::abs(glm::dot(surfacePoint.shadingNormal, sampledDirection));
 	if (*nextDistDelta) {
-		if (util::equals(bsdfSamplePDF, 0.0f) || bsdfValue.isZero()) {
+		if (bsdfSamplePDF == 0.0f || bsdfValue.isZero()) {
 			*nextThroughput = Spectrum(0.0f);
 			return L;
 		}
@@ -31,7 +31,7 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 	float lightDist;
 	Spectrum emission = light->sample(sampler, surfacePoint.point, &sampledPoint,
 		&lightDir, &lightPdf, &lightDist);
-	lightDir = -lightDir;
+	lightDir *= -1.0f;
 	// Division with pdf is omitted since the balance heuristic weight
 	// has the pdf on the numerator (both on light and bsdf MIS sampling)
 	// MISWeight = pdf / (lpdf + bsdfPdf)
@@ -40,25 +40,20 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 	if (lightPdf > 0.0f
 		&& !emission.isZero()
 		&& scene->areUnoccluded(surfacePoint, sampledPoint.point, lightDir, lightDist)) {
-		float MISWeight = 1.0f / (lightPdf + surfaceShader->pdf(wo, lightDir));
-		L += surfaceShader->evaluate(wo, lightDir)
-			* emission
-			* std::abs(glm::dot(surfacePoint.shadingNormal, lightDir))
-			* MISWeight
-			* (float)lights;
+		L += (surfaceShader->evaluate(wo, lightDir)
+			* emission)
+			* (std::abs(glm::dot(surfacePoint.shadingNormal, lightDir))
+			* (float)lights
+				/ (lightPdf + surfaceShader->pdf(wo, lightDir)));
 	}
-	if (util::equals(bsdfSamplePDF, 0.0f) || bsdfValue.isZero()) {
+	if (bsdfSamplePDF == 0.0f || bsdfValue.isZero()) {
 		*nextThroughput = Spectrum(0.0);
 		return L;
 	}
 	if (sampleIntersection->hit && sampleIntersection->light) {
-		Spectrum lightEmission = sampleIntersection->light->
-			emission(surfacePoint.point, sampleIntersection->intersectionPoint);
-		float pdfLight = sampleIntersection->light->pdf(surfacePoint.point, sampleIntersection->intersectionPoint);
-		float MISWeight = 1.0f / (bsdfSamplePDF + pdfLight);
-		L += *nextThroughput
-			* lightEmission
-			* MISWeight;
+		L += (*nextThroughput
+			* sampleIntersection->light->emission(surfacePoint.point, sampleIntersection->intersectionPoint))
+			/ (bsdfSamplePDF + sampleIntersection->light->pdf(surfacePoint.point, sampleIntersection->intersectionPoint));
 	}
 	*nextThroughput /= bsdfSamplePDF;
 	return L;

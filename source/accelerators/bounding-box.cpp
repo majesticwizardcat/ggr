@@ -52,16 +52,12 @@ float BoundingBox::intersectSide(float p, float o, float d,
 	float ox, float oy, float dx, float dy, float sx, float sy,
 	float ex, float ey, float maxT) const {
 	float t = (p - o) / d;
-	if (t < 0 || t >= maxT) {
+	if (t < 0 || t > maxT) {
 		return -1.0f;
 	}
-
 	float x = ox + dx * t;
 	float y = oy + dy * t;
-	if (util::greater(x, sx)
-		&& util::less(x, ex)
-		&& util::greater(y, sy)
-		&& util::less(y, ey)) {
+	if (x > sx && x < ex && y > sy && y < ey) {
 		return t;
 	}
 	return -1.0f;

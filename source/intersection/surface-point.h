@@ -19,10 +19,6 @@ struct SurfacePoint {
 	float surfaceArea;
 	int meshID;
 
-	SurfacePoint() : point(0.0f), uv(0.0f), geometricNormal(0.0f), dpdu(0.0f),
-		dpdv(0.0f), shadingNormal(0.0f), tangent(0.0f), bitangent(0.0f), dUVdx(0.0f),
-		dUVdy(0.0f), surfaceArea(0.0f), meshID(-1) { }
-
 	inline SurfacePoint& operator=(SurfacePoint other) noexcept {
 		std::swap(point, other.point);
 		std::swap(uv, other.uv);

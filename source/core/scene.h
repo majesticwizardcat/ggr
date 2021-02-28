@@ -59,7 +59,7 @@ public:
 		return areUnoccluded(p0, p1.point, p0p1 / l, l);
 	}
 
-	inline size_t getNumberOfLights() const { return m_lights.size(); }
+	inline const int getNumberOfLights() const { return m_lights.size(); }
 	inline const LightEntity* getLight(int index) const { return m_lights[index]; }
 	inline const Skybox* getSkybox() const { return m_skybox; }
 };
