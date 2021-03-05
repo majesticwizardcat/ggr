@@ -5,6 +5,8 @@ class CameraSample;
 #include "primitives/point.h"
 #include "samplers/sample-2d.h"
 
+#include <utility>
+
 class CameraSample {
 public:
 	Point2 filmPosition;

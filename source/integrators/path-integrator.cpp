@@ -17,7 +17,7 @@ void PathIntegrator::renderPixel(const Scene* scene, const Camera* camera, Film*
 	Spectrum nextThroughput;
 	SurfacePoint prevIntersectionP;
 	Vector3 prevWo;
-	for (unsigned int s = samples; s--;) {
+	for (unsigned int s = 0; s < samples; ++s) {
 		cameraSample = sampler->getCameraSample(pixel);
 		camera->generateRay(&ray, cameraSample);
 		L = Spectrum(0.0f);
