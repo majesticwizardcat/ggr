@@ -6,15 +6,12 @@ class Sampler;
 #include "samplers/sample-2d.h"
 #include "filters/filter.h"
 
-#include <queue>
+#include <vector>
 #include <memory>
 
 class Sampler {
-private:
-	CameraSample createCameraSample(const Point2& rasterPosition);
-
 protected:
-	std::queue<CameraSample> m_samples;
+	std::vector<CameraSample> m_samples;
 	const Filter* m_filmFilter;
 
 public:

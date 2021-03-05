@@ -23,8 +23,8 @@ float HaltonSampler::sequence(int index, int base) const {
 
 void HaltonSampler::createCameraSamples(const Point2& rasterPosition, int samples) {
 	for (int i = m_firstIndex; i < m_firstIndex + samples; ++i) {
-		m_samples.push(CameraSample(rasterPosition + Point2(sequence(i, m_base0), sequence(i, m_base1)),
-			Sample2D(sequence(i, m_base2), sequence(i, m_base3))));
+		m_samples.emplace_back(rasterPosition + Point2(sequence(i, m_base0), sequence(i, m_base1)),
+			Sample2D(sequence(i, m_base2), sequence(i, m_base3)));
 	}
 	m_firstIndex += samples;
 }
