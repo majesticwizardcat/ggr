@@ -30,7 +30,7 @@ Spectrum LightEntity::sample(Sampler* sampler, const Point3& surfacePoint, Surfa
 	*direction = surfacePoint - sampledPoint->point;
 	*lightDist = glm::length(*direction);
 	float dist2 = *lightDist * *lightDist;
-	float p = 1.0f / (1.0 + dist2);
+	float p = 1.0f / (1.0 + *lightDist);
 	if (dist2 == 0.0f || sampler->getSample() > p) {
 		return Spectrum(0.0f);
 	}

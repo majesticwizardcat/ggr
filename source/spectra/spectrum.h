@@ -8,8 +8,10 @@ class Spectrum;
 #include <glm/common.hpp>
 #include <glm/geometric.hpp>
 
-const glm::vec3 TO_Y(0.2126f, 0.7252f, 0.0722f);
+static const glm::vec3 TO_Y(0.2126f, 0.7252f, 0.0722f);
+static const glm::vec3 ZERO(0.0f);
 
+#include <iostream>
 class Spectrum {
 private:
 	glm::vec3 m_rgb;
@@ -26,12 +28,27 @@ public:
 	XYZColor getXYZ() const;
 	RGBColor getRGB() const;
 
+	void checkNaNs(const char* location) const {
+		if (std::isnan(m_rgb.x) || std::isnan(m_rgb.y) || std::isnan(m_rgb.z)) {
+			std::cout << "Nan values on L at " << location << std::endl;
+			std::cin.ignore();
+		}
+		if (std::isinf(m_rgb.x) || std::isinf(m_rgb.y) || std::isinf(m_rgb.z)) {
+			std::cout << "Inf values on L at " << location << std::endl;
+			std::cin.ignore();
+		}
+	}
+
+	inline void print() const {
+		std::cout << "Spectrum: " << m_rgb.x << " " << m_rgb.y << " " << m_rgb.z << std::endl;
+	}
+
 	inline void clamp(float min, float max) {
 		glm::clamp(m_rgb, min, max);
 	}
 
 	inline bool isZero() const {
-		return m_rgb == glm::vec3(0.0f);
+		return m_rgb == ZERO;
 	}
 
 	inline Spectrum operator+(const Spectrum& right) const {

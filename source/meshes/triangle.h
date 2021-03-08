@@ -30,7 +30,7 @@ public:
 	Triangle(const Vertex* v0, const Vertex* v1, const Vertex* v2);
 
 	void calculateGeometry();
-	bool intersects(const Ray& ray, float maxT, EntityIntersection* result) const;
+	bool intersects(const Ray& ray, EntityIntersection* result) const;
 	void fillIntersection(float w0, float w1, float w2, Intersection* result) const;
 	void samplePoint(Sampler* sampler, SurfacePoint* sampledPoint) const;
 

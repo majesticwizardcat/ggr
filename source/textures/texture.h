@@ -13,7 +13,8 @@ public:
 	virtual ~Texture() { }
 	virtual Spectrum sample(const SurfacePoint& point) const = 0;
 	void setUVScale(float x, float y) {
-		m_uvScale = Point2(x, y);
+		m_uvScale.x = x;
+		m_uvScale.y = y;
 	}
 };
 

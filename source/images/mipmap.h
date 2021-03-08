@@ -21,7 +21,9 @@ private:
 
 public:
 	Layer() = delete;
-	Layer(const Layer& other);
+	Layer(const Layer& other) = delete;
+	Layer(Layer&& other) noexcept : m_pixels(std::move(other.m_pixels)),
+		m_width(other.m_width), m_height(other.m_height) { }
 	Layer(int width, int height);
 
 	Spectrum get(int x, int y) const;
@@ -42,8 +44,8 @@ private:
 		const Vector2& majorAxis) const;
 
 public:
-	MipMap();
-	MipMap(const MipMap& other);
+	MipMap() = delete;
+	MipMap(const MipMap& other) = delete;
 	MipMap(const Image& image);
 	MipMap(const Image& image, int anisotropicLevel);
 

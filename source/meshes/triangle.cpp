@@ -30,7 +30,7 @@ void Triangle::calculateGeometry() {
 	m_area = glm::length(glm::cross(p1p0, p2p0)) / 2.0f;
 }
 
-bool Triangle::intersects(const Ray& ray, float maxT, EntityIntersection* result) const {
+bool Triangle::intersects(const Ray& ray, EntityIntersection* result) const {
 	Point3 p0 = ray.toRaySpace(v0->position);
 	Point3 p1 = ray.toRaySpace(v1->position);
 	Point3 p2 = ray.toRaySpace(v2->position);
@@ -56,7 +56,7 @@ bool Triangle::intersects(const Ray& ray, float maxT, EntityIntersection* result
 
 	float t = p0.z * w0 + p1.z * w1 + p2.z * w2;
 
-	if (maxT < t || t < 0.0f) {
+	if (result->t < t || t < 0.0f) {
 		return false;
 	}
 
@@ -92,4 +92,6 @@ void Triangle::samplePoint(Sampler* sampler, SurfacePoint* sampledPoint) const {
 	sampledPoint->tangent = m_tangent;
 	sampledPoint->bitangent = glm::cross(sampledPoint->shadingNormal, m_tangent);
 	sampledPoint->surfaceArea = m_area;
+	sampledPoint->dUVdx = Vector2(0.0f);
+	sampledPoint->dUVdy = Vector2(0.0f);
 }

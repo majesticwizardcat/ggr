@@ -140,7 +140,7 @@ float BBAccelerator::intersectNode(BBNode* node, const Ray& ray, size_t ignoreID
 	if (node->isLeaf()) {
 		if (m_entities[node->itemIndex]->getID() != ignoreID) {
 			float lastT = result->t;
-			if (m_entities[node->itemIndex]->intersects(ray, result->t, result) && result->t != lastT) {
+			if (m_entities[node->itemIndex]->intersects(ray, result) && result->t != lastT) {
 				return result->t;
 			}
 		}

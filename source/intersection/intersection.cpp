@@ -3,11 +3,15 @@
 
 void Intersection::calculateScreenDifferentials(const Ray& ray) {
 	if (!hit || !ray.isCameraRay) {
+		intersectionPoint.dUVdx.x = 0.0f;
+		intersectionPoint.dUVdx.y = 0.0f;
+		intersectionPoint.dUVdy.x = 0.0f;
+		intersectionPoint.dUVdy.y = 0.0f;
 		return;
 	}
 	
-	Vector3 dpdx;
-	Vector3 dpdy;
+	Vector3 dpdx(0.0f);
+	Vector3 dpdy(0.0f);
 
 	float NoP = -glm::dot(intersectionPoint.geometricNormal, intersectionPoint.point);
 	float NoD = glm::dot(intersectionPoint.geometricNormal, ray.dxDirection);
@@ -73,5 +77,11 @@ void Intersection::calculateScreenDifferentials(const Ray& ray) {
 		intersectionPoint.dUVdx.y = (yx * dux - xx * duy) * oneOverDet;
 		intersectionPoint.dUVdy.x = (xy * dvy - yy * dvx) * oneOverDet;
 		intersectionPoint.dUVdy.y = (yy * dux - xy * duy) * oneOverDet;
+	}
+	else {
+		intersectionPoint.dUVdx.x = 0.0f;
+		intersectionPoint.dUVdx.y = 0.0f;
+		intersectionPoint.dUVdy.x = 0.0f;
+		intersectionPoint.dUVdy.y = 0.0f;
 	}
 }

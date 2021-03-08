@@ -6,11 +6,9 @@ void Entity::fillMeshIntersection(float w0, float w1, float w2, Intersection* re
 
 BoundingBox Entity::createBoundingBox() const { return BoundingBox(*m_mesh); }
 
-bool Entity::intersects(const Ray& ray, float maxT, EntityIntersection* result) const {
-	if (m_mesh->intersects(ray, maxT, result)) {
-		if (result) {
-			result->entity = this;
-		}
+bool Entity::intersects(const Ray& ray, EntityIntersection* result) const {
+	if (m_mesh->intersects(ray, result)) {
+		result->entity = this;
 		return true;
 	}
 	return false;

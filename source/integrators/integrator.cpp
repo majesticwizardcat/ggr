@@ -50,7 +50,7 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 		*nextThroughput = Spectrum(0.0);
 		return L;
 	}
-	if (sampleIntersection->hit && sampleIntersection->light) {
+	if (sampleIntersection->light && sampleIntersection->hit) {
 		L += (*nextThroughput
 			* sampleIntersection->light->emission(surfacePoint.point, sampleIntersection->intersectionPoint))
 			/ (bsdfSamplePDF + sampleIntersection->light->pdf(surfacePoint.point, sampleIntersection->intersectionPoint));

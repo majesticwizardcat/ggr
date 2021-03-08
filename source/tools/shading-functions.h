@@ -30,6 +30,9 @@ inline Point2 diskSample(const Sample2D& sample) {
 }
 
 inline Point2 toSpherical(const Vector3& v) {
+	if (v.x == 0.0f) {
+		return Point2(PI, std::abs(std::acos(v.z)));
+	}
 	return Point2(2.0f * std::abs(std::atan(v.y / v.x)),
 		std::abs(std::acos(v.z)));
 }

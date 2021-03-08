@@ -24,12 +24,7 @@ public:
 
 	void fillMeshIntersection(float w0, float w1, float w2, Intersection* result) const;
 	BoundingBox createBoundingBox() const;
-	bool intersects(const Ray& ray, float maxT, EntityIntersection* result) const;
-
-	inline bool intersects(const Ray& ray, float maxT) const {
-		return intersects(ray, maxT, nullptr);
-	}
-
+	bool intersects(const Ray& ray, EntityIntersection* result) const;
 	inline const Material* getMaterial() const { return m_material; }
 	inline int getID() const { return m_id; }
 

@@ -52,6 +52,7 @@ void Scene::intersects(Ray* ray, Intersection* result, float maxT) const {
 	ray->createRaySpace();
 	if (m_accelerator.intersects(*ray, &entityIntersection)) {
 		fillIntersectionFromEntity(entityIntersection, result);
+		result->calculateScreenDifferentials(*ray);
 		return;
 	}
 	result->light = nullptr;
@@ -67,6 +68,7 @@ void Scene::intersects(const SurfacePoint& surface, const Vector3& direction,
 	ray.createRaySpace();
 	if (m_accelerator.intersects(ray, surface, &entityIntersection)) {
 		fillIntersectionFromEntity(entityIntersection, result);
+		result->calculateScreenDifferentials(ray);
 		return;
 	}
 	result->light = nullptr;

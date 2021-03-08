@@ -3,19 +3,10 @@
 
 #include <cmath>
 #include <algorithm>
-#include <iostream>
 #include <glm/gtx/norm.hpp>
 
 int Layer::index(int x, int y) const {
 	return x * m_height + y;
-}
-
-Layer::Layer(const Layer& other) : m_width(other.m_width),
-	m_height(other.m_height) {
-	m_pixels = std::make_unique<Spectrum[]>(m_width * m_height);
-	for (unsigned int i = 0; i < m_width * m_height; ++i) {
-		m_pixels[i] = other.m_pixels[i];
-	}
 }
 
 Layer::Layer(int width, int height) : m_width(width), m_height(height) {
@@ -72,7 +63,7 @@ MipMap::MipMap(const Image& image, int anisotropicLevel) : m_anisotropicLevel(an
 		}
 	}
 
-	m_mipmaps.push_back(layer);
+	m_mipmaps.push_back(std::move(layer));
 
 	while(width != 1 && height != 1) {
 		width = std::max(1, width / 2);
@@ -98,7 +89,7 @@ MipMap::MipMap(const Image& image, int anisotropicLevel) : m_anisotropicLevel(an
 				current.set(x, y, value);
 			}
 		}
-		m_mipmaps.push_back(current);
+		m_mipmaps.push_back(std::move(current));
 	}
 }
 
@@ -117,10 +108,10 @@ Spectrum MipMap::get(int level, int x, int y) const {
 Spectrum MipMap::bilinear(int level, const Point2& uv) const {
 	float s = uv.x * m_mipmaps[level].getWidth();
 	float t = uv.y * m_mipmaps[level].getHeight();
-	int s0 = std::floor(s);
-	int t0 = std::floor(t);
-	s = s - s0;
-	t = t - t0;
+	int s0 = (int) std::floor(s);
+	int t0 = (int) std::floor(t);
+	s = s - (float) s0;
+	t = t - (float) t0;
 	return get(level, s0, t0) * (1.0f - s) * (1.0f - t)
 		+ get(level, s0 + 1, t0) * s * (1.0f - t)
 		+ get(level, s0, t0 + 1) * (1.0f - s) * t
@@ -128,11 +119,7 @@ Spectrum MipMap::bilinear(int level, const Point2& uv) const {
 }
 
 Spectrum MipMap::trilinear(const Point2& uv, const Vector2& dUVdx, const Vector2& dUVdy) const {
-	float width = std::max(dUVdx.length(), dUVdy.length());
-	if (util::equals(width, 0.0f)) {
-		return bilinear(0, uv);	
-	}
-
+	float width = std::max(glm::length(dUVdx), glm::length(dUVdy));
 	float level = m_mipmaps.size() - 1 + std::log2(width);
 	if (level < 0) {
 		return bilinear(0, uv);
@@ -167,8 +154,8 @@ Spectrum MipMap::ewa(int level, const Point2& uv, const Vector2& minorAxis,
 	float c = -majy * oneOverDet;
 	float d = majx * oneOverDet;
 
-	int startX = (int) (s -std::max(std::abs(std::floor(minx)), std::abs(std::floor(majx))));
-	int startY = (int) (t -std::max(std::abs(std::floor(miny)), std::abs(std::floor(majy))));
+	int startX = (int) (s - std::max(std::abs(std::floor(minx)), std::abs(std::floor(majx))));
+	int startY = (int) (t - std::max(std::abs(std::floor(miny)), std::abs(std::floor(majy))));
 	int endX = (int) s + std::max(std::abs(std::ceil(minx)), std::abs(std::ceil(majx)));
 	int endY = (int) t + std::max(std::abs(std::ceil(miny)), std::abs(std::ceil(majy)));
 
@@ -191,10 +178,9 @@ Spectrum MipMap::ewa(int level, const Point2& uv, const Vector2& minorAxis,
 		}
 	}
 
-	if (util::equals(filterSum, 0.0f)) {
+	if (filterSum == 0.0f) {
 		return bilinear(level, uv);
 	}
-
 	return sum / filterSum;
 }
 

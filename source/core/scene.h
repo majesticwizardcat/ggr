@@ -50,7 +50,7 @@ public:
 		const Vector3& dir, float distance) const {
 		Ray ray(p0.point, dir);
 		ray.createRaySpace();
-		return !m_accelerator.intersectsAny(ray, p0, distance - ERROR);
+		return !m_accelerator.intersectsAny(ray, p0, distance - TWO_ERROR);
 	}
 
 	inline bool areUnoccluded(const SurfacePoint& p0, const SurfacePoint& p1) const {

@@ -65,7 +65,7 @@ public:
 	inline Point4 applyPoint(const Point4& p) const {
 		Point4 res = m_transform * p;
 
-		if (!util::equals(res.w, 0.0f)) {
+		if (res.w != 0.0f) {
 			res = res / res.w;
 		}
 
@@ -74,7 +74,7 @@ public:
 
 	inline Point3 applyPoint(const Point3& p) const {
 		Point4 res = m_transform * Point4(p, 1.0f);
-		if (!util::equals(res.w, 0.0f)) {
+		if (res.w != 0.0f) {
 			res = res / res.w;
 		}
 
@@ -83,7 +83,7 @@ public:
 
 	inline Point2 applyPoint(const Point2& p) const {
 		Point4 res = m_transform * Point4(p, 0.0f, 1.0f);
-		if (!util::equals(res.w, 0.0f)) {
+		if (res.w != 0.0f) {
 			res = res / res.w;
 		}
 
@@ -109,7 +109,7 @@ public:
 	inline Point4 applyInversePoint(const Point4& p) const {
 		Point4 res = m_inverse * p;
 
-		if (!util::equals(res.w, 0.0f)) {
+		if (res.w != 0.0f) {
 			res = res / res.w;
 		}
 
@@ -119,7 +119,7 @@ public:
 	inline Point3 applyInversePoint(const Point3& p) const {
 		Point4 res = m_inverse * Point4(p, 1.0f);
 
-		if (!util::equals(res.w, 0.0f)) {
+		if (res.w != 0.0f) {
 			res = res / res.w;
 		}
 
@@ -129,7 +129,7 @@ public:
 	inline Point2 applyInversePoint(const Point2& p) const {
 		Point4 res = m_inverse * Point4(p, 0.0f, 1.0f);
 
-		if (!util::equals(res.w, 0.0f)) {
+		if (res.w != 0.0f) {
 			res = res / res.w;
 		}
 
