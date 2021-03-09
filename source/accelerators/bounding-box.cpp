@@ -42,12 +42,6 @@ void BoundingBox::addBoundingBox(const BoundingBox& b) {
 
 }
 
-bool BoundingBox::isInside(const Point3& p) const {
-	return p.x >= start.x && p.x <= end.x
-	&& p.y >= start.y && p.y <= end.y
-	&& p.z >= start.z && p.z <= end.z;
-}
-
 float BoundingBox::intersectSide(float p, float o, float d,
 	float ox, float oy, float dx, float dy, float sx, float sy,
 	float ex, float ey, float maxT) const {
@@ -64,14 +58,10 @@ float BoundingBox::intersectSide(float p, float o, float d,
 }
 
 void BoundingBox::updateIfValid(float t, float* currentT, float* maxT) const {
-	if (t >= 0.0f && (*currentT < 0.0f || t < *currentT)) {
+	if (t > 0.0f && (*currentT < 0.0f || t < *currentT)) {
 		*maxT = t;
 		*currentT = t;
 	}
-}
-
-float BoundingBox::intersects(const Ray& ray) const {
-	return intersects(ray, std::numeric_limits<float>::max());
 }
 
 float BoundingBox::intersects(const Ray& ray, float maxT) const {
@@ -109,10 +99,6 @@ float BoundingBox::intersects(const Ray& ray, float maxT) const {
 	return t;
 }
 
-bool BoundingBox::intersectsAny(const Ray& ray) const {
-	return intersectsAny(ray, std::numeric_limits<float>::max());
-}
-
 bool BoundingBox::intersectsAny(const Ray& ray, float maxT) const {
 	if (isInside(ray.origin)) {
 		return true;
@@ -121,14 +107,12 @@ bool BoundingBox::intersectsAny(const Ray& ray, float maxT) const {
 	if (ray.direction.x != 0.0f) {
 		if (intersectSide(start.x, ray.origin.x, ray.direction.x,
 			ray.origin.z, ray.origin.y, ray.direction.z,
-			ray.direction.y, start.z, start.y, end.z, end.y,
-			maxT) >= 0.0f) {
+			ray.direction.y, start.z, start.y, end.z, end.y, maxT) > 0.0f) {
 			return true;
 		}
 		if (intersectSide(end.x, ray.origin.x, ray.direction.x,
 			ray.origin.z, ray.origin.y, ray.direction.z,
-			ray.direction.y, start.z, start.y, end.z, end.y,
-			maxT) >= 0.0f) {
+			ray.direction.y, start.z, start.y, end.z, end.y, maxT) > 0.0f) {
 			return true;
 		}
 	}
@@ -136,14 +120,12 @@ bool BoundingBox::intersectsAny(const Ray& ray, float maxT) const {
 	if (ray.direction.y != 0.0f) {
 		if (intersectSide(start.y, ray.origin.y, ray.direction.y,
 			ray.origin.x, ray.origin.z, ray.direction.x,
-			ray.direction.z, start.x, start.z, end.x, end.z,
-			maxT) >= 0.0f) {
+			ray.direction.z, start.x, start.z, end.x, end.z, maxT) > 0.0f) {
 			return true;
 		}
 		if (intersectSide(end.y, ray.origin.y, ray.direction.y,
 			ray.origin.x, ray.origin.z, ray.direction.x,
-			ray.direction.z, start.x, start.z, end.x, end.z,
-			maxT) >= 0.0f) {
+			ray.direction.z, start.x, start.z, end.x, end.z, maxT) > 0.0f) {
 			return true;
 		}
 	}
@@ -151,14 +133,12 @@ bool BoundingBox::intersectsAny(const Ray& ray, float maxT) const {
 	if (ray.direction.z != 0.0f) {
 		if (intersectSide(start.z, ray.origin.z, ray.direction.z,
 			ray.origin.x, ray.origin.y, ray.direction.x,
-			ray.direction.y, start.x, start.y, end.x, end.y,
-			maxT) >= 0.0f) {
+			ray.direction.y, start.x, start.y, end.x, end.y, maxT) > 0.0f) {
 			return true;
 		}
 		if (intersectSide(end.z, ray.origin.z, ray.direction.z,
 			ray.origin.x, ray.origin.y, ray.direction.x,
-			ray.direction.y, start.x, start.y, end.x, end.y,
-			maxT) >= 0.0f) {
+			ray.direction.y, start.x, start.y, end.x, end.y, maxT) > 0.0f) {
 			return true;
 		}
 	}

@@ -12,7 +12,7 @@ private:
 		float dx, float dy, float sx, float sy, float ex, float ey,
 		float maxT) const;
 	void updateIfValid(float t, float* currentT, float* maxT) const;
-	
+
 public:
 	Point3 start;
 	Point3 end;
@@ -24,11 +24,21 @@ public:
 
 	void addPoint(const Point3& p);
 	void addBoundingBox(const BoundingBox& b);
-	bool isInside(const Point3& p) const;
-	float intersects(const Ray& ray) const;
+	inline float intersects(const Ray& ray) const {
+		return intersects(ray, std::numeric_limits<float>::max());
+	}
+
+	inline bool intersectsAny(const Ray& ray) const {
+		return intersectsAny(ray, std::numeric_limits<float>::max());
+	}
+
 	float intersects(const Ray& ray, float maxT) const;
-	bool intersectsAny(const Ray& ray) const;
 	bool intersectsAny(const Ray& ray, float maxT) const;
 	Point3 mid() const;
-};
 
+	inline bool isInside(const Point3& p) const {
+		return p.x >= start.x && p.x <= end.x
+		&& p.y >= start.y && p.y <= end.y
+		&& p.z >= start.z && p.z <= end.z;
+	}
+};
