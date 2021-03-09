@@ -14,11 +14,12 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 	// Next throughput is bsdf * cosTheta / pdf, pdf is divided after sampling the bsdf
 	// since the terms "bsdf * cosTheta" are being used in the sampling later
 	*nextThroughput = bsdfValue * std::abs(glm::dot(surfacePoint.shadingNormal, sampledDirection));
+	if (bsdfSamplePDF == 0.0f || bsdfValue.isZero()) {
+		*nextThroughput = Spectrum(0.0f);
+		return Spectrum(0.0f);
+	}
+
 	if (*nextDistDelta) {
-		if (bsdfSamplePDF == 0.0f || bsdfValue.isZero()) {
-			*nextThroughput = Spectrum(0.0f);
-			return L;
-		}
 		*nextThroughput /= bsdfSamplePDF;
 		return L;
 	}
@@ -45,10 +46,6 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 			* (std::abs(glm::dot(surfacePoint.shadingNormal, lightDir))
 			* (float)lights
 				/ (lightPdf + surfaceShader->pdf(wo, lightDir)));
-	}
-	if (bsdfSamplePDF == 0.0f || bsdfValue.isZero()) {
-		*nextThroughput = Spectrum(0.0);
-		return L;
 	}
 	if (sampleIntersection->light && sampleIntersection->hit) {
 		L += (*nextThroughput

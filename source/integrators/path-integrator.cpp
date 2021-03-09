@@ -47,7 +47,9 @@ void PathIntegrator::renderPixel(const Scene* scene, const Camera* camera, Film*
 
 			L += throughput * sampleDirectLighting(prevIntersectionP, prevWo,
 				surfaceShader.get(), scene, sampler, &intersection, &nextThroughput, &lastDistDelta);
-
+			if (nextThroughput.isZero()) {
+				break;
+			}
 			throughput *= nextThroughput;
 			if (depth > 4) {
 				float rrProb = std::max(0.05f, 1.0f - throughput.luminosity());
