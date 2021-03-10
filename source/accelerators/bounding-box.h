@@ -24,16 +24,8 @@ public:
 
 	void addPoint(const Point3& p);
 	void addBoundingBox(const BoundingBox& b);
-	inline float intersects(const Ray& ray) const {
-		return intersects(ray, std::numeric_limits<float>::max());
-	}
-
-	inline bool intersectsAny(const Ray& ray) const {
-		return intersectsAny(ray, std::numeric_limits<float>::max());
-	}
-
-	float intersects(const Ray& ray, float maxT) const;
-	bool intersectsAny(const Ray& ray, float maxT) const;
+	float intersects(const Ray& ray, const Vector3& invDir, float maxT) const;
+	bool intersectsAny(const Ray& ray, const Vector3& invDir, float maxT) const;
 	Point3 mid() const;
 
 	inline bool isInside(const Point3& p) const {

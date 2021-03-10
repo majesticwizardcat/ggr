@@ -45,9 +45,9 @@ void Scene::fillIntersectionFromEntity(const EntityIntersection& entityIntersect
 		result->material = entityIntersection.entity->getMaterial();
 }
 
-void Scene::intersects(Ray* ray, Intersection* result, float maxT) const {
+void Scene::intersects(Ray* ray, Intersection* result) const {
 	EntityIntersection entityIntersection;
-	entityIntersection.t = maxT;
+	entityIntersection.t = std::numeric_limits<float>::max();
 	result->wo = -ray->direction;
 	ray->createRaySpace();
 	if (m_accelerator.intersects(*ray, &entityIntersection)) {
@@ -59,11 +59,10 @@ void Scene::intersects(Ray* ray, Intersection* result, float maxT) const {
 	result->hit = false;
 }
 
-void Scene::intersects(const SurfacePoint& surface, const Vector3& direction,
-	Intersection* result, float maxT) const {
+void Scene::intersects(const SurfacePoint& surface, const Vector3& direction, Intersection* result) const {
 	Ray ray(surface.point, direction);
 	EntityIntersection entityIntersection;
-	entityIntersection.t = maxT;
+	entityIntersection.t = std::numeric_limits<float>::max();
 	result->wo = -ray.direction;
 	ray.createRaySpace();
 	if (m_accelerator.intersects(ray, surface, &entityIntersection)) {

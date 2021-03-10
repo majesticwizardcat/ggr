@@ -136,59 +136,39 @@ void BBAccelerator::initialize(const std::unique_ptr<Entity>* entities, size_t n
 	mergeRoots();
 }
 
-float BBAccelerator::intersectNode(BBNode* node, const Ray& ray, size_t ignoreID, EntityIntersection* result) const {
-	if (node->isLeaf()) {
-		if (m_entities[node->itemIndex]->getID() != ignoreID) {
-			float lastT = result->t;
-			if (m_entities[node->itemIndex]->intersects(ray, result) && result->t != lastT) {
-				return result->t;
+bool BBAccelerator::intersects(const Ray& ray, size_t ignoreID, EntityIntersection* result) const {
+	std::vector<const BBNode*> nodes;
+	const BBNode* current;
+	bool hit = false;
+	const Vector3 invrDir(1.0f / ray.direction.x, 1.0f / ray.direction.y, 1.0f / ray.direction.z);
+	nodes.push_back(m_root->left.get());
+	nodes.push_back(m_root->right.get());
+	while (!nodes.empty()) {
+		current = nodes.back();
+		nodes.pop_back();
+		if (current->isLeaf()) {
+			if (m_entities[current->itemIndex]->getID() != ignoreID
+				&& m_entities[current->itemIndex]->intersects(ray, result)) {
+				hit = true;
 			}
 		}
-		return -1.0f;
-	}
-	return m_boundingBoxes[node->itemIndex].intersects(ray, result->t);
-}
-
-bool BBAccelerator::intersects(const Ray& ray, size_t ignoreID, EntityIntersection* result) const {
-	std::priority_queue<std::pair<float, const BBNode*>, std::vector<std::pair<float, const BBNode*>>,
-		std::greater<std::pair<float, const BBNode*>>> tq;
-	tq.push(std::make_pair(0.0f, m_root));
-	const BBNode* current;
-	float t = -1.0f;
-	while (true) {
-		if (tq.empty()) {
-			break;
-		}
-		current = tq.top().second;
-		if (current->isLeaf()) {
-			return true;
-		}
-		tq.pop();
-
-		t = intersectNode(current->left.get(), ray, ignoreID, result);
-		if (t >= 0.0f) {
-			tq.push(std::make_pair(t, current->left.get()));
-		}
-
-		t = intersectNode(current->right.get(), ray, ignoreID, result);
-		if (t >= 0.0f) {
-			tq.push(std::make_pair(t, current->right.get()));
+		else if (m_boundingBoxes[current->itemIndex].intersectsAny(ray, invrDir, result->t)) {
+			nodes.push_back(current->left.get());
+			nodes.push_back(current->right.get());
 		}
 	}
-	return false;
+	return hit;
 }
 
 bool BBAccelerator::intersectsAny(const Ray& ray, const SurfacePoint& surface, float maxT) const {
 	EntityIntersection result;
 	result.t = maxT;
 	std::vector<const BBNode*> nodes;
+	const Vector3 invrDir(1.0f / ray.direction.x, 1.0f / ray.direction.y, 1.0f / ray.direction.z);
 	const BBNode* current;
 	nodes.push_back(m_root->left.get());
 	nodes.push_back(m_root->right.get());
-	while (true) {
-		if (nodes.empty()) {
-			return false;
-		}
+	while (!nodes.empty()) {
 		current = nodes.back();
 		nodes.pop_back();
 		if (current->isLeaf()) {
@@ -197,11 +177,9 @@ bool BBAccelerator::intersectsAny(const Ray& ray, const SurfacePoint& surface, f
 				return true;
 			}
 		}
-		else {
-			if (m_boundingBoxes[current->itemIndex].intersectsAny(ray, result.t)) {
-				nodes.push_back(current->left.get());
-				nodes.push_back(current->right.get());
-			}
+		else if (m_boundingBoxes[current->itemIndex].intersectsAny(ray, invrDir, result.t)) {
+			nodes.push_back(current->left.get());
+			nodes.push_back(current->right.get());
 		}
 	}
 	return false;

@@ -45,7 +45,7 @@ void BoundingBox::addBoundingBox(const BoundingBox& b) {
 float BoundingBox::intersectSide(float p, float o, float d,
 	float ox, float oy, float dx, float dy, float sx, float sy,
 	float ex, float ey, float maxT) const {
-	float t = (p - o) / d;
+	float t = (p - o) * d;
 	if (t < 0 || t > maxT) {
 		return -1.0f;
 	}
@@ -64,79 +64,73 @@ void BoundingBox::updateIfValid(float t, float* currentT, float* maxT) const {
 	}
 }
 
-float BoundingBox::intersects(const Ray& ray, float maxT) const {
+float BoundingBox::intersects(const Ray& ray, const Vector3& invDir, float maxT) const {
 	if (isInside(ray.origin)) {
 		return 0.0f;
 	}
 
 	float t = -1.0f;
-	if (ray.direction.x != 0.0f) {
-		updateIfValid(intersectSide(start.x, ray.origin.x, ray.direction.x,
+	if (!std::isinf(invDir.x)) {
+		updateIfValid(intersectSide(start.x, ray.origin.x, invDir.x,
 			ray.origin.z, ray.origin.y, ray.direction.z,
 			ray.direction.y, start.z, start.y, end.z, end.y, maxT), &t, &maxT);
-		updateIfValid(intersectSide(end.x, ray.origin.x, ray.direction.x,
+		updateIfValid(intersectSide(end.x, ray.origin.x, invDir.x,
 			ray.origin.z, ray.origin.y, ray.direction.z,
 			ray.direction.y, start.z, start.y, end.z, end.y, maxT), &t, &maxT);
 	}
 
-	if (ray.direction.y != 0.0f) {
-		updateIfValid(intersectSide(start.y, ray.origin.y, ray.direction.y,
+	if (!std::isinf(invDir.y)) {
+		updateIfValid(intersectSide(start.y, ray.origin.y, invDir.y,
 			ray.origin.x, ray.origin.z, ray.direction.x,
 			ray.direction.z, start.x, start.z, end.x, end.z, maxT), &t, &maxT);
-		updateIfValid(intersectSide(end.y, ray.origin.y, ray.direction.y,
+		updateIfValid(intersectSide(end.y, ray.origin.y, invDir.y,
 			ray.origin.x, ray.origin.z, ray.direction.x,
 			ray.direction.z, start.x, start.z, end.x, end.z, maxT), &t, &maxT);
 	}
 	
-	if (ray.direction.z != 0.0f) {
-		updateIfValid(intersectSide(start.z, ray.origin.z, ray.direction.z,
+	if (!std::isinf(invDir.z)) {
+		updateIfValid(intersectSide(start.z, ray.origin.z, invDir.z,
 			ray.origin.x, ray.origin.y, ray.direction.x,
 			ray.direction.y, start.x, start.y, end.x, end.y, maxT), &t, &maxT);
-		updateIfValid(intersectSide(end.z, ray.origin.z, ray.direction.z,
+		updateIfValid(intersectSide(end.z, ray.origin.z, invDir.z,
 			ray.origin.x, ray.origin.y, ray.direction.x,
 			ray.direction.y, start.x, start.y, end.x, end.y, maxT), &t, &maxT);
 	}
 	return t;
 }
 
-bool BoundingBox::intersectsAny(const Ray& ray, float maxT) const {
+bool BoundingBox::intersectsAny(const Ray& ray, const Vector3& invDir, float maxT) const {
 	if (isInside(ray.origin)) {
 		return true;
 	}
 
-	if (ray.direction.x != 0.0f) {
-		if (intersectSide(start.x, ray.origin.x, ray.direction.x,
+	if (!std::isinf(invDir.x)) {
+		if (intersectSide(start.x, ray.origin.x, invDir.x,
 			ray.origin.z, ray.origin.y, ray.direction.z,
-			ray.direction.y, start.z, start.y, end.z, end.y, maxT) > 0.0f) {
-			return true;
-		}
-		if (intersectSide(end.x, ray.origin.x, ray.direction.x,
+			ray.direction.y, start.z, start.y, end.z, end.y, maxT) > 0.0f
+		|| intersectSide(end.x, ray.origin.x, invDir.x,
 			ray.origin.z, ray.origin.y, ray.direction.z,
 			ray.direction.y, start.z, start.y, end.z, end.y, maxT) > 0.0f) {
 			return true;
 		}
 	}
 
-	if (ray.direction.y != 0.0f) {
-		if (intersectSide(start.y, ray.origin.y, ray.direction.y,
+	if (!std::isinf(invDir.y)) {
+		if (intersectSide(start.y, ray.origin.y, invDir.y,
 			ray.origin.x, ray.origin.z, ray.direction.x,
-			ray.direction.z, start.x, start.z, end.x, end.z, maxT) > 0.0f) {
-			return true;
-		}
-		if (intersectSide(end.y, ray.origin.y, ray.direction.y,
+			ray.direction.z, start.x, start.z, end.x, end.z, maxT) > 0.0f
+		|| intersectSide(end.y, ray.origin.y, invDir.y,
 			ray.origin.x, ray.origin.z, ray.direction.x,
 			ray.direction.z, start.x, start.z, end.x, end.z, maxT) > 0.0f) {
 			return true;
 		}
 	}
 	
-	if (ray.direction.z != 0.0f) {
-		if (intersectSide(start.z, ray.origin.z, ray.direction.z,
+	if (!std::isinf(invDir.z)) {
+		if (intersectSide(start.z, ray.origin.z, invDir.z,
 			ray.origin.x, ray.origin.y, ray.direction.x,
-			ray.direction.y, start.x, start.y, end.x, end.y, maxT) > 0.0f) {
-			return true;
-		}
-		if (intersectSide(end.z, ray.origin.z, ray.direction.z,
+			ray.direction.y, start.x, start.y, end.x, end.y, maxT) > 0.0f
+		|| intersectSide(end.z, ray.origin.z, invDir.z,
 			ray.origin.x, ray.origin.y, ray.direction.x,
 			ray.direction.y, start.x, start.y, end.x, end.y, maxT) > 0.0f) {
 			return true;

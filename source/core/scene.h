@@ -32,19 +32,8 @@ public:
 	void addEntity(const TriangleMesh* mesh, const Material* material);
 	void addLight(const TriangleMesh* mesh, const EmissionMaterial* emissionMat);
 	void initializeAccelerator();
-
-	inline void intersects(Ray* ray, Intersection* result) const {
-		intersects(ray, result, std::numeric_limits<float>::max());
-	}
-
-	inline void intersects(const SurfacePoint& surface,
-		const Vector3& direction, Intersection* result) const {
-		intersects(surface, direction, result, std::numeric_limits<float>::max());
-	}
-
-	void intersects(Ray* ray, Intersection* result, float maxT) const;
-	void intersects(const SurfacePoint& surface, const Vector3& direction,
-		Intersection* result, float maxT) const;
+	void intersects(Ray* ray, Intersection* result) const;
+	void intersects(const SurfacePoint& surface, const Vector3& direction, Intersection* result) const;
 
 	inline bool areUnoccluded(const SurfacePoint& p0, const Point3& p,
 		const Vector3& dir, float distance) const {
