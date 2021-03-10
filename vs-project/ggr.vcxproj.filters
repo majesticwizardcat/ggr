@@ -413,9 +413,6 @@
     <ClCompile Include="..\source\textures\height-map.cpp">
       <Filter>source\textures</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\spectra\spectrum.cpp">
-      <Filter>source\spectra</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\meshes\mesh-loader.cpp">
       <Filter>source\meshes</Filter>
     </ClCompile>

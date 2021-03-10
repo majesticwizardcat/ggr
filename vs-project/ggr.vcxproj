@@ -259,7 +259,6 @@
     <ClCompile Include="..\source\shaders\mf-reflection-shader.cpp" />
     <ClCompile Include="..\source\shaders\mf-refraction-shader.cpp" />
     <ClCompile Include="..\source\shaders\refraction-shader.cpp" />
-    <ClCompile Include="..\source\spectra\spectrum.cpp" />
     <ClCompile Include="..\source\textures\color-texture.cpp" />
     <ClCompile Include="..\source\textures\height-map.cpp" />
     <ClCompile Include="..\source\textures\image-texture.cpp" />

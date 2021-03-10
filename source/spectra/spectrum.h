@@ -3,30 +3,33 @@
 class Spectrum;
 
 #include "primitives/color.h"
+#include "tools/constants.h"
 
 #include <glm/vec3.hpp>
 #include <glm/common.hpp>
 #include <glm/geometric.hpp>
-
-static const glm::vec3 TO_Y(0.2126f, 0.7252f, 0.0722f);
-static const glm::vec3 ZERO(0.0f);
-
 #include <iostream>
+
 class Spectrum {
 private:
 	glm::vec3 m_rgb;
 
 public:
-	Spectrum();
-	Spectrum(const Spectrum& other);
-	Spectrum(const glm::vec3& v);
-	Spectrum(float r, float g, float b);
-	Spectrum(float v);
-	Spectrum(const XYZColor& xyzColor);
-	Spectrum(const RGBColor& rgbColor);
+	Spectrum() : m_rgb(0.0f) { }
+	Spectrum(const Spectrum& other) : m_rgb(other.m_rgb) { }
+	Spectrum(const glm::vec3& v) : m_rgb(v) { }
+	Spectrum(float r, float g, float b) : m_rgb(r, g, b) { }
+	Spectrum(float v) : m_rgb(v) { }
+	Spectrum(const XYZColor& xyzColor) : Spectrum(clr::XYZToRGB(xyzColor)) { }
+	Spectrum(const RGBColor& rgbColor) : Spectrum(rgbColor.r, rgbColor.g, rgbColor.b) { }
 
-	XYZColor getXYZ() const;
-	RGBColor getRGB() const;
+	inline XYZColor getXYZ() const {
+		return clr::RGBToXYZ(getRGB());
+	}
+
+	inline RGBColor getRGB() const {
+		return RGBColor(m_rgb.r, m_rgb.g, m_rgb.b);
+	}
 
 	void checkNaNs(const char* location) const {
 		if (std::isnan(m_rgb.x) || std::isnan(m_rgb.y) || std::isnan(m_rgb.z)) {
@@ -48,7 +51,7 @@ public:
 	}
 
 	inline bool isZero() const {
-		return m_rgb == ZERO;
+		return m_rgb == ZERO_VECTOR;
 	}
 
 	inline Spectrum operator+(const Spectrum& right) const {
@@ -104,4 +107,3 @@ public:
 		return glm::dot(m_rgb, TO_Y);
 	}
 };
-

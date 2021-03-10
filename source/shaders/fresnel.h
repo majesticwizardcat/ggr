@@ -1,11 +1,14 @@
 #pragma once
 
 #include "spectra/spectrum.h"
+#include "tools/constants.h"
 
 namespace fresnel {
+static const Spectrum ONE_SPECTRUM(1.0f);
+
 inline Spectrum fresnelSchlick(const Spectrum& R0, float cosTheta) {
 	float oct = 1.0f - cosTheta;
-	return R0 + (Spectrum(1.0f) - R0) * (oct * oct * oct * oct * oct);
+	return R0 + (ONE_SPECTRUM - R0) * (oct * oct * oct * oct * oct);
 }
 
 inline float fresnelCT(float eta, float cosTheta) {
