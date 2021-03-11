@@ -136,15 +136,16 @@ void BBAccelerator::initialize(const std::unique_ptr<Entity>* entities, size_t n
 }
 
 bool BBAccelerator::intersects(const Ray& ray, size_t ignoreID, EntityIntersection* result, bool findAny) const {
-	std::vector<const BBNode*> nodes;
+	const BBNode* stack[128];
+	int stackBack;
 	const BBNode* current;
 	bool hit = false;
-	const Vector3 invrDir(1.0f / ray.direction.x, 1.0f / ray.direction.y, 1.0f / ray.direction.z);
-	nodes.push_back(m_root->left.get());
-	nodes.push_back(m_root->right.get());
-	while (!nodes.empty()) {
-		current = nodes.back();
-		nodes.pop_back();
+	const Vector3 invrDir = ONE_VECTOR / ray.direction;
+	stack[0] = m_root->left.get();
+	stack[1] = m_root->right.get();
+	stackBack = 2;
+	while (stackBack > 0) {
+		current = stack[--stackBack];
 		if (current->isLeaf()) {
 			if (m_entities[current->itemIndex]->getID() != ignoreID
 				&& m_entities[current->itemIndex]->intersects(ray, result)) {
@@ -155,8 +156,8 @@ bool BBAccelerator::intersects(const Ray& ray, size_t ignoreID, EntityIntersecti
 			}
 		}
 		else if (m_boundingBoxes[current->itemIndex].intersectsAny(ray, invrDir, result->t)) {
-			nodes.push_back(current->left.get());
-			nodes.push_back(current->right.get());
+			stack[stackBack++] = current->left.get();
+			stack[stackBack++] = current->right.get();
 		}
 	}
 	return hit;
