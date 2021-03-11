@@ -42,8 +42,7 @@ private:
 	float calculateGapAverage(std::vector<Point3>& midPoints, const Axis& axis) const;
 	Axis findSortAxis(const std::vector<std::pair<BoundingBox, size_t>>& boxes,
 		size_t startIndex, size_t endIndex) const;
-	bool intersects(const Ray& ray, size_t ignoreID, EntityIntersection* result) const;
-	float intersectNode(BBNode* node, const Ray& ray, size_t ignoreID, EntityIntersection* result) const;
+	bool intersects(const Ray& ray, size_t ignoreID, EntityIntersection* result, bool findAny) const;
 	void mergeRoots();
 
 public:
@@ -51,14 +50,20 @@ public:
 	BBAccelerator(const BBAccelerator& other) = delete;
 
 	inline bool intersects(const Ray& ray, EntityIntersection* result) const {
-		return intersects(ray, -1, result);
+		return intersects(ray, -1, result, false);
 	}
+
 	inline bool intersects(const Ray& ray, const SurfacePoint& surface, EntityIntersection* result) const {
-		return intersects(ray, surface.meshID, result);
+		return intersects(ray, surface.meshID, result, false);
+	}
+
+	inline  bool intersectsAny(const Ray& ray, const SurfacePoint& surface, float maxT) const {
+		EntityIntersection i;
+		i.t = maxT;
+		return intersects(ray, surface.meshID, &i, true);
 	}
 
 	void initialize(const std::unique_ptr<Entity>* entities, size_t numberOfEntites,
 		const std::vector<int>& objects);
-	bool intersectsAny(const Ray& ray, const SurfacePoint& surface, float maxT) const;
 };
 

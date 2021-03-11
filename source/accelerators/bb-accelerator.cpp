@@ -91,7 +91,6 @@ Axis BBAccelerator::findSortAxis(const std::vector<std::pair<BoundingBox, size_t
 	return Axis::Z_AXIS;
 }
 
-#include <iostream>
 void BBAccelerator::mergeRoots() {
 	auto sortNodes = [&](const std::unique_ptr<BBNode>& n0,
 		const std::unique_ptr<BBNode>& n1) {
@@ -136,7 +135,7 @@ void BBAccelerator::initialize(const std::unique_ptr<Entity>* entities, size_t n
 	mergeRoots();
 }
 
-bool BBAccelerator::intersects(const Ray& ray, size_t ignoreID, EntityIntersection* result) const {
+bool BBAccelerator::intersects(const Ray& ray, size_t ignoreID, EntityIntersection* result, bool findAny) const {
 	std::vector<const BBNode*> nodes;
 	const BBNode* current;
 	bool hit = false;
@@ -149,6 +148,9 @@ bool BBAccelerator::intersects(const Ray& ray, size_t ignoreID, EntityIntersecti
 		if (current->isLeaf()) {
 			if (m_entities[current->itemIndex]->getID() != ignoreID
 				&& m_entities[current->itemIndex]->intersects(ray, result)) {
+				if (findAny) {
+					return true;
+				}
 				hit = true;
 			}
 		}
@@ -158,29 +160,4 @@ bool BBAccelerator::intersects(const Ray& ray, size_t ignoreID, EntityIntersecti
 		}
 	}
 	return hit;
-}
-
-bool BBAccelerator::intersectsAny(const Ray& ray, const SurfacePoint& surface, float maxT) const {
-	EntityIntersection result;
-	result.t = maxT;
-	std::vector<const BBNode*> nodes;
-	const Vector3 invrDir(1.0f / ray.direction.x, 1.0f / ray.direction.y, 1.0f / ray.direction.z);
-	const BBNode* current;
-	nodes.push_back(m_root->left.get());
-	nodes.push_back(m_root->right.get());
-	while (!nodes.empty()) {
-		current = nodes.back();
-		nodes.pop_back();
-		if (current->isLeaf()) {
-			if (m_entities[current->itemIndex]->getID() != surface.meshID
-				&& m_entities[current->itemIndex]->intersects(ray, &result)) {
-				return true;
-			}
-		}
-		else if (m_boundingBoxes[current->itemIndex].intersectsAny(ray, invrDir, result.t)) {
-			nodes.push_back(current->left.get());
-			nodes.push_back(current->right.get());
-		}
-	}
-	return false;
 }
