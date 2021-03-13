@@ -19,11 +19,18 @@ void FilmSamplingIntegrator::setup(const Scene* scene, const Camera* camera, Fil
 
 void FilmSamplingIntegrator::render(const Scene* scene, const Camera* camera, Film* film,
 		Sampler* sampler, const RenderSettings& settings) {
-	const auto& pixelsToRender = m_renderArrays[m_nextWorkerIndex++];
+	int id = m_nextWorkerIndex++;
+	const auto& pixelsToRender = m_renderArrays[id];
 	std::unique_ptr<Sampler> samplerClone = sampler->clone();
+	int done = 0;
 	for (const auto& nextPixel : pixelsToRender) {
 		samplerClone->createCameraSamples(nextPixel, settings.samples);
 		renderPixel(scene, camera, film, samplerClone.get(), nextPixel, settings.samples);
+		done++;
+		if (id == 0 && done % 11 == 0) {
+			std::cout << "\rCompeleted: " << (float)((float)done / (float)pixelsToRender.size()) * 100.0f
+				<< " %                   ";
+		}
 	}
 }
 
