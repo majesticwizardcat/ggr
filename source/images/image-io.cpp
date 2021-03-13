@@ -63,9 +63,9 @@ void savePPM(const char* location, const Image& image) {
 
 	float maxVal = 255.0f;
 
-	imageFile << "P3" << std::endl;
-	imageFile << image.getWidth() << " " << image.getHeight() << std::endl;
-	imageFile << maxVal << std::endl;
+	imageFile << "P3" << '\n';
+	imageFile << image.getWidth() << ' ' << image.getHeight() << '\n';
+	imageFile << maxVal << '\n';
 
 	for (int y = 0; y < image.getHeight(); ++y) {
 		for (int x = 0; x < image.getWidth(); ++x) {
@@ -78,12 +78,13 @@ void savePPM(const char* location, const Image& image) {
 			float r = std::ceil(color.r);
 			float g = std::ceil(color.g);
 			float b = std::ceil(color.b);
-			imageFile << r << " ";
-			imageFile << g << " ";
-			imageFile << b << " ";
+			imageFile << r << ' ';
+			imageFile << g << ' ';
+			imageFile << b << ' ';
 		}
 
-		imageFile << std::endl;
+		imageFile << '\n';
 	}
+	imageFile << std::endl;
 }
 
