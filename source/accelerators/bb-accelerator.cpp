@@ -129,9 +129,13 @@ void BBAccelerator::initialize(const std::unique_ptr<Entity>* entities, size_t n
 		boxes.push_back(std::make_pair(m_entities[i]->createBoundingBox(), i));
 	}
 	for (int i = 0; i < objects.size() - 1; ++i) {
-		m_roots.push_back(split(objects[i], objects[i + 1], boxes));
+		if (objects[i + 1] - objects[i] > 0) {
+			m_roots.push_back(split(objects[i], objects[i + 1], boxes));
+		}
 	}
-	m_roots.push_back(split(objects.back(), numberOfEntities, boxes));
+	if (numberOfEntities - objects.back() > 0) {
+		m_roots.push_back(split(objects.back(), numberOfEntities, boxes));
+	}
 	mergeRoots();
 }
 

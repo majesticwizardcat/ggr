@@ -8,6 +8,7 @@
 Triangle::Triangle(const Vertex* v0, const Vertex* v1, const Vertex* v2) : v0(v0), v1(v1), v2(v2) { }
 
 void Triangle::calculateGeometry() {
+	m_degenerate = false;
 	float u1u0 = v1->uv.x - v0->uv.x;
 	float u2u0 = v2->uv.x - v0->uv.x;
 	float v1v0 = v1->uv.y - v0->uv.y;
@@ -15,7 +16,19 @@ void Triangle::calculateGeometry() {
 	float dt = v2v0 * u1u0 - v1v0 * u2u0;
 
 	if (dt == 0.0f) {
-		m_degenerate = true;
+		// Arbitrarily assign dP/dUV partial derivatives
+		Vector3 p1p0 = v1->position - v0->position;
+		Vector3 p2p0 = v2->position - v0->position;
+		m_dpdu = p1p0 - p2p0;
+		m_dpdv = p2p0 - p1p0;
+		m_area = glm::length(glm::cross(p1p0, p2p0)) / 2.0f;
+		if (m_area == 0.0f) {
+			m_degenerate = true;
+			return;
+		}
+		m_geometricNormal = glm::normalize(glm::cross(m_dpdu, m_dpdv));
+		m_tangent = glm::normalize(m_dpdu);
+		m_area = glm::length(glm::cross(p1p0, p2p0)) / 2.0f;
 		return;
 	}
 
