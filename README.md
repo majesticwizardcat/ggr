@@ -1,6 +1,9 @@
 # ggr - A physically based offline renderer
-![alt text](https://raw.githubusercontent.com/loukoum/ggr/master/renders/the-one-with-the-cat.png)
+![alt text](https://raw.githubusercontent.com/loukoum/ggr/master/renders/resm_lowres.png)
 ![alt text](https://raw.githubusercontent.com/loukoum/ggr/master/renders/glass-earth.png)
+
+You can find more renders [HERE](https://github.com/loukoum/ggr/tree/master/renders) like a [1080p version](https://raw.githubusercontent.com/loukoum/ggr/master/renders/resm.png) of the first render.
+
 
 ggr is a physically based offline renderer written in C++. The purpose of the project is to create a renderer
 that can create realistic pictures, indistinguishable from ones taken from a real camera and to
