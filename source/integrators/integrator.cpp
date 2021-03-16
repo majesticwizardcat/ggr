@@ -21,9 +21,13 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 
 	if (*nextDistDelta) {
 		*nextThroughput /= bsdfSamplePDF;
-		return L;
+		return Spectrum(0.0f);
 	}
 	int lights = scene->getNumberOfLights();
+	if (lights == 0) {
+		return Spectrum(0.0f);
+	}
+
 	int choice = (int)std::floor((float)lights * sampler->getSample());
 	const LightEntity* light = scene->getLight(choice);
 	SurfacePoint sampledPoint;
