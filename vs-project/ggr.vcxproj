@@ -162,6 +162,7 @@
     <ClInclude Include="..\source\intersection\surface-point.h" />
     <ClInclude Include="..\source\lighting\skybox-sample.h" />
     <ClInclude Include="..\source\lighting\skybox.h" />
+    <ClInclude Include="..\source\materials\blend-material.h" />
     <ClInclude Include="..\source\materials\emission-material.h" />
     <ClInclude Include="..\source\materials\glass-material.h" />
     <ClInclude Include="..\source\materials\material.h" />
@@ -242,6 +243,7 @@
     <ClCompile Include="..\source\intersection\ray.cpp" />
     <ClCompile Include="..\source\lighting\skybox-sample.cpp" />
     <ClCompile Include="..\source\lighting\skybox.cpp" />
+    <ClCompile Include="..\source\materials\blend-material.cpp" />
     <ClCompile Include="..\source\materials\glass-material.cpp" />
     <ClCompile Include="..\source\materials\metal-material.cpp" />
     <ClCompile Include="..\source\materials\plastic-material.cpp" />

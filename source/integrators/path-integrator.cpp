@@ -30,7 +30,6 @@ void PathIntegrator::renderPixel(const Scene* scene, const Camera* camera, Film*
 				L += throughput * scene->getSkybox()->emission(-intersection.wo);
 				break;
 			}
-
 			if (intersection.light) {
 				if (depth == 0 || lastDistDelta) {
 					surfaceShader = intersection.material->createShader(intersection.intersectionPoint,
@@ -50,10 +49,14 @@ void PathIntegrator::renderPixel(const Scene* scene, const Camera* camera, Film*
 			if (nextThroughput.isZero()) {
 				break;
 			}
+			nextThroughput.clamp(0.0f, 10.0f);
 			throughput *= nextThroughput;
 			if (depth > 4) {
 				float rrProb = std::max(0.05f, 1.0f - throughput.luminosity());
 				if (sampler->getSample() < rrProb) {
+					if (!intersection.hit) {
+						L += throughput * scene->getSkybox()->emission(-intersection.wo);
+					}
 					break;
 				}
 				throughput /= std::max((1.0f - rrProb), 0.1f);

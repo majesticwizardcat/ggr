@@ -19,12 +19,9 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 		return Spectrum(0.0f);
 	}
 
-	if (*nextDistDelta) {
-		*nextThroughput /= bsdfSamplePDF;
-		return Spectrum(0.0f);
-	}
 	int lights = scene->getNumberOfLights();
-	if (lights == 0) {
+	if (*nextDistDelta || lights == 0) {
+		*nextThroughput /= bsdfSamplePDF;
 		return Spectrum(0.0f);
 	}
 

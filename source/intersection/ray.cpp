@@ -12,13 +12,30 @@ Ray::Ray(const Point3& origin, const Vector3& direction, float weight) : origin(
 	direction(direction), weight(weight), isCameraRay(false) { }
 
 void Ray::createRaySpace() {
-	if (direction.z != 0.0f) {
+	if (direction.z < direction.x) {
+		if (direction.x > direction.y) {
+			m_maxIndex = 0;
+		}
+		else {
+			m_maxIndex = 1;
+		}
+	}
+	else {
+		if (direction.z > direction.y) {
+			m_maxIndex = 2;
+		}
+		else {
+			m_maxIndex = 1;
+		}
+	}
+
+	if (m_maxIndex == 2) {
 		float oneOverZ = 1.0f / direction.z;
 		m_raySpaceShear.x = -direction.x * oneOverZ;
 		m_raySpaceShear.y = -direction.y * oneOverZ;
 		m_raySpaceShear.z =  oneOverZ;
 	}
-	else if (direction.y != 0.0f) {
+	else if (m_maxIndex == 1) {
 		float oneOverZ = 1.0f / direction.y;
 		m_raySpaceShear.x = -direction.x * oneOverZ;
 		m_raySpaceShear.y = -direction.z * oneOverZ;
@@ -42,14 +59,14 @@ Point3 Ray::point(float t) const {
 }
 
 Point3 Ray::toRaySpace(const Point3& p) const {
-	if (direction.z != 0) {
+	if (m_maxIndex == 2) {
 		float z = p.z - origin.z;
 		return Point3((p.x - origin.x) + m_raySpaceShear.x * z,
 			(p.y - origin.y) + m_raySpaceShear.y * z,
 			z * m_raySpaceShear.z);
 	}
 
-	if (direction.y != 0) {
+	if (m_maxIndex == 1) {
 		float z = p.y - origin.y;
 		return Point3((p.x - origin.x) + m_raySpaceShear.x * z,
 			(p.z - origin.z) + m_raySpaceShear.y * z,

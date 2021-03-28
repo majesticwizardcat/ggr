@@ -285,6 +285,9 @@
     <ClInclude Include="..\source\shaders\emission-shader.h">
       <Filter>source\shaders</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\materials\blend-material.h">
+      <Filter>source\materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\accelerators\bb-accelerator.cpp">
@@ -430,6 +433,9 @@
     </ClCompile>
     <ClCompile Include="..\source\shaders\mf-refraction-shader.cpp">
       <Filter>source\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\materials\blend-material.cpp">
+      <Filter>source\materials</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

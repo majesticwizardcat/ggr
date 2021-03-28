@@ -18,13 +18,11 @@ public:
 		: Shader(normal, tangent, bitangent), m_diffuseColor(color * INV_PI) { }
 
 	Spectrum evaluate(const Vector3& wo, const Vector3& wi) const {
-		return glm::dot(m_normal, wo) * glm::dot(m_normal, wi) > 0.0f
-			? m_diffuseColor : Spectrum(0.0f);
+		return m_diffuseColor;
 	}
 
 	float pdf(const Vector3& wo, const Vector3& wi) const {
-		return glm::dot(m_normal, wo) * glm::dot(m_normal, wi) > 0.0f
-		? std::abs(glm::dot(m_normal, wi)) * INV_PI : 0.0f;
+		return std::abs(glm::dot(m_normal, wi)) * INV_PI;
 	}
 
 	Spectrum sample(const Vector3& wo, Vector3* wi, float* pdf,
@@ -34,11 +32,16 @@ public:
 		Point2 disk(r * std::cos(phi), r * std::sin(phi));
 		*wi = Vector3(disk, std::sqrt(std::max(0.0f, 1.0f - glm::dot(disk, disk))));
 		float cosThetaWi = wi->z;
-		toWorld(wi);
-		if (util::less(cosThetaWi * glm::dot(m_normal, wo), 0.0f)) {
+		float cosThetaWo = glm::dot(m_normal, wo);
+		if (util::equals(cosThetaWo * cosThetaWi, 0.0f)) {
 			*pdf = 0.0f;
 			return Spectrum(0.0f);
 		}
+
+		if (cosThetaWi * cosThetaWo < 0.0f) {
+			wi->z *= -1.0f;
+		}
+		toWorld(wi);
 		*pdf = std::abs(cosThetaWi) * INV_PI;
 		*isDelta = false;
 		return m_diffuseColor;

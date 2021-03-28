@@ -3,12 +3,10 @@
 #include "shaders/fresnel.h"
 
 Spectrum MFReflectionShader::evaluate(const Vector3& wo, const Vector3& wi) const {
-	float cosThetaWo = glm::dot(m_normal, wo);
-	float cosThetaWi = glm::dot(m_normal, wi);
+	float cosThetaWo = std::abs(glm::dot(m_normal, wo));
+	float cosThetaWi = std::abs(glm::dot(m_normal, wi));
 	float cosThetaWoWi = cosThetaWo * cosThetaWi;
-	if (util::less(cosThetaWo, 0.0f)
-		|| util::less(cosThetaWi, 0.0f)
-		|| util::equals(cosThetaWoWi, 0.0f)) {
+	if (util::equals(cosThetaWoWi, 0.0f)) {
 		return Spectrum(0.0f);
 	}
 	Vector3 m = glm::normalize(wo + wi);
@@ -20,12 +18,9 @@ Spectrum MFReflectionShader::evaluate(const Vector3& wo, const Vector3& wi) cons
 }
 
 float MFReflectionShader::pdf(const Vector3& wo, const Vector3& wi) const {
-	if (util::equals(glm::dot(m_normal, wo) * glm::dot(m_normal, wi), 0.0f)) {
-		return 0.0f;
-	}
 	Vector3 m = glm::normalize(wo + wi);
-	float MoWo = glm::dot(m, wo);
-	if (util::less(MoWo, 0.0f)) {
+	float MoWo = std::abs(glm::dot(m, wo));
+	if (util::equals(MoWo, 0.0f)) {
 		return 0.0f;
 	}
 	float cosThetaM = std::abs(glm::dot(m, m_normal));
@@ -38,17 +33,20 @@ Spectrum MFReflectionShader::sample(const Vector3& wo, Vector3* wi, float* pdf,
 	Vector3 m = mfdist::GGX_sampleNormal(m_alpha, sampler->getSample2D());
 	toWorld(&m);
 	float MoWo = glm::dot(m, wo);
-	if (util::less(MoWo, 0.0f)) {
+	if (util::equals(MoWo, 0.0f)) {
 		*pdf = 0.0f;
 		return Spectrum(0.0f);
 	}
+	if (MoWo < 0.0f) {
+		m = -m;
+		MoWo = -MoWo;
+	}
+
 	*wi = shading::reflect(wo, m, MoWo);
-	float cosThetaWo = glm::dot(m_normal, wo);
-	float cosThetaWi = glm::dot(m_normal, *wi);
+	float cosThetaWo = std::abs(glm::dot(m_normal, wo));
+	float cosThetaWi = std::abs(glm::dot(m_normal, *wi));
 	float cosThetaWoWi = cosThetaWo * cosThetaWi;
-	if (util::less(cosThetaWo, 0.0f)
-		|| util::less(cosThetaWi, 0.0f)
-		|| util::equals(cosThetaWoWi, 0.0f)) {
+	if (util::equals(cosThetaWoWi, 0.0f)) {
 		*pdf = 0.0f;
 		return Spectrum(0.0f);
 	}

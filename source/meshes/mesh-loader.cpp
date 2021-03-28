@@ -66,7 +66,7 @@ std::unique_ptr<TriangleMesh> meshloader::loadObj(const char* location) {
 			}
 		}
 	}
-	std::cout << "Loaded obj with: " << vertices.size() << " vertices and " <<
+	std::cout << "Loaded obj " << location << " with: " << vertices.size() << " vertices and " <<
 		indices.size() << " indices -> " << indices.size() / 3 << " triangles" << std::endl;
 	return std::make_unique<TriangleMesh>(vertices, indices);
 }

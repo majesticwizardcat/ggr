@@ -28,14 +28,20 @@ public:
 
 	Spectrum sample(const Vector3& wo, Vector3* wi, float* pdf,
 		bool* isDelta, Sampler* sampler) const {
+		*isDelta = true;
 		float cosTheta = glm::dot(wo, m_normal);
-		*wi = shading::reflect(wo, m_normal, cosTheta);
-		if (util::less(cosTheta, 0.0f)) {
+		if (util::equals(cosTheta, 0.0f)) {
 			*pdf = 0.0f;
 			return Spectrum(0.0f);
 		}
+		if (cosTheta < 0.0f) {
+			cosTheta = -cosTheta;
+			*wi = shading::reflect(wo, -m_normal, cosTheta);
+		}
+		else {
+			*wi = shading::reflect(wo, m_normal, cosTheta);
+		}
 		*pdf = 1.0f;
-		*isDelta = true;
 		return fresnel::fresnelSchlick(m_color, cosTheta) / cosTheta;
 	}
 

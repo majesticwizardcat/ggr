@@ -20,7 +20,8 @@ Image Renderer::render() {
 		m_integrator->render(m_scene, m_camera, film.get(), sampler.get(), m_settings);
 	};
 
-	std::cout << "Starting rendering with: " << m_settings.samples
+	std::cout << "Starting rendering at: " << m_settings.resolutionWidth
+		<< " x " << m_settings.resolutionHeight  << " resolution, with: " << m_settings.samples
 		<< " samples, using: " << m_settings.threads << " threads" << std::endl;
 
 	std::vector<std::thread> threads;

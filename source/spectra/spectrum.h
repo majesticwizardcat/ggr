@@ -33,17 +33,24 @@ public:
 
 	void checkNaNs(const char* location) const {
 		if (std::isnan(m_rgb.x) || std::isnan(m_rgb.y) || std::isnan(m_rgb.z)) {
-			std::cout << "Nan values on L at " << location << std::endl;
+			std::cout << "Nan values on L at " << location << '\n';
 			std::cin.ignore();
 		}
 		if (std::isinf(m_rgb.x) || std::isinf(m_rgb.y) || std::isinf(m_rgb.z)) {
-			std::cout << "Inf values on L at " << location << std::endl;
+			std::cout << "Inf values on L at " << location << '\n';
 			std::cin.ignore();
 		}
 	}
 
+	void isHigh(const char* location) const {
+		if (m_rgb.r > 10.0f || m_rgb.g > 10.0f || m_rgb.b > 10.0f) {
+			std::cout << "High value at: " << location << " -> " <<
+				m_rgb.r << ' ' << m_rgb.g << ' ' << m_rgb.b << '\n';
+		}
+	}
+
 	inline void print() const {
-		std::cout << "Spectrum: " << m_rgb.x << " " << m_rgb.y << " " << m_rgb.z << std::endl;
+		std::cout << "Spectrum: " << m_rgb.x << " " << m_rgb.y << " " << m_rgb.z << '\n';
 	}
 
 	inline void clamp(float min, float max) {

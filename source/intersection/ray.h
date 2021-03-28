@@ -10,6 +10,7 @@ class Ray;
 
 class Ray {
 private:
+	int m_maxIndex;
 	Point3 m_raySpaceShear;
 
 public:
