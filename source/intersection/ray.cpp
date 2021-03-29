@@ -12,8 +12,11 @@ Ray::Ray(const Point3& origin, const Vector3& direction, float weight) : origin(
 	direction(direction), weight(weight), isCameraRay(false) { }
 
 void Ray::createRaySpace() {
-	if (direction.z < direction.x) {
-		if (direction.x > direction.y) {
+	float absX = std::abs(direction.x);
+	float absY = std::abs(direction.y);
+	float absZ = std::abs(direction.z);
+	if (absZ < absX) {
+		if (absX > absY) {
 			m_maxIndex = 0;
 		}
 		else {
@@ -21,7 +24,7 @@ void Ray::createRaySpace() {
 		}
 	}
 	else {
-		if (direction.z > direction.y) {
+		if (absZ > absY) {
 			m_maxIndex = 2;
 		}
 		else {
