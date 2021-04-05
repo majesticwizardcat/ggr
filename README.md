@@ -1,8 +1,9 @@
 # ggr - A physically based offline renderer
+![alt text](https://raw.githubusercontent.com/loukoum/ggr/master/renders/moon-render-low.png)
 ![alt text](https://raw.githubusercontent.com/loukoum/ggr/master/renders/resm_lowres.png)
 ![alt text](https://raw.githubusercontent.com/loukoum/ggr/master/renders/glass-earth.png)
 
-You can find more renders [HERE](https://github.com/loukoum/ggr/tree/master/renders) like a [1080p version](https://raw.githubusercontent.com/loukoum/ggr/master/renders/resm.png) of the first render.
+You can find more renders [HERE](https://github.com/loukoum/ggr/tree/master/renders) like a [High Res version](https://raw.githubusercontent.com/loukoum/ggr/master/renders/moon-render.png) of the first render.
 
 
 ggr is a physically based offline renderer written in C++. The purpose of the project is to create a renderer
