@@ -30,14 +30,20 @@
 #include <iostream>
 #include <memory>
 
-const int DEFAULT_SAMPLES = 2123;
+const int DEFAULT_SAMPLES = 64;
 const int DEFAULT_THREADS = 4;
 
 int main(int args, char** argv) {
 	int samples = DEFAULT_SAMPLES; int threads = DEFAULT_THREADS;
+	int resolutionX = 2880 / 4;
+	int resolutionY = 1800 / 4;
 	if (args > 2) {
 		samples = atoi(argv[1]);
 		threads = atoi(argv[2]);
+	}
+	if (args > 4) {
+		resolutionX = atoi(argv[3]);
+		resolutionY = atoi(argv[4]);
 	}
 
 	auto eifel = meshloader::loadObj("render_moon/eifel.obj");
@@ -69,7 +75,7 @@ int main(int args, char** argv) {
 	seaMaterial->setBumpMap(seaBump.get());
 
 	auto filter = std::make_unique<GaussianFilter>(0.75f);
-	RenderSettings settings(2880, 1800, 64, samples, threads, filter.get());
+	RenderSettings settings(resolutionX, resolutionY, 64, samples, threads, filter.get());
 	auto sampler = std::make_unique<StohasticSampler>(filter.get());
 	auto cameraTransform =
 		std::make_unique<Transformation>(
