@@ -1,5 +1,6 @@
 # ggr - A physically based offline renderer
 ![alt text](https://raw.githubusercontent.com/loukoum/ggr/master/renders/moon-render-low.png)
+![alt text](https://raw.githubusercontent.com/loukoum/ggr/master/renders/living-room-render-low.png)
 ![alt text](https://raw.githubusercontent.com/loukoum/ggr/master/renders/resm_lowres.png)
 ![alt text](https://raw.githubusercontent.com/loukoum/ggr/master/renders/glass-earth.png)
 
