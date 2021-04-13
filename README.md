@@ -95,3 +95,7 @@ If you find a bug or want an addition, open an issue and I will look into it. If
 a pull request and I will look into it as well. I will write a more detailed documentation of the renderer and some
 programming rules to follow when contributing in the future.
 
+## Credits
+- Rendering resources: [Benedikt Bitterli](https://benedikt-bitterli.me/resources/)
+- Textures/Models/Skyboxes: [Poly Haven](https://www.patreon.com/hdrihaven/overview)
+- The CG Bible: [PBRT](https://www.pbrt.org/)
