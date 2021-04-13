@@ -17,3 +17,8 @@ cleanexample0:
 example0: cleanexample0
 	g++ ${INCLUDES} ${OPTIONS} ${SOURCE} examples/example-0.cpp -o example0
 
+clean-moon:
+	rm -f moon-example
+
+moon-example: clean-moon
+	g++ ${INCLUDES} ${OPTIONS} ${SOURCE} examples/moon-example.cpp -o moon-example
