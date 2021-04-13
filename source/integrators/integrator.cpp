@@ -14,7 +14,7 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 	// Next throughput is bsdf * cosTheta / pdf, pdf is divided after sampling the bsdf
 	// since the terms "bsdf * cosTheta" are being used in the sampling later
 	*nextThroughput = bsdfValue * std::abs(glm::dot(surfacePoint.shadingNormal, sampledDirection));
-	if (bsdfSamplePDF == 0.0f || bsdfValue.isZero()) {
+	if (util::equals(bsdfSamplePDF, 0.0f) || bsdfValue.isZero()) {
 		*nextThroughput = Spectrum(0.0f);
 		return Spectrum(0.0f);
 	}
@@ -39,7 +39,7 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 	// MISWeight = pdf / (lpdf + bsdfPdf)
 	// L = Le * bsdf * cosTheta * Weight / pdf
 	// => L = Le * bsdf * cosTheta / (lpdf + bsdfPdf)
-	if (lightPdf > 0.0f
+	if (!util::equals(lightPdf, 0.0f)
 		&& !emission.isZero()
 		&& scene->areUnoccluded(surfacePoint, sampledPoint.point, lightDir, lightDist)) {
 		L += (surfaceShader->evaluate(wo, lightDir)

@@ -4,6 +4,7 @@ class Spectrum;
 
 #include "primitives/color.h"
 #include "tools/constants.h"
+#include "tools/util.h"
 
 #include <glm/vec3.hpp>
 #include <glm/common.hpp>
@@ -31,22 +32,32 @@ public:
 		return RGBColor(m_rgb.r, m_rgb.g, m_rgb.b);
 	}
 
-	void checkNaNs(const char* location) const {
+	inline bool hasNegative() const {
+		return m_rgb.x < 0.0f || m_rgb.y < 0.0f || m_rgb.z < 0.0f;
+	}
+
+	inline bool isBad() const {
+		return std::isnan(m_rgb.x) || std::isnan(m_rgb.y) || std::isnan(m_rgb.z)
+			|| std::isinf(m_rgb.x) || std::isinf(m_rgb.y) || std::isinf(m_rgb.z)
+			|| hasNegative();
+	}
+
+	inline bool checkNaNs(const char* location) const {
 		if (std::isnan(m_rgb.x) || std::isnan(m_rgb.y) || std::isnan(m_rgb.z)) {
 			std::cout << "Nan values on L at " << location << '\n';
 			std::cin.ignore();
+			return true;
 		}
 		if (std::isinf(m_rgb.x) || std::isinf(m_rgb.y) || std::isinf(m_rgb.z)) {
 			std::cout << "Inf values on L at " << location << '\n';
 			std::cin.ignore();
+			return true;
 		}
+		return false;
 	}
 
-	void isHigh(const char* location) const {
-		if (m_rgb.r > 10.0f || m_rgb.g > 10.0f || m_rgb.b > 10.0f) {
-			std::cout << "High value at: " << location << " -> " <<
-				m_rgb.r << ' ' << m_rgb.g << ' ' << m_rgb.b << '\n';
-		}
+	inline bool isHigh() const {
+		return m_rgb.r > 100.0f || m_rgb.g > 100.0f || m_rgb.b > 100.0f;
 	}
 
 	inline void print() const {
@@ -58,7 +69,9 @@ public:
 	}
 
 	inline bool isZero() const {
-		return m_rgb == ZERO_VECTOR;
+		return util::equals(m_rgb.r, 0.0f)
+			&& util::equals(m_rgb.g, 0.0f)
+			&& util::equals(m_rgb.b, 0.0f);
 	}
 
 	inline Spectrum operator+(const Spectrum& right) const {

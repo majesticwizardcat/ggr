@@ -51,7 +51,7 @@ Image loadPPM(const char* location) {
 
 	imageFile.close();
 	std::cout << "Loaded PPM: " << location << std::endl;
-	return image;
+	return std::move(image);
 }
 
 void savePPM(const char* location, const Image& image) {

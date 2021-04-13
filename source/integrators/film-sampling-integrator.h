@@ -7,18 +7,15 @@ class FilmSamplingIntegrator;
 
 #include <mutex>
 #include <memory>
-#include <atomic>
 
 class FilmSamplingIntegrator : public Integrator {
 private:
-	std::atomic<int> m_nextWorkerIndex;
-	std::vector<std::vector<Point2>> m_renderArrays;
-	unsigned int m_initialSize;
-	unsigned int m_pixelsRendered;
+	std::mutex m_stackLock;
+	std::vector<FilmBounds> m_tiles;
+	int m_initialSize;
 
 public:
-	FilmSamplingIntegrator() : m_nextWorkerIndex(0), m_initialSize(0),
-		m_pixelsRendered(0) { }
+	FilmSamplingIntegrator() : m_initialSize(0) { }
 	FilmSamplingIntegrator(const Integrator& other) = delete;
 
 	void setup(const Scene* scene, const Camera* camera, Film* film,

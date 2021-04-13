@@ -22,7 +22,7 @@ Image Renderer::render() {
 
 	std::cout << "Starting rendering at: " << m_settings.resolutionWidth
 		<< " x " << m_settings.resolutionHeight  << " resolution, with: " << m_settings.samples
-		<< " samples, using: " << m_settings.threads << " threads" << std::endl;
+		<< " samples, using: " << m_settings.threads << " threads" << '\n';
 
 	std::vector<std::thread> threads;
 	timer.start();
@@ -34,9 +34,9 @@ Image Renderer::render() {
 		thread.join();
 	}
 
-	std::cout << "\rCompleted: 100%" << std::endl;
+	std::cout << "\rCompleted: 100 %                           " << '\n';
 	timer.stop();
-	std::cout << "Finished rendering in: " << timer.getDuration().count() << " seconds" << std::endl;
+	std::cout << "Finished rendering in: " << timer.getDuration().count() << " seconds" << '\n';
 	return film->getImage();
 }
 

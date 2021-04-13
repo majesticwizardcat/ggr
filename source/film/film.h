@@ -14,8 +14,8 @@ struct FilteredSample;
 #include <vector>
 
 struct FilmBounds {
-	std::pair<unsigned int, unsigned int> start;
-	std::pair<unsigned int, unsigned int> end;
+	std::pair<int, int> start;
+	std::pair<int, int> end;
 
 	FilmBounds() = delete;
 	FilmBounds(const FilmBounds& other) : start(other.start), end(other.end) { }
@@ -38,6 +38,15 @@ struct FilteredSample {
 			return Spectrum(0.0f);
 		}
 		return unnormalizedFilteredRadiance / filterWeightSum;
+	}
+
+	inline void addSample(const Spectrum& fRadiance, float filterWeight) {
+		if (fRadiance.isBad()) {
+			std::cout << "Warning: rejecting bad sample" << '\n';
+			return;
+		}
+		unnormalizedFilteredRadiance += fRadiance;
+		filterWeightSum += filterWeight;
 	}
 };
 
@@ -74,8 +83,7 @@ public:
 		const Spectrum& radiance, float rayWeight) {
 		unsigned int indx = index(pixelX - sampleBounds.start.first, pixelY - sampleBounds.start.second);
 		float filterValue = m_filterTable[filterIndex(pixelX, pixelY, rasterLocation)];
-		samples[indx].unnormalizedFilteredRadiance += radiance * (rayWeight * filterValue);
-		samples[indx].filterWeightSum += filterValue;
+		samples[indx].addSample(radiance * (rayWeight * filterValue), filterValue);
 	}
 
 	inline const FilteredSample& getPixel(unsigned int x, unsigned int y) const {
@@ -116,7 +124,6 @@ public:
 		const Spectrum& radiance, float rayWeight) {
 		unsigned int indx = index(pixelX, pixelY);
 		float filterValue = m_filterTable[filterIndex(pixelX, pixelY, rasterLocation)];
-		m_filmPixels[indx].unnormalizedFilteredRadiance += radiance * (rayWeight * filterValue);
-		m_filmPixels[indx].filterWeightSum += filterValue;
+		m_filmPixels[indx].addSample(radiance * (rayWeight * filterValue), filterValue);
 	}
 };
