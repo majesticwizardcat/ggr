@@ -145,7 +145,7 @@ Spectrum MipMap::ewa(int level, const Point2& uv, const Vector2& minorAxis,
 	float majy = majorAxis.y * m_mipmaps[level].getHeight();
 
 	float det = majx * miny - majy * minx;
-	if (det == 0.0f) {
+	if (util::equals(det, 0.0f)) {
 		return bilinear(level, uv);
 	}
 
@@ -172,14 +172,13 @@ Spectrum MipMap::ewa(int level, const Point2& uv, const Vector2& minorAxis,
 			esY *= esY;
 
 			if (std::sqrt(esX + esY) <= 1.0f) {
-				float filter = std::exp(-2.0f * sx * sx) * std::exp(-2.0f * ty * ty);
-				sum = sum + get(level, x, y) * filter;
+				float filter = std::exp(-sx * sx) * std::exp(-ty * ty);
+				sum += get(level, x, y) * filter;
 				filterSum += filter;
 			}
 		}
 	}
-
-	if (filterSum == 0.0f) {
+	if (util::less(filterSum, 0.0f)) {
 		return bilinear(level, uv);
 	}
 	return sum / filterSum;
@@ -190,28 +189,22 @@ Spectrum MipMap::sample(const Point2& uv, const Vector2& dUVdx, const Vector2& d
 		return trilinear(uv, dUVdx, dUVdy);
 	}
 
-	Vector2 minorAxis;
-	Vector2 majorAxis;
+	Vector2 minorAxis = dUVdx;
+	Vector2 majorAxis = dUVdy;
 
-	if (glm::length2(dUVdx) < glm::length2(dUVdy)) {
-		minorAxis = dUVdx;
-		majorAxis = dUVdy;
-	}
-
-	else {
-		minorAxis = dUVdy;
-		majorAxis = dUVdx;
+	if (glm::length2(majorAxis) < glm::length2(minorAxis)) {
+		std::swap(minorAxis, majorAxis);
 	}
 
 	float minorAxisL = glm::length(minorAxis);
 	float majorAxisL = glm::length(majorAxis);
 
-	if (minorAxisL == 0.0f || majorAxisL == 0.0f) {
+	if (util::equals(minorAxisL, 0.0f) || util::equals(majorAxisL, 0.0f)) {
 		return bilinear(0, uv);
 	}
 
 	if (minorAxisL * m_anisotropicLevel < majorAxisL) {
-		majorAxis = (majorAxis / majorAxisL) * (minorAxisL * m_anisotropicLevel);
+		majorAxis *= (minorAxisL * m_anisotropicLevel) / majorAxisL;
 	}
 
 	float level = m_mipmaps.size() - 1 + std::log2(minorAxisL);
@@ -225,7 +218,7 @@ Spectrum MipMap::sample(const Point2& uv, const Vector2& dUVdx, const Vector2& d
 	}
 
 	int lod = (int) std::floor(level);
-	float t = level - lod;
+	float t = level - (float) lod;
 	return ewa(lod, uv, minorAxis, majorAxis) * (1.0f - t)
 		+ ewa(lod + 1, uv, minorAxis, majorAxis) * t;
 }

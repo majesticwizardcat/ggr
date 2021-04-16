@@ -16,14 +16,14 @@ inline float clamp(float v, float min, float max) {
 }
 
 inline bool equals(float f0, float f1) {
-	return f0 > f1 - ERROR && f0 < f1 + ERROR;
+	return std::abs(f0 - f1) - ERROR < 0.0f;
 }
 
 inline bool less(float f0, float f1) {
-	return f0 < f1 + ERROR;
+	return f0 - f1 - ERROR < 0.0f;
 }
 
 inline bool greater(float f0, float f1) {
-	return f0 > f1 - ERROR;
+	return less(f1, f0);
 }
 }
