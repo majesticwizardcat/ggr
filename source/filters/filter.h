@@ -8,6 +8,7 @@ const float MAX_FILTER_RADIUS = 5.0f;
 #include "primitives/point.h"
 #include "samplers/sample-2d.h"
 
+#include <algorithm>
 #include <memory>
 
 class Filter {

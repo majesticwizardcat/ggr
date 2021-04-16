@@ -49,22 +49,23 @@ MipMap::MipMap(const Image& image, int anisotropicLevel) : m_anisotropicLevel(an
 			int ex = (int) std::min((float) image.getWidth(), std::ceil(u * image.getWidth() + fw));
 			int ey = (int) std::min((float) image.getHeight(), std::ceil(v * image.getHeight() + fh));
 
-			Spectrum value;
+			Spectrum value(0.0f);
 			int sampled = 0;
 			for (int ix = sx; ix < ex; ++ix) {
 				for (int iy = sy; iy < ey; ++iy) {
-					value = value + Spectrum(image.getPixel(ix, iy));
+					value += Spectrum(image.getPixel(ix, iy));
 					sampled++;
 				}
 			}
 
-			value /= sampled;
+			if (sampled > 0) {
+				value /= (float) sampled;
+			}
 			layer.set(x, y, value);
 		}
 	}
 
 	m_mipmaps.push_back(std::move(layer));
-
 	while(width != 1 && height != 1) {
 		width = std::max(1, width / 2);
 		height = std::max(1, height / 2);

@@ -12,7 +12,7 @@ Image loadPPM(const char* location) {
 
 	if (!imageFile.is_open()) {
 		std::cout << "Could not open PPM file for loading: " << location << std::endl;
-		return Image(1, 1);
+		return std::move(Image(1, 1));
 	}
 
 	char header[2];
@@ -21,7 +21,7 @@ Image loadPPM(const char* location) {
 	if (strcmp(header, "P3") != 0) {
 		std::cout << location << " is not a P3 PPM file" << std::endl;
 		imageFile.close();
-		return Image(1, 1);
+		return std::move(Image(1, 1));
 	}
 
 	int width;
@@ -36,14 +36,16 @@ Image loadPPM(const char* location) {
 
 	for (int y = 0; y < height; ++y) {
 		for (int x = 0; x < width; ++x) {
-			float r;
-			float g;
-			float b;
-			imageFile >> r;
-			imageFile >> g;
-			imageFile >> b;
-
-			RGBColor color = RGBColor(r / maxVal, g / maxVal, b / maxVal);
+			float clr[3];
+			for (int i = 0; i < 3; ++i) {
+				if (!imageFile) {
+					std::cout << "End of image file before finishing image" << '\n';
+					imageFile.close();
+					return std::move(image);
+				}
+				imageFile >> clr[i];
+			}
+			RGBColor color = RGBColor(clr[0] / maxVal, clr[1] / maxVal, clr[2] / maxVal);
 			color = clr::toLinear(color);
 			image.setPixel(x, y, color);
 		}
@@ -51,7 +53,7 @@ Image loadPPM(const char* location) {
 
 	imageFile.close();
 	std::cout << "Loaded PPM: " << location << std::endl;
-	return image;
+	return std::move(image);
 }
 
 void savePPM(const char* location, const Image& image) {

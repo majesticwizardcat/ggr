@@ -10,7 +10,7 @@ const int PIXELS_PER_TILE = 32;
 class CheckerboardImage : public Image {
 public:
 	CheckerboardImage();
-	CheckerboardImage(const CheckerboardImage& other);
+	CheckerboardImage(const CheckerboardImage& other) = delete;
 	CheckerboardImage(int tiles);
 
 	Image generateHeightMap() const;

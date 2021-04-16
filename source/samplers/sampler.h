@@ -18,6 +18,7 @@ public:
 	Sampler() = delete;
 	Sampler(const Sampler& other) = delete;
 	Sampler(const Filter* filmFilter) : m_filmFilter(filmFilter) { }
+	virtual ~Sampler() { }
 
 	CameraSample getCameraSample(const Point2& rasterPosition);
 	virtual void createCameraSamples(const Point2& rasterPosition, int samples);

@@ -22,3 +22,9 @@ clean-moon:
 
 moon-example: clean-moon
 	g++ ${INCLUDES} ${OPTIONS} ${SOURCE} examples/moon-example.cpp -o moon-example
+
+clean-living-room:
+	rm -f living-room
+
+living-room-example: clean-living-room
+	g++ ${INCLUDES} ${OPTIONS} ${SOURCE} examples/living-room.cpp -o living-room

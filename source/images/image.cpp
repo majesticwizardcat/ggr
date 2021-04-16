@@ -1,11 +1,7 @@
 #include "images/image.h"
 #include "tools/util.h"
 
-Image::Image(const Image& other) : Image(other.m_resolutionWidth, other.m_resolutionHeight) {
-	for (int i = 0; i < m_resolutionWidth * m_resolutionHeight; ++i) {
-		m_pixels[i] = RGBColor(other.m_pixels[i]);
-	}
-}
+#include <iostream>
 
 Image::Image(int resolutionWidth, int resolutionHeight) : m_resolutionWidth(resolutionWidth),
 	m_resolutionHeight(resolutionHeight) {

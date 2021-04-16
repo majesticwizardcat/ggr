@@ -1,7 +1,6 @@
 #include "images/checkerboard-image.h"
 
 CheckerboardImage::CheckerboardImage() : CheckerboardImage(DEFAULT_TILES) { }
-CheckerboardImage::CheckerboardImage(const CheckerboardImage& other) : Image(other) { }
 CheckerboardImage::CheckerboardImage(int tiles) : Image(tiles * PIXELS_PER_TILE, tiles * PIXELS_PER_TILE) {
 	bool black = true;
 	int x = 0;
