@@ -13,8 +13,9 @@ void FilmSamplingIntegrator::render(const Scene* scene, const Camera* camera, Fi
 		Sampler* sampler, const RenderSettings& settings) {
 	std::unique_ptr<Sampler> samplerClone = sampler->clone();
 	while (true) {
-		m_stackLock.lock();
 		std::cout << "\rCompeleted: " << getCompletion() << " %                   ";
+		std::cout.flush();
+		m_stackLock.lock();
 		if (m_tiles.empty()) {
 			m_stackLock.unlock();
 			break;
