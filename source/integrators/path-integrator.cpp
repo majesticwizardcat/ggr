@@ -8,7 +8,10 @@ void PathIntegrator::renderPixel(const Scene* scene, const Camera* camera, Film*
 	Sampler* sampler, const Point2& pixel, unsigned int samples) const {
 	Ray ray;
 	Intersection intersection;
-	int depth;
+	float lumAccumulation;
+	float lastLumL;
+	float newAccum;
+	float newLumL;
 	bool lastDistDelta;
 	CameraSample cameraSample;
 	std::unique_ptr<Shader> surfaceShader;
@@ -22,7 +25,9 @@ void PathIntegrator::renderPixel(const Scene* scene, const Camera* camera, Film*
 		camera->generateRay(&ray, cameraSample);
 		L = Spectrum(0.0f);
 		throughput = Spectrum(1.0f);
-		depth = 0;
+		lumAccumulation = 0.0f;
+		lastLumL = 0.0f;
+		newLumL = 0.0f;
 		lastDistDelta = false;
 		scene->intersects(&ray, &intersection);
 		while (true) {
@@ -31,7 +36,7 @@ void PathIntegrator::renderPixel(const Scene* scene, const Camera* camera, Film*
 				break;
 			}
 			if (intersection.light) {
-				if (depth == 0 || lastDistDelta) {
+				if (lumAccumulation == 0.0f || lastDistDelta) {
 					surfaceShader = intersection.material->createShader(intersection.intersectionPoint,
 						intersection.wo);
 					L += throughput * surfaceShader->evaluate(intersection.wo, intersection.wo);
@@ -50,13 +55,16 @@ void PathIntegrator::renderPixel(const Scene* scene, const Camera* camera, Film*
 				break;
 			}
 			throughput *= nextThroughput;
-			if (depth > 4) {
+			if (lumAccumulation > 4.0f) {
 				if (!intersection.hit) {
 					L += throughput * scene->getSkybox()->emission(-intersection.wo);
 				}
 				break;
 			}
-			depth++;
+			newLumL = util::clamp(L.luminosity(), 0.0f, 1.0f);
+			lastLumL = newLumL;
+			newAccum = (util::clamp(nextThroughput.luminosity(), 0.0f, 1.0f) + newLumL - lastLumL) * 0.5f;;
+			lumAccumulation += 1.1f - newAccum;
 		}
 		film->addSample(pixel.x, pixel.y,
 			cameraSample.filmPosition, L, ray.weight);
