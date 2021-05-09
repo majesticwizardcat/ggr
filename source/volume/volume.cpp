@@ -2,6 +2,8 @@
 #include "tools/constants.h"
 #include "tools/util.h"
 
+#include <algorithm>
+
 float Volume::phase(float aniso, float cosTheta) const {
 	float denom = 1.0f + aniso * aniso + 2.0f * aniso * cosTheta;
 	return (INV_FOUR_PI * (1.0f - aniso * aniso) / (denom * std::sqrt(denom)));
@@ -47,14 +49,19 @@ float Volume::tr(const Point3& from, const Vector3& direction, float distance, S
 		return 1.0f;
 	}
 	SurfacePoint sp;
-	sp.point = from;
 	float tr = 0.0f;
 	int samples = (int) std::ceil(distance * 0.1f);
-	for (int i = 0; i < samples || distance < 0.1f; ++i ) {
-		float sampleDist = distance * sampler->getSample();
-		sp.point = sp.point + direction * sampleDist;
-		tr -= sampleDist * m_density->sample(sp).value();
-		distance -= sampleDist;
+	SamplerGen sg(sampler);
+	std::vector<float> sampleValues;
+	std::generate_n(sampleValues.begin(), samples, sg);
+	std::sort(sampleValues.begin(), sampleValues.end());
+	float lastDist = 0.0f;
+	float curDist;
+	for (auto s : sampleValues) {
+		float curDist = distance * s;
+		sp.point = from + direction * curDist;
+		tr -= (curDist - lastDist) * m_density->sample(sp).value();
+		lastDist = curDist;
 	}
 	return std::exp(tr);
 }

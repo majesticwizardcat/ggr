@@ -1,6 +1,7 @@
 #pragma once
 
 class Sampler;
+class SamplerGen;
 
 #include "cameras/camera-sample.h"
 #include "samplers/sample-2d.h"
@@ -26,3 +27,15 @@ public:
 	virtual Sample2D getSample2D() = 0;
 	virtual std::unique_ptr<Sampler> clone() const = 0;
 };
+
+class SamplerGen {
+private:
+	Sampler* m_sampler;
+
+public:
+	SamplerGen() = delete;
+	SamplerGen(Sampler* sampler) : m_sampler(sampler) { }
+
+	float operator()() { return m_sampler->getSample(); }
+};
+
