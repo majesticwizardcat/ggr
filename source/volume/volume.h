@@ -25,7 +25,7 @@ private:
 	const Texture* m_aniso;
 
 	float phase(float aniso, float cosTheta) const;
-	float tr(const Point3& from, const Vector3& direction, float distance, Sampler* sampler) const;
+	Spectrum tr(const Point3& from, const Vector3& direction, float distance, Sampler* sampler) const;
 
 public:
 	Volume() = delete;
@@ -34,8 +34,8 @@ public:
 
 	Spectrum phase(const Point3& p, float cosTheta) const;
 	Spectrum samplePhase(const Point3& p, const Vector3& wo, Vector3* wi, Sampler* sampler) const;
-	float transmittance(const Point3& from, const Point3& to, Sampler* sampler) const;
-	float sampleVolume(const Point3& p, const Vector3& direction, bool* sampledVolume, Point3* sampledPoint,
+	Spectrum transmittance(const Point3& from, const Point3& to, Sampler* sampler) const;
+	Spectrum sampleVolume(const Point3& p, const Vector3& direction, bool* sampledVolume, Point3* sampledPoint,
 		Sampler* sampler) const;
 };
 

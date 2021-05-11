@@ -44,35 +44,40 @@ Spectrum Volume::samplePhase(const Point3& p, const Vector3& wo, Vector3* wi, Sa
 	return color * phase(aniso, cosTheta);
 }
 
-float Volume::tr(const Point3& from, const Vector3& direction, float distance, Sampler* sampler) const {
+Spectrum Volume::tr(const Point3& from, const Vector3& direction, float distance, Sampler* sampler) const {
 	if (util::equals(distance, 0.0f)) {
 		return 1.0f;
 	}
 	SurfacePoint sp;
-	float tr = 0.0f;
 	int samples = (int) std::ceil(distance * 0.1f);
 	SamplerGen sg(sampler);
 	std::vector<float> sampleValues;
 	std::generate_n(sampleValues.begin(), samples, sg);
 	std::sort(sampleValues.begin(), sampleValues.end());
+	sampleValues.push_back(1.0f);
+	float tr = 0.0f;
+	Spectrum color(0.0f);
+	float lastS = 0.0f;
 	float lastDist = 0.0f;
 	float curDist;
 	for (auto s : sampleValues) {
 		float curDist = distance * s;
 		sp.point = from + direction * curDist;
+		color += m_color->sample(sp) * (s - lastS);
 		tr -= (curDist - lastDist) * m_density->sample(sp).value();
 		lastDist = curDist;
+		lastS = s;
 	}
-	return std::exp(tr);
+	return color * std::exp(tr);
 }
 
-float Volume::transmittance(const Point3& from, const Point3& to, Sampler* sampler) const {
+Spectrum Volume::transmittance(const Point3& from, const Point3& to, Sampler* sampler) const {
 	float distance = glm::distance(from, to);
 	Vector3 direction = (to - from) / distance;
 	return tr(from, direction, distance, sampler);
 }
 
-float Volume::sampleVolume(const Point3& p, const Vector3& direction, bool* sampledVolume, Point3* sampledPoint,
+Spectrum Volume::sampleVolume(const Point3& p, const Vector3& direction, bool* sampledVolume, Point3* sampledPoint,
 	Sampler* sampler) const {
 	float u0 = sampler->getSample();
 	if (util::equals(u0, 0.0f)) {
