@@ -5,19 +5,19 @@
 #include <algorithm>
 
 float Volume::phase(float aniso, float cosTheta) const {
+	cosTheta = std::abs(cosTheta);
 	float denom = 1.0f + aniso * aniso + 2.0f * aniso * cosTheta;
 	return (INV_FOUR_PI * (1.0f - aniso * aniso) / (denom * std::sqrt(denom)));
 }
 
-Spectrum Volume::phase(const Point3& p, float cosTheta) const {
+float Volume::phase(const Point3& p, const Vector3& wo, const Vector3& wi) const {
 	SurfacePoint sp;
 	sp.point = p;
-	Spectrum color = m_color->sample(sp);
 	float aniso = m_aniso->sample(sp).value();
-	return color * phase(aniso, cosTheta);
+	return phase(aniso, glm::dot(wo, wi));
 }
 
-Spectrum Volume::samplePhase(const Point3& p, const Vector3& wo, Vector3* wi, Sampler* sampler) const {
+float Volume::samplePhase(const Point3& p, const Vector3& wo, Vector3* wi, Sampler* sampler) const {
 	Sample2D sample = sampler->getSample2D();
 	SurfacePoint sp;
 	sp.point = p;
@@ -41,7 +41,7 @@ Spectrum Volume::samplePhase(const Point3& p, const Vector3& wo, Vector3* wi, Sa
 	*wi = sinTheta * std::cos(phi) * t
 		+ sinTheta * std::sin(phi) * bt
 		+ cosTheta * wo;
-	return color * phase(aniso, cosTheta);
+	return phase(aniso, cosTheta);
 }
 
 Spectrum Volume::tr(const Point3& from, const Vector3& direction, float distance, Sampler* sampler) const {
@@ -87,6 +87,6 @@ Spectrum Volume::sampleVolume(const Point3& p, const Vector3& direction, bool* s
 	float t = -std::log(u0);
 	*sampledPoint  = p + direction * t;
 	*sampledVolume = true;
-	return tr(p, direction, t, sampler) / std::exp(-t);
+	return tr(p, direction, t, sampler) / u0; // pdf = exp(-t) = exp(ln(u0)) = u0
 }
 
