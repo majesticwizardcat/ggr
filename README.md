@@ -6,7 +6,6 @@
 
 You can find more renders [HERE](https://github.com/loukoum/ggr/tree/master/renders) like a [High Res version](https://raw.githubusercontent.com/loukoum/ggr/master/renders/moon-render.png) of the first render.
 
-
 ggr is a physically based offline renderer written in C++. The purpose of the project is to create a renderer
 that can create realistic pictures, indistinguishable from ones taken from a real camera and to
 create practice grounds to write and test more complicated methods for computer graphics. Although ggr
@@ -97,6 +96,9 @@ a pull request and I will look into it as well. I will write a more detailed doc
 programming rules to follow when contributing in the future.
 
 ## Credits
+- Linear Algebra Library: [GLM](https://github.com/g-truc/glm)
+- Random number generator: [PCG](https://www.pcg-random.org/index.html)
 - Rendering resources: [Benedikt Bitterli](https://benedikt-bitterli.me/resources/)
 - Textures/Models/Skyboxes: [Poly Haven](https://www.patreon.com/hdrihaven/overview)
 - The CG Bible: [PBRT](https://www.pbrt.org/)
+
