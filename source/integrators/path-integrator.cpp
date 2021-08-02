@@ -1,11 +1,14 @@
 #include "integrators/path-integrator.h"
 #include "tools/util.h"
 #include "shaders/shader.h"
+#include "tools/stack-allocator.h"
 
 #include <algorithm>
 
 void PathIntegrator::renderPixel(const Scene* scene, const Camera* camera, Film* film,
 	Sampler* sampler, const Point2& pixel, unsigned int samples) const {
+	byte buffer[1024];
+	StackAllocator alloc(buffer, sizeof(buffer));
 	Ray ray;
 	Intersection intersection;
 	float lumAccumulation;
@@ -14,7 +17,7 @@ void PathIntegrator::renderPixel(const Scene* scene, const Camera* camera, Film*
 	float newLumL;
 	bool lastDistDelta;
 	CameraSample cameraSample;
-	std::unique_ptr<Shader> surfaceShader;
+	Shader* surfaceShader;
 	Spectrum L;
 	Spectrum throughput;
 	Spectrum nextThroughput;
@@ -31,6 +34,7 @@ void PathIntegrator::renderPixel(const Scene* scene, const Camera* camera, Film*
 		lastDistDelta = false;
 		scene->intersects(&ray, &intersection);
 		while (true) {
+			alloc.clearMemory();
 			if (!intersection.hit) {
 				L += throughput * scene->getSkybox()->emission(-intersection.wo);
 				break;
@@ -38,19 +42,19 @@ void PathIntegrator::renderPixel(const Scene* scene, const Camera* camera, Film*
 			if (intersection.light) {
 				if (lumAccumulation == 0.0f || lastDistDelta) {
 					surfaceShader = intersection.material->createShader(intersection.intersectionPoint,
-						intersection.wo);
+						intersection.wo, alloc);
 					L += throughput * surfaceShader->evaluate(intersection.wo, intersection.wo);
 				}
 				break;
 			}
 
 			intersection.material->bump(&intersection.intersectionPoint);
-			surfaceShader = intersection.material->createShader(intersection.intersectionPoint, intersection.wo);
+			surfaceShader = intersection.material->createShader(intersection.intersectionPoint, intersection.wo, alloc);
 			prevIntersectionP = intersection.intersectionPoint;
 			prevWo = intersection.wo;
 
 			L += throughput * sampleDirectLighting(prevIntersectionP, prevWo,
-				surfaceShader.get(), scene, sampler, &intersection, &nextThroughput, &lastDistDelta);
+				surfaceShader, scene, sampler, &intersection, &nextThroughput, &lastDistDelta, alloc);
 			if (nextThroughput.isZero()) {
 				break;
 			}

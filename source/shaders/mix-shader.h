@@ -6,8 +6,8 @@ class MixShader;
 
 class MixShader : public Shader {
 private:
-	std::unique_ptr<Shader> m_shader0;
-	std::unique_ptr<Shader> m_shader1;
+	const Shader* m_shader0;
+	const Shader* m_shader1;
 	float m_blend;
 	float m_oneMinusBlend;
 
@@ -26,11 +26,16 @@ private:
 public:
 	MixShader() = delete;
 	MixShader(const MixShader& other) = delete;
-	MixShader(std::unique_ptr<Shader>& shader0,
-		std::unique_ptr<Shader>& shader1, float blend)
+	MixShader(const Shader* shader0, const Shader* shader1, float blend)
 		: Shader(Vector3(0.0f), Vector3(0.0f), Vector3(0.0f)),
-		m_shader0(std::move(shader0)), m_shader1(std::move(shader1)), m_blend(1.0f - blend),
+		m_shader0(shader0), m_shader1(shader1), m_blend(1.0f - blend),
 		m_oneMinusBlend(blend) { }
+	MixShader(MixShader&& other) :
+		Shader(std::move(other)),
+		m_shader0(std::move(other.m_shader0)),
+		m_shader1(std::move(other.m_shader1)),
+		m_blend(std::move(other.m_blend)),
+		m_oneMinusBlend(std::move(other.m_oneMinusBlend)) { }
 
 	Spectrum evaluate(const Vector3& wo, const Vector3& wi) const {
 		return m_shader0->evaluate(wo, wi) * m_blend + m_shader1->evaluate(wo, wi) * m_oneMinusBlend;
@@ -44,10 +49,10 @@ public:
 		bool* isDelta, Sampler* sampler) const {
 		float choice = sampler->getSample();
 		if (choice < m_blend) {
-			return sampleMix(m_shader0.get(), m_shader1.get(),
+			return sampleMix(m_shader0, m_shader1,
 				m_blend, m_oneMinusBlend, wo, wi, pdf, isDelta, sampler);
 		}
-		return sampleMix(m_shader1.get(), m_shader0.get(),
+		return sampleMix(m_shader1, m_shader0,
 			m_oneMinusBlend, m_blend, wo, wi, pdf, isDelta, sampler);
 	}
 

@@ -2,9 +2,10 @@
 
 #include <glm/gtx/norm.hpp>
 
-Spectrum LightEntity::emission(const Point3& surfacePoint, const SurfacePoint& lightPoint) const {
+Spectrum LightEntity::emission(const Point3& surfacePoint, const SurfacePoint& lightPoint,
+	StackAllocator& alloc) const {
 	Vector3 direction = surfacePoint - lightPoint.point;
-	return m_material->createShader(lightPoint, direction)->evaluate(direction, direction);
+	return m_material->createShader(lightPoint, direction, alloc)->evaluate(direction, direction);
 }
 
 float LightEntity::pdf(const Point3& surfacePoint, const SurfacePoint& lightPoint) const {
@@ -23,7 +24,7 @@ float LightEntity::pdf(const Point3& surfacePoint, const SurfacePoint& lightPoin
 }
 
 Spectrum LightEntity::sample(Sampler* sampler, const Point3& surfacePoint, SurfacePoint* sampledPoint,
-	Vector3* direction, float* pdf, float* lightDist) const {
+	Vector3* direction, float* pdf, float* lightDist, StackAllocator& alloc) const {
 	m_mesh->samplePoint(sampler, sampledPoint);
 	sampledPoint->meshID = m_id;
 	*pdf = 0.0f;
@@ -40,5 +41,5 @@ Spectrum LightEntity::sample(Sampler* sampler, const Point3& surfacePoint, Surfa
 		return Spectrum(0.0f);
 	}
 	*pdf = p * dist2 / denom;
-	return emission(surfacePoint, *sampledPoint);
+	return emission(surfacePoint, *sampledPoint, alloc);
 }

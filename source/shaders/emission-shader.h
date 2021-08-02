@@ -14,6 +14,9 @@ public:
 	EmissionShader(const Vector3& normal, const Vector3& tangent,
 		const Vector3& bitangent, const Spectrum& emission)
 		: Shader(normal, tangent, bitangent), m_emission(emission) { }
+	EmissionShader(EmissionShader&& other) :
+		Shader(std::move(other)),
+		m_emission(std::move(other.m_emission)) { }
 
 	Spectrum evaluate(const Vector3& wo, const Vector3& wi) const {
 		return m_emission;

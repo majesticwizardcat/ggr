@@ -22,6 +22,10 @@ public:
 	Shader(const Vector3& normal, const Vector3& tangent,
 		const Vector3& bitangent) : m_normal(normal), m_tangent(tangent),
 		m_bitangent(bitangent) { }
+	Shader(Shader&& other) :
+		m_normal(other.m_normal),
+		m_tangent(other.m_tangent),
+		m_bitangent(other.m_bitangent) { }
 	virtual ~Shader() { }
 
 	virtual Spectrum evaluate(const Vector3& wo, const Vector3& wi) const = 0;

@@ -20,7 +20,7 @@ public:
 
 	Spectrum sampleDirectLighting(const SurfacePoint& point, const Vector3& wo, const Shader* surfaceShader,
 		const Scene* scene, Sampler* sampler, Intersection* sampleIntersection,
-		Spectrum* sampleThroughput, bool* nextDistDelta) const;
+		Spectrum* sampleThroughput, bool* nextDistDelta, StackAllocator& alloc) const;
 
 	virtual void setup(const Scene* scene, const Camera* camera, Film* film,
 		Sampler* sampler, const RenderSettings& settings) = 0;

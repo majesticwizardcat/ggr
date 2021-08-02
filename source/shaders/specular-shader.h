@@ -17,6 +17,9 @@ public:
 	SpecularShader(const Vector3& normal, const Vector3& tangent,
 		const Vector3& bitangent, const Spectrum& color)
 		: Shader(normal, tangent, bitangent), m_color(color) { }
+	SpecularShader(SpecularShader&& other) :
+		Shader(std::move(other)),
+		m_color(std::move(other.m_color)) { }
 
 	Spectrum evaluate(const Vector3& wo, const Vector3& wi) const {
 		return Spectrum(0.0f);

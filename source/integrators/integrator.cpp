@@ -5,7 +5,7 @@
 
 Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, const Vector3& wo,
 	const Shader* surfaceShader, const Scene* scene, Sampler* sampler, Intersection* sampleIntersection,
-	Spectrum* nextThroughput, bool* nextDistDelta) const {
+	Spectrum* nextThroughput, bool* nextDistDelta, StackAllocator& alloc) const {
 	Spectrum L(0.0f);
 	float bsdfSamplePDF;
 	Vector3 sampledDirection;
@@ -32,7 +32,7 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 	float lightPdf;
 	float lightDist;
 	Spectrum emission = light->sample(sampler, surfacePoint.point, &sampledPoint,
-		&lightDir, &lightPdf, &lightDist);
+		&lightDir, &lightPdf, &lightDist, alloc);
 	lightDir *= -1.0f;
 	// Division with pdf is omitted since the balance heuristic weight
 	// has the pdf on the numerator (both on light and bsdf MIS sampling)
@@ -50,7 +50,7 @@ Spectrum Integrator::sampleDirectLighting(const SurfacePoint& surfacePoint, cons
 	}
 	if (sampleIntersection->light && sampleIntersection->hit) {
 		L += (*nextThroughput
-			* sampleIntersection->light->emission(surfacePoint.point, sampleIntersection->intersectionPoint))
+			* sampleIntersection->light->emission(surfacePoint.point, sampleIntersection->intersectionPoint, alloc))
 			/ (bsdfSamplePDF + sampleIntersection->light->pdf(surfacePoint.point, sampleIntersection->intersectionPoint));
 	}
 	*nextThroughput /= bsdfSamplePDF;

@@ -15,6 +15,10 @@ public:
 	MFReflectionShader(const Vector3& normal, const Vector3& tangent,
 		const Vector3& bitangent, const Spectrum& color, float alpha)
 		: Shader(normal, tangent, bitangent), m_color(color), m_alpha(alpha) { }
+	MFReflectionShader(MFReflectionShader&& other) :
+		Shader(std::move(other)),
+		m_color(std::move(other.m_color)),
+		m_alpha(std::move(other.m_alpha)) { }
 
 	Spectrum evaluate(const Vector3& wo, const Vector3& wi) const;
 	float pdf(const Vector3& wo, const Vector3& wi) const;

@@ -11,21 +11,20 @@ PlasticMaterial::PlasticMaterial(const Texture* color, const Texture* roughness,
 	: Material(), m_color(color), m_roughness(roughness), m_blend(blend) {
 }
 
-std::unique_ptr<Shader> PlasticMaterial::createShader(const SurfacePoint& point, const Vector3& wo) const {
+Shader* PlasticMaterial::createShader(const SurfacePoint& point, const Vector3& wo, StackAllocator& alloc) const {
 	Spectrum color = m_color->sample(point);
 	float roughness = util::clamp(m_roughness->sample(point).value(), 0.0f, 1.0f);
 	roughness *= roughness;
-	std::unique_ptr<Shader> diffuse =
-		std::make_unique<DiffuseShader>(point.shadingNormal, point.tangent,
-		point.bitangent, color);
-	std::unique_ptr<Shader> gloss;
+	Shader* diffuse = alloc.construct<DiffuseShader>(DiffuseShader(point.shadingNormal,
+		point.tangent, point.bitangent, color));
+	Shader* gloss;
 	if (util::equals(roughness, 0.0f)) {
-		gloss = std::make_unique<SpecularShader>(point.shadingNormal, point.tangent,
-			point.bitangent, color);
+		gloss = alloc.construct<SpecularShader>(SpecularShader(point.shadingNormal,
+			point.tangent, point.bitangent, color));
 	}
 	else {
-		gloss = std::make_unique<MFReflectionShader>(point.shadingNormal, point.tangent,
-			point.bitangent, color, roughness);
+		gloss = alloc.construct<MFReflectionShader>(MFReflectionShader(point.shadingNormal,
+			point.tangent, point.bitangent, color, roughness));
 	}
-	return std::make_unique<MixShader>(diffuse, gloss, m_blend);
+	return alloc.construct<MixShader>(MixShader(diffuse, gloss, m_blend));
 }

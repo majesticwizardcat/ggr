@@ -5,6 +5,7 @@ class Material;
 #include "shaders/shader.h"
 #include "intersection/surface-point.h"
 #include "textures/bump-map.h"
+#include "tools/stack-allocator.h"
 
 #include <memory>
 
@@ -27,6 +28,6 @@ public:
 	inline void setBumpMap(const BumpMap* bumpMap) {
 		m_bumpMap = bumpMap;
 	}
-	virtual std::unique_ptr<Shader>
-		createShader(const SurfacePoint& point, const Vector3& wo) const = 0;
+
+	virtual Shader* createShader(const SurfacePoint& point, const Vector3& wo, StackAllocator& alloc) const = 0;
 };

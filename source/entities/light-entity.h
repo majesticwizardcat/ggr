@@ -12,10 +12,11 @@ public:
 	LightEntity(const Triangle* mesh, const EmissionMaterial* material, int meshID)
 		: Entity(mesh, material, meshID) { }
 
-	Spectrum emission(const Point3& surfacePoint, const SurfacePoint& lightPoint) const;
+	Spectrum emission(const Point3& surfacePoint, const SurfacePoint& lightPoint,
+		StackAllocator& alloc) const;
 	float pdf(const Point3& surfacePoint, const SurfacePoint& lightPoint) const;
 	Spectrum sample(Sampler* sampler, const Point3& surfacePoint, SurfacePoint* sampledPoint,
-		Vector3* direction, float* pdf, float* lightDist) const;
+		Vector3* direction, float* pdf, float* lightDist, StackAllocator& alloc) const;
 
 	inline const LightEntity* getLight() const { return this; }
 };

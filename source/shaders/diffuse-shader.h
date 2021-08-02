@@ -16,6 +16,9 @@ public:
 	DiffuseShader(const Vector3& normal, const Vector3& tangent,
 		const Vector3& bitangent, const Spectrum& color)
 		: Shader(normal, tangent, bitangent), m_diffuseColor(color * INV_PI) { }
+	DiffuseShader(DiffuseShader&& other) :
+		Shader(std::move(other)),
+		m_diffuseColor(std::move(other.m_diffuseColor)) { }
 
 	Spectrum evaluate(const Vector3& wo, const Vector3& wi) const {
 		return m_diffuseColor;

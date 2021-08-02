@@ -22,5 +22,6 @@ public:
 	BlendMaterial(const Texture* diffuse, const Texture* glossy, const Texture* roughness, float blend) :
 		m_diffuse(diffuse), m_glossy(glossy), m_roughness(roughness), m_blend(blend) { }
 
-	std::unique_ptr<Shader> createShader(const SurfacePoint& point, const Vector3& wo) const;
+
+	Shader* createShader(const SurfacePoint& point, const Vector3& wo, StackAllocator& alloc) const;
 };

@@ -15,9 +15,9 @@ public:
 	MatteMaterial(const MatteMaterial& other) = delete;
 	MatteMaterial(const Texture* diffuseColor) : Material(), m_diffuseColor(diffuseColor) { }
 
-	std::unique_ptr<Shader> createShader(const SurfacePoint& point, const Vector3& wo) const {
-		return std::make_unique<DiffuseShader>(point.shadingNormal, point.tangent, point.bitangent,
-			m_diffuseColor->sample(point));
+	Shader* createShader(const SurfacePoint& point, const Vector3& wo, StackAllocator& alloc) const {
+		return alloc.construct<DiffuseShader>(DiffuseShader(point.shadingNormal, point.tangent, point.bitangent,
+			m_diffuseColor->sample(point)));
 	}
 };
 
