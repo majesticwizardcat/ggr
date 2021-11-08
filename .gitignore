@@ -17,3 +17,5 @@ vs-project/enc_temp_folder
 moon-example
 *.zip
 living-room
+.vscode
+
