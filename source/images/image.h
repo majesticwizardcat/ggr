@@ -16,7 +16,8 @@ private:
 public:
 	Image() = delete;
 	Image(const Image& other) = delete;
-	Image(Image&& other) : m_pixels(std::move(other.m_pixels)),
+	Image(Image&& other) : 
+		m_pixels(std::move(other.m_pixels)),
 		m_resolutionWidth(std::move(other.m_resolutionWidth)),
 		m_resolutionHeight(std::move(other.m_resolutionHeight)) { }
 

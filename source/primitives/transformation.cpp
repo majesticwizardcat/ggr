@@ -29,11 +29,11 @@ Vertex Transformation::applyInverseVertex(const Vertex& v) const {
 }
 
 Vertex Transformation::applyVertex(const Vertex& v) const {
-Vertex result;
-result.position = applyPoint(v.position);
-result.normal = applyNormal(v.normal);
-result.uv = v.uv;
-return result;
+	Vertex result;
+	result.position = applyPoint(v.position);
+	result.normal = applyNormal(v.normal);
+	result.uv = v.uv;
+	return result;
 }
 
 Transformation transform::translate(float x, float y, float z) {

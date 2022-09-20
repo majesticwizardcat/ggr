@@ -17,7 +17,8 @@ public:
 	MFRefractionShader(const MFRefractionShader& other) = delete;
 	MFRefractionShader(const Vector3& normal, const Vector3& tangent,
 		const Vector3& bitangent, const Spectrum& color, float alpha,
-		float IORin, float IORout) : Shader(normal, tangent, bitangent),
+		float IORin, float IORout) : 
+		Shader(normal, tangent, bitangent),
 		m_color(color), m_alpha(alpha), m_IORin(IORin), m_IORout(IORout),
 		m_eta(IORout / IORin) { }
 

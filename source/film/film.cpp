@@ -51,6 +51,7 @@ std::vector<FilmBounds> Film::splitToTiles(unsigned int tileSize) const {
 		}
 	}
 
+	// Remove boolean? 
 	bool shouldPad = false;
 
 	if (filmResW % tileWidth != 0) {

@@ -22,8 +22,11 @@ private:
 public:
 	Layer() = delete;
 	Layer(const Layer& other) = delete;
-	Layer(Layer&& other) noexcept : m_pixels(std::move(other.m_pixels)),
-		m_width(other.m_width), m_height(other.m_height) { }
+	Layer(Layer&& other) noexcept : 
+		m_pixels(std::move(other.m_pixels)),
+		m_width(other.m_width), 
+		m_height(other.m_height) { }
+
 	Layer(int width, int height);
 
 	Spectrum get(int x, int y) const;

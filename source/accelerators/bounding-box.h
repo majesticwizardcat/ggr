@@ -11,6 +11,7 @@ private:
 	float intersectSide(float p, float o, float d, float ox, float oy,
 		float dx, float dy, float sx, float sy, float ex, float ey,
 		float maxT) const;
+
 	void updateIfValid(float t, float* currentT, float* maxT) const;
 
 public:

@@ -11,7 +11,8 @@ Image loadPPM(const char* location) {
 	std::ifstream imageFile(location, std::ios::in);
 
 	if (!imageFile.is_open()) {
-		std::cout << "Could not open PPM file for loading: " << location << std::endl;
+		std::cout << "Could not open PPM file for loading: " 
+			<< location << std::endl;
 		return std::move(Image(1, 1));
 	}
 
@@ -36,6 +37,7 @@ Image loadPPM(const char* location) {
 
 	for (int y = 0; y < height; ++y) {
 		for (int x = 0; x < width; ++x) {
+			// extract this part
 			float clr[3];
 			for (int i = 0; i < 3; ++i) {
 				if (!imageFile) {
@@ -48,6 +50,7 @@ Image loadPPM(const char* location) {
 			RGBColor color = RGBColor(clr[0] / maxVal, clr[1] / maxVal, clr[2] / maxVal);
 			color = clr::toLinear(color);
 			image.setPixel(x, y, color);
+			// Up to here
 		}
 	}
 
@@ -60,7 +63,8 @@ void savePPM(const char* location, const Image& image) {
 	std::ofstream imageFile(location, std::ios::out);
 
 	if (!imageFile.is_open()) {
-		std::cout << "Could not open PPM file for saving: " << location << std::endl;
+		std::cout << "Could not open PPM file for saving: " 
+			<< location << std::endl;
 		return;
 	}
 
@@ -72,6 +76,7 @@ void savePPM(const char* location, const Image& image) {
 
 	for (int y = 0; y < image.getHeight(); ++y) {
 		for (int x = 0; x < image.getWidth(); ++x) {
+			// Extract in a new function
 			RGBColor color = image.getPixel(x, y);
 			color.clampValues();
 			color = clr::tosRGB(color);

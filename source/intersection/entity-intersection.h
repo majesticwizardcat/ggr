@@ -17,6 +17,7 @@ struct EntityIntersection {
 	} triangleWeights;
 	
 	EntityIntersection() : t(std::numeric_limits<float>::max()), entity(nullptr) { }
-	EntityIntersection(const EntityIntersection& other) : t(other.t),
-		entity(other.entity), triangleWeights(other.triangleWeights) { }
+
+	EntityIntersection(const EntityIntersection& other) : 
+		t(other.t), entity(other.entity), triangleWeights(other.triangleWeights) { }
 };

@@ -16,6 +16,7 @@ inline float fresnelCT(float eta, float cosTheta) {
 	if (gSqrd <= 0.0f) {
 		return 1.0f;
 	}
+
 	float g = std::sqrt(gSqrd);
 	float first = (g - cosTheta) / (g + cosTheta);
 	first *= 0.5f * first;
@@ -23,6 +24,7 @@ inline float fresnelCT(float eta, float cosTheta) {
 	if (denom == 0.0f) {
 		return 1.0f;
 	}
+
 	float sec = ((g + cosTheta) * cosTheta - 1.0f) / denom;
 	sec *= sec;
 	return first * (1.0f + sec);

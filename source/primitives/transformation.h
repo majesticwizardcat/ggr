@@ -18,7 +18,8 @@ public:
 	Transformation() : Transformation(Matrix4(1.0f), Matrix4(1.0f)) { } 
 	Transformation(const Transformation& other) : Transformation(other.m_transform, other.m_inverse) { }
 	Transformation(const Matrix4& transform) : Transformation(transform, glm::inverse(transform)) { }
-	Transformation(const Matrix4& transform, const Matrix4& inverse) : m_transform(transform), m_inverse(inverse) { }
+	Transformation(const Matrix4& transform, const Matrix4& inverse) : 
+		m_transform(transform), m_inverse(inverse) { }
 
 	Vertex applyVertex(const Vertex& v) const;
 	Vertex applyInverseVertex(const Vertex& v) const;
@@ -31,7 +32,9 @@ public:
 	}
 
 	inline Transformation transpose() const {
-		return Transformation(glm::transpose(m_transform), glm::transpose(m_inverse));
+		return Transformation(
+				glm::transpose(m_transform), 
+				glm::transpose(m_inverse));
 	}
 
 	inline Transformation inverse() const {
@@ -39,7 +42,9 @@ public:
 	}
 
 	inline Transformation combine(const Transformation& right) const {
-		return Transformation(m_transform * right.m_transform, right.m_inverse * m_inverse);
+		return Transformation(
+				m_transform * right.m_transform, 
+				right.m_inverse * m_inverse);
 	}
 
 	inline Transformation operator*(const Transformation& right) const {

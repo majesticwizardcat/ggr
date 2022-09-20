@@ -19,6 +19,7 @@ public:
 	PlasticMaterial(const Texture* color, const Texture* roughness);
 	PlasticMaterial(const Texture* color, const Texture* roughness, float blend);
 
-	std::unique_ptr<Shader> createShader(const SurfacePoint& point, const Vector3& wo) const;
+	std::unique_ptr<Shader> createShader(
+			const SurfacePoint& point, const Vector3& wo) const;
 };
 

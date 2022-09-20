@@ -18,9 +18,11 @@ protected:
 
 public:
 	Entity() = delete;
-	Entity(const Entity& other) : Entity(other.m_mesh, other.m_material, other.m_id) { }
-	Entity(const Triangle* mesh, const Material* material, int id) : m_mesh(mesh),
-		m_material(material), m_id(id) { }
+	Entity(const Entity& other) : 
+		Entity(other.m_mesh, other.m_material, other.m_id) { }
+
+	Entity(const Triangle* mesh, const Material* material, int id) : 
+		m_mesh(mesh), m_material(material), m_id(id) { }
 
 	void fillMeshIntersection(float w0, float w1, float w2, Intersection* result) const;
 	BoundingBox createBoundingBox() const;

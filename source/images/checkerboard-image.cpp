@@ -5,14 +5,17 @@ CheckerboardImage::CheckerboardImage(int tiles) : Image(tiles * PIXELS_PER_TILE,
 	bool black = true;
 	int x = 0;
 	int y = 0;
+	// Break this loop in two, avoid flag (But optimization issues I assume)
 	for (int i = 0; i < getHeight(); ++i) {
 		for (int j = 0; j < getWidth(); ++j) {
+			// Return color from a procedure?
 			if (black) {
 				setPixel(i, j, RGBColor(0.05f, 0.05f, 0.05f));
 			}
 			else {
 				setPixel(i, j, RGBColor(0.95f, 0.95f, 0.95f));
 			}
+
 			x++;
 			if (x == PIXELS_PER_TILE) {
 				black = !black;

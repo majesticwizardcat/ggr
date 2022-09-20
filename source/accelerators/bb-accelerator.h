@@ -35,13 +35,17 @@ private:
 	int findSplitIndex(size_t startIndex, size_t endIndex,
 		const std::vector<std::pair<BoundingBox, size_t>>& boxes, 
 		const Axis& axis) const;
+
 	std::unique_ptr<BBNode> split(size_t startIndex, size_t endIndex,
 		std::vector<std::pair<BoundingBox, size_t>>& boxes);
+
 	float pointAxisValue(const Point3& p, const Axis& axis) const;
 	bool pointCompAxis(const Point3& p0, const Point3& p1, const Axis& axis) const;
 	float calculateGapAverage(std::vector<Point3>& midPoints, const Axis& axis) const;
+
 	Axis findSortAxis(const std::vector<std::pair<BoundingBox, size_t>>& boxes,
 		size_t startIndex, size_t endIndex) const;
+
 	bool intersects(const Ray& ray, size_t ignoreID, EntityIntersection* result, bool findAny) const;
 	void mergeRoots();
 
