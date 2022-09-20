@@ -19,6 +19,7 @@ public:
 	Skybox() = delete;
 	Skybox(const Skybox& other) : m_skyboxTexture(other.m_skyboxTexture),
 		m_intensity(other.m_intensity), m_rotation(other.m_rotation) { }
+
 	Skybox(const Texture* skyboxTexture, float intensity, const Transformation& rotation)
 		: m_skyboxTexture(skyboxTexture), m_intensity(intensity), m_rotation(rotation) { }
 

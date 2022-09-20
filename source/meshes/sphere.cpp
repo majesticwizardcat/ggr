@@ -47,12 +47,16 @@ Sphere::Sphere(size_t circles) {
 		float phi = (TWO_PI / (float) circles) * i;
 		float phiN = (TWO_PI / (float) circles) * (i + 1);
 		float u = (phi / TWO_PI + phiN / TWO_PI) / 2.0f;
-		m_vertices.push_back(Vertex(Point3(0.0f, 0.0f, -1.0f),
-									Point2(u, 1.0f),
-									Vector3(0.0f, 0.0f, -1.0f)));
-		m_vertices.push_back(Vertex(Point3(0.0f, 0.0f, 1.0f),
-									Point2(u, 0.0f),
-									Vector3(0.0f, 0.0f, 1.0f)));
+		m_vertices.push_back(Vertex(
+					Point3(0.0f, 0.0f, -1.0f),
+					Point2(u, 1.0f), 
+					Vector3(0.0f, 0.0f, -1.0f))
+				);
+		m_vertices.push_back(Vertex(
+					Point3(0.0f, 0.0f, 1.0f),
+					Point2(u, 0.0f),
+					Vector3(0.0f, 0.0f, 1.0f))
+				);
 		m_triangles.push_back(std::make_unique<Triangle>(
 			&m_vertices[botIndex], &m_vertices[i + 1], &m_vertices[i]));
 		m_triangles.push_back(std::make_unique<Triangle>(

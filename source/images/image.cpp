@@ -3,8 +3,10 @@
 
 #include <iostream>
 
-Image::Image(int resolutionWidth, int resolutionHeight) : m_resolutionWidth(resolutionWidth),
+Image::Image(int resolutionWidth, int resolutionHeight) : 
+	m_resolutionWidth(resolutionWidth),
 	m_resolutionHeight(resolutionHeight) {
+
 	m_pixels = std::make_unique<RGBColor[]>(m_resolutionWidth * m_resolutionHeight);
 }
 

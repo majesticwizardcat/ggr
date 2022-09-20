@@ -69,7 +69,8 @@ void Intersection::calculateScreenDifferentials(const Ray& ray) {
 		dvx = intersectionPoint.dpdv.y;
 		dvy = intersectionPoint.dpdv.z;
 	}
-
+	// You are setting the same data according to which case you use,
+	// Instead move the following code in each case and extract procedure
 	float det = dux * dvy - duy * dvx;
 	if (det != 0.0f) {
 		float oneOverDet = 1.0f / det;
@@ -77,6 +78,7 @@ void Intersection::calculateScreenDifferentials(const Ray& ray) {
 		intersectionPoint.dUVdx.y = (yx * dux - xx * duy) * oneOverDet;
 		intersectionPoint.dUVdy.x = (xy * dvy - yy * dvx) * oneOverDet;
 		intersectionPoint.dUVdy.y = (yy * dux - xy * duy) * oneOverDet;
+		// return...
 	}
 	else {
 		intersectionPoint.dUVdx.x = 0.0f;

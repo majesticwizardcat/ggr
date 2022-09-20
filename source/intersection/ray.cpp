@@ -23,6 +23,7 @@ void Ray::createRaySpace() {
 			m_maxIndex = 1;
 		}
 	}
+	// absZ > absX
 	else {
 		if (absZ > absY) {
 			m_maxIndex = 2;
@@ -32,6 +33,10 @@ void Ray::createRaySpace() {
 		}
 	}
 
+	// Suggestion 1: return the m_maxIndex value from a procedure
+	// Suggestion 2: move each of the following code inside each
+	// case.
+	// Also note: m_raySpaceShear.z =  oneOverZ; is common in all cases
 	if (m_maxIndex == 2) {
 		float oneOverZ = 1.0f / direction.z;
 		m_raySpaceShear.x = -direction.x * oneOverZ;

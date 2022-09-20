@@ -11,8 +11,10 @@ struct Vertex {
 	Vector3 normal;
 
 	Vertex() { }
-	Vertex(const Vertex& other) : position(other.position), uv(other.uv), normal(other.normal) { }
-	Vertex(const Point3& position, const Point2& uv, const Vector3& normal) : position(position),
-		uv(uv), normal(normal) { }
+	Vertex(const Vertex& other) : 
+		position(other.position), uv(other.uv), normal(other.normal) { }
+
+	Vertex(const Point3& position, const Point2& uv, const Vector3& normal) : 
+		position(position), uv(uv), normal(normal) { }
 };
 

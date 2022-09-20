@@ -3,8 +3,9 @@
 #include "tools/util.h"
 #include "tools/shading-functions.h"
 
-Spectrum RefractionShader::sample(const Vector3& wo, Vector3* wi, float* pdf,
-	bool* isDelta, Sampler* sampler) const {
+Spectrum RefractionShader::sample(
+		const Vector3& wo, Vector3* wi, float* pdf, bool* isDelta, 
+		Sampler* sampler) const {
 	*isDelta = true;
 	float cosTheta = glm::dot(m_normal, wo);
 	Vector3 n = m_normal;

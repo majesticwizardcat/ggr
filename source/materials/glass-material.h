@@ -17,7 +17,9 @@ private:
 public:
 	GlassMaterial() = delete;
 	GlassMaterial(const GlassMaterial& other) = delete;
-	GlassMaterial(const Texture* color, const Texture* roughness, float materialIOR, float airIOR);
+	GlassMaterial(const Texture* color, const Texture* roughness, 
+			float materialIOR, float airIOR);
+
 	GlassMaterial(const Texture* color, const Texture* roughness, float materialIOR);
 
 	std::unique_ptr<Shader> createShader(const SurfacePoint& point, const Vector3& wo) const;

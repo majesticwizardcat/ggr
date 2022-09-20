@@ -14,8 +14,10 @@ public:
 
 	Spectrum emission(const Point3& surfacePoint, const SurfacePoint& lightPoint) const;
 	float pdf(const Point3& surfacePoint, const SurfacePoint& lightPoint) const;
-	Spectrum sample(Sampler* sampler, const Point3& surfacePoint, SurfacePoint* sampledPoint,
-		Vector3* direction, float* pdf, float* lightDist) const;
+
+	Spectrum sample(Sampler* sampler, const Point3& surfacePoint, 
+			SurfacePoint* sampledPoint, Vector3* direction, 
+			float* pdf, float* lightDist) const;
 
 	inline const LightEntity* getLight() const { return this; }
 };

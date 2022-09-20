@@ -19,9 +19,9 @@ protected:
 public:
 	Shader() = delete;
 	Shader(const Shader& other) = delete;
-	Shader(const Vector3& normal, const Vector3& tangent,
-		const Vector3& bitangent) : m_normal(normal), m_tangent(tangent),
-		m_bitangent(bitangent) { }
+	Shader(const Vector3& normal, const Vector3& tangent, const Vector3& bitangent) :
+		m_normal(normal), m_tangent(tangent), m_bitangent(bitangent) { }
+
 	virtual ~Shader() { }
 
 	virtual Spectrum evaluate(const Vector3& wo, const Vector3& wi) const = 0;
