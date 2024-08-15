@@ -1,6 +1,7 @@
 #include "meshes/cube.h"
 
 Cube::Cube() : TriangleMesh() {
+	// Extract
 	Point3 p1( 0.5f,  0.5f, -0.5f);
 	Point3 p2( 0.5f, -0.5f, -0.5f);
 	Point3 p3( 0.5f,  0.5f,  0.5f);
@@ -10,6 +11,7 @@ Cube::Cube() : TriangleMesh() {
 	Point3 p7(-0.5f,  0.5f,  0.5f);
 	Point3 p8(-0.5f, -0.5f,  0.5f);
 
+	// Extract
 	Point2 uv1( 0.50f, 0.0f);
 	Point2 uv2( 0.25f, 0.25f);
 	Point2 uv3( 0.25f, 0.0f);
@@ -31,6 +33,7 @@ Cube::Cube() : TriangleMesh() {
 	Point2 uv19(0.25f, 0.75f);
 	Point2 uv20(0.75f, 0.75f);
 
+	// Extract
 	Vector3 n1( 0.0f,  1.0f,  0.0f);
 	Vector3 n2( 0.0f,  0.0f,  1.0f);
 	Vector3 n3(-1.0f,  0.0f,  0.0f);
@@ -38,6 +41,8 @@ Cube::Cube() : TriangleMesh() {
 	Vector3 n5( 1.0f,  0.0f,  0.0f);
 	Vector3 n6( 0.0f,  0.0f, -1.0f);
 
+	// You get the point, if you group them 
+	// with vertical spaces, extract them
 	m_vertices.push_back(Vertex(p5, uv1, n1));
 	m_vertices.push_back(Vertex(p3, uv2, n1));
 	m_vertices.push_back(Vertex(p1, uv3, n1));

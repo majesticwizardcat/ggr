@@ -17,5 +17,6 @@ public:
 	MetalMaterial(const MetalMaterial& other) = delete;
 	MetalMaterial(const Texture* color, const Texture* roughness);
 
-	std::unique_ptr<Shader> createShader(const SurfacePoint& point, const Vector3& wo) const;
+	std::unique_ptr<Shader> createShader(
+			const SurfacePoint& point, const Vector3& wo) const;
 };

@@ -9,7 +9,8 @@ ProjectiveCamera::ProjectiveCamera(const Transformation* cameraToWorld,
 	int resolutionWidth, int resolutionHeight,
 	const Transformation& projection, float lensRadius, float focalDistance) :
 	Camera(cameraToWorld, resolutionWidth, resolutionHeight),
-	m_lensRadius(lensRadius), m_focalDistance(focalDistance) {
+	m_lensRadius(lensRadius), m_focalDistance(focalDistance) 
+{
 	m_unprojection = projection.inverse() * m_rasterToFilm;
 	Point3 worldDeltasX(1.0f, 0.0f, 0.0f);
 	Point3 worldDeltasY(0.0f, 1.0f, 0.0f);

@@ -27,6 +27,7 @@ public:
 	inline void setBumpMap(const BumpMap* bumpMap) {
 		m_bumpMap = bumpMap;
 	}
+
 	virtual std::unique_ptr<Shader>
 		createShader(const SurfacePoint& point, const Vector3& wo) const = 0;
 };

@@ -31,11 +31,14 @@ int Layer::getHeight() const {
 
 MipMap::MipMap(const Image& image) : MipMap(image, 0) { }
 
-MipMap::MipMap(const Image& image, int anisotropicLevel) : m_anisotropicLevel(anisotropicLevel) {
+MipMap::MipMap(const Image& image, int anisotropicLevel) : 
+	m_anisotropicLevel(anisotropicLevel) 
+{
 	int width = std::pow(2, (int) std::ceil(std::log2(image.getWidth())));
 	int height = std::pow(2, (int) std::ceil(std::log2(image.getHeight())));
+	
+	// You are using one layer here
 	Layer layer(width, height);
-
 	float fw = ((float) ((float) width / (float) image.getWidth())) / 2.0f;
 	float fh = ((float) ((float) height / (float) image.getHeight())) / 2.0f;
 
@@ -64,8 +67,10 @@ MipMap::MipMap(const Image& image, int anisotropicLevel) : m_anisotropicLevel(an
 			layer.set(x, y, value);
 		}
 	}
-
 	m_mipmaps.push_back(std::move(layer));
+	
+	// And another one here
+	// Suggestion to extract?
 	while(width != 1 && height != 1) {
 		width = std::max(1, width / 2);
 		height = std::max(1, height / 2);
@@ -79,6 +84,7 @@ MipMap::MipMap(const Image& image, int anisotropicLevel) : m_anisotropicLevel(an
 				int ey = std::min(sy + 2, m_mipmaps.back().getHeight());
 
 				Spectrum value;
+				// calc_value procedure?
 				int sampled = 0;
 				for (int xx = sx; xx < ex; ++xx) {
 					for (int yy = sy; yy < ey; ++yy) {
@@ -160,6 +166,8 @@ Spectrum MipMap::ewa(int level, const Point2& uv, const Vector2& minorAxis,
 	int endX = (int) s + std::max(std::abs(std::ceil(minx)), std::abs(std::ceil(majx)));
 	int endY = (int) t + std::max(std::abs(std::ceil(miny)), std::abs(std::ceil(majy)));
 
+	// Widen scope of extraction until the least amount of 
+	// parameters are passed
 	Spectrum sum;
 	float filterSum = 0.0f;
 	for (int x = startX; x <= endX; ++x) {
@@ -181,6 +189,9 @@ Spectrum MipMap::ewa(int level, const Point2& uv, const Vector2& minorAxis,
 	if (util::less(filterSum, 0.0f)) {
 		return bilinear(level, uv);
 	}
+	// return whatever you want from the above
+	// from another function, and assign
+	// that as the return value
 	return sum / filterSum;
 }
 
@@ -188,7 +199,8 @@ Spectrum MipMap::sample(const Point2& uv, const Vector2& dUVdx, const Vector2& d
 	if (m_anisotropicLevel < 2) {
 		return trilinear(uv, dUVdx, dUVdy);
 	}
-
+	
+	// If it's read only, no point for the assignment
 	Vector2 minorAxis = dUVdx;
 	Vector2 majorAxis = dUVdy;
 

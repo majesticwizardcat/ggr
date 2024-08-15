@@ -4,8 +4,12 @@
 
 #include <algorithm>
 
-void PathIntegrator::renderPixel(const Scene* scene, const Camera* camera, Film* film,
-	Sampler* sampler, const Point2& pixel, unsigned int samples) const {
+void PathIntegrator::renderPixel(
+		const Scene* scene, const Camera* camera, Film* film, 
+		Sampler* sampler, const Point2& pixel, unsigned int samples) const {
+	// I am not sure, but if your problem with declaring
+	// any of these variables inside the loop is performance
+	// related only, the compiler will optimize it for you.
 	Ray ray;
 	Intersection intersection;
 	float lumAccumulation;
@@ -30,7 +34,8 @@ void PathIntegrator::renderPixel(const Scene* scene, const Camera* camera, Film*
 		newLumL = 0.0f;
 		lastDistDelta = false;
 		scene->intersects(&ray, &intersection);
-		while (true) {
+		// Extract in function break -> return
+		while (true) { 
 			if (!intersection.hit) {
 				L += throughput * scene->getSkybox()->emission(-intersection.wo);
 				break;

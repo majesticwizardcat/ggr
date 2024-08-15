@@ -25,10 +25,13 @@
 int main() {
 	std::shared_ptr<Sphere> c(new Sphere());
 	std::shared_ptr<Cube> light(new Cube());
-	c->transform(transform::rotate(PI_OVER_TWO, PI_OVER_FOUR, 0.0f).combine(transform::scale(1.5f, 1.5f, 1.5f)));
-	light->transform(transform::translate(5.5f, 0.5f, 1.0f).combine(transform::scale(3.5f, 3.5f, 3.5f)));
+	c->transform(transform::rotate(PI_OVER_TWO, PI_OVER_FOUR, 0.0f)
+			.combine(transform::scale(1.5f, 1.5f, 1.5f)));
+	light->transform(transform::translate(5.5f, 0.5f, 1.0f)
+			.combine(transform::scale(3.5f, 3.5f, 3.5f)));
 	std::shared_ptr<Plane> plane(new Plane());
-	plane->transform(transform::translate(0.0f, 0.0f, -2.0f).combine(transform::scale(15.0f, 15.0f, 1.0f)));
+	plane->transform(transform::translate(0.0f, 0.0f, -2.0f)
+			.combine(transform::scale(15.0f, 15.0f, 1.0f)));
 
 	std::shared_ptr<Texture> colorTexture(new ColorTexture(Spectrum(RGBColor(0.2f, 0.6f, 0.1f))));
 	std::shared_ptr<Texture> whiteTexture(new ColorTexture(Spectrum(RGBColor(1.0f, 1.0f, 1.0f))));
@@ -37,12 +40,23 @@ int main() {
 	std::shared_ptr<Material> whiteMatte(new MatteMaterial(whiteTexture));
 	std::shared_ptr<EmissionMaterial> emissionMat(new EmissionMaterial(lightTexture, 1.3f));
 
+	// Suggestion: Assign all parameters in single variable
+	// Eg what does the first 500 mean for options?
 	RenderSettings settings(500, 500, 16, 16, 4, std::shared_ptr<Filter>(new BoxFilter(0.5f, 0.5f)));
 	std::unique_ptr<Sampler> sampler(new StohasticSampler(settings.resolutionWidth, settings.resolutionHeight));
-	std::unique_ptr<Camera> camera(new PerspectiveCamera(std::shared_ptr<Transformation>(new Transformation(
-		transform::lookAt(Point3(0.75f, 2.0f, 5.0f), Point3(0.5f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f)))),
-		settings.resolutionWidth, settings.resolutionHeight,
-		0.0f, 5.5f, PI_OVER_TWO));
+
+	// Same for the Camera, first create the PerspectiveCamera,
+	// the pass it as a constructor parameter
+	std::unique_ptr<Camera> camera(new PerspectiveCamera(std::shared_ptr<Transformation>(
+					new Transformation(transform::lookAt(
+							Point3(0.75f, 2.0f, 5.0f), 
+							Point3(0.5f, 0.0f, 0.0f), 
+							Vector3(0.0f, 1.0f, 0.0f)))
+					), 
+				settings.resolutionWidth, 
+				settings.resolutionHeight, 
+				0.0f, 5.5f, PI_OVER_TWO));
+
 	std::unique_ptr<Integrator> integrator(new DirectLightingIntegrator());
 	std::shared_ptr<Skybox> skybox(
 		new Skybox(std::shared_ptr<Texture>(new ColorTexture(Spectrum(0.0f)))));

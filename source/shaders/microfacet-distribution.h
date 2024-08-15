@@ -6,6 +6,7 @@
 #include "samplers/sampler.h"
 
 namespace mfdist {
+	// Intidation level
 inline float GGX_D(float NoM, float alpha) {
 	float NoM2 = NoM * NoM;
 	float alpha2 = alpha * alpha;
@@ -31,4 +32,5 @@ inline Vector3 GGX_sampleNormal(float alpha, const Sample2D& u) {
 	return shading::fromSpherical(TWO_PI * u.t,
 		std::atan((alpha * std::sqrt(u.s)) / std::sqrt(1.0f - u.s)));
 }
+
 }

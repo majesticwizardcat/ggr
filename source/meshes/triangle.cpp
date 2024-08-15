@@ -82,13 +82,16 @@ bool Triangle::intersects(const Ray& ray, EntityIntersection* result) const {
 void Triangle::fillIntersection(float w0, float w1, float w2, Intersection* result) const {
 	result->intersectionPoint.point = v0->position * w0 + v1->position * w1 + v2->position * w2;
 	result->intersectionPoint.uv = v0->uv * w0 + v1->uv * w1 + v2->uv * w2;
-	result->intersectionPoint.shadingNormal = glm::normalize(v0->normal * w0 + v1->normal * w1 + v2->normal * w2);
+	result->intersectionPoint.shadingNormal = 
+		glm::normalize(v0->normal * w0 + v1->normal * w1 + v2->normal * w2);
 	result->intersectionPoint.geometricNormal =
-		glm::dot(m_geometricNormal, result->intersectionPoint.shadingNormal) > 0.0f ? m_geometricNormal : -m_geometricNormal;
+		glm::dot(m_geometricNormal, result->intersectionPoint.shadingNormal) 
+		> 0.0f ? m_geometricNormal : -m_geometricNormal;
 	result->intersectionPoint.dpdu = m_dpdu;
 	result->intersectionPoint.dpdv = m_dpdv;
 	result->intersectionPoint.tangent = m_tangent;
-	result->intersectionPoint.bitangent = glm::cross(result->intersectionPoint.shadingNormal, m_tangent);
+	result->intersectionPoint.bitangent = 
+		glm::cross(result->intersectionPoint.shadingNormal, m_tangent);
 	result->intersectionPoint.surfaceArea = m_area;
 }
 

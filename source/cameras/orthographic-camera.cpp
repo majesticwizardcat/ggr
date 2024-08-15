@@ -2,6 +2,7 @@
 #include "primitives/transformation.h"
 
 OrthographicCamera::OrthographicCamera(const OrthographicCamera& other) : ProjectiveCamera(other) { }
+
 OrthographicCamera::OrthographicCamera(const Transformation* cameraToWorld,
 	int resolutionWidth, int resolutionHeight,
 	float lensRadius, float focalDistance, float scale) :

@@ -13,11 +13,15 @@ private:
 public:
 	MatteMaterial() = delete;
 	MatteMaterial(const MatteMaterial& other) = delete;
-	MatteMaterial(const Texture* diffuseColor) : Material(), m_diffuseColor(diffuseColor) { }
+	MatteMaterial(const Texture* diffuseColor) : 
+		Material(), m_diffuseColor(diffuseColor) { }
 
-	std::unique_ptr<Shader> createShader(const SurfacePoint& point, const Vector3& wo) const {
-		return std::make_unique<DiffuseShader>(point.shadingNormal, point.tangent, point.bitangent,
-			m_diffuseColor->sample(point));
+	// Ok this one might be too formated 
+	std::unique_ptr<Shader> createShader(
+			const SurfacePoint& point, const Vector3& wo) const {
+		return std::make_unique<DiffuseShader>(
+				point.shadingNormal, point.tangent, 
+				point.bitangent, m_diffuseColor->sample(point));
 	}
 };
 

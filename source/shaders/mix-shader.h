@@ -27,10 +27,10 @@ public:
 	MixShader() = delete;
 	MixShader(const MixShader& other) = delete;
 	MixShader(std::unique_ptr<Shader>& shader0,
-		std::unique_ptr<Shader>& shader1, float blend)
-		: Shader(Vector3(0.0f), Vector3(0.0f), Vector3(0.0f)),
-		m_shader0(std::move(shader0)), m_shader1(std::move(shader1)), m_blend(1.0f - blend),
-		m_oneMinusBlend(blend) { }
+		std::unique_ptr<Shader>& shader1, float blend) : 
+		Shader(Vector3(0.0f), Vector3(0.0f), Vector3(0.0f)),
+		m_shader0(std::move(shader0)), m_shader1(std::move(shader1)), 
+		m_blend(1.0f - blend), m_oneMinusBlend(blend) { }
 
 	Spectrum evaluate(const Vector3& wo, const Vector3& wi) const {
 		return m_shader0->evaluate(wo, wi) * m_blend + m_shader1->evaluate(wo, wi) * m_oneMinusBlend;

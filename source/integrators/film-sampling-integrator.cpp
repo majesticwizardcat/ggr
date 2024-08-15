@@ -9,11 +9,14 @@ void FilmSamplingIntegrator::setup(const Scene* scene, const Camera* camera, Fil
 	m_initialSize = m_tiles.size();
 }
 
-void FilmSamplingIntegrator::render(const Scene* scene, const Camera* camera, Film* film,
+void FilmSamplingIntegrator::render(
+		const Scene* scene, const Camera* camera, Film* film,
 		Sampler* sampler, const RenderSettings& settings) {
 	std::unique_ptr<Sampler> samplerClone = sampler->clone();
 	while (true) {
-		std::cout << "\rCompeleted: " << getCompletion() << " %                   ";
+		std::cout << 
+			"\rCompeleted: " << getCompletion() 
+			<< " %                   ";
 		std::cout.flush();
 		m_stackLock.lock();
 		if (m_tiles.empty()) {
@@ -23,6 +26,7 @@ void FilmSamplingIntegrator::render(const Scene* scene, const Camera* camera, Fi
 		FilmBounds tile = std::move(m_tiles.back());
 		m_tiles.pop_back();
 		m_stackLock.unlock();
+		// I am still not conviced this can not be extracted
 		for (int x = tile.start.first; x < tile.end.first; ++x) {
 			for (int y = tile.start.second; y < tile.end.second; ++y) {
 				Point2 nextPixel((float)x, (float)y);

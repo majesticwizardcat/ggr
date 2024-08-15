@@ -105,6 +105,7 @@ bool BoundingBox::intersectsAny(const Ray& ray, const Vector3& invDir, float max
 	}
 
 	if (!std::isinf(invDir.x)) {
+		// Hide the complex conidtion in a procedure
 		if (intersectSide(start.x, ray.origin.x, invDir.x,
 			ray.origin.z, ray.origin.y, ray.direction.z,
 			ray.direction.y, start.z, start.y, end.z, end.y, maxT) > 0.0f
@@ -116,6 +117,9 @@ bool BoundingBox::intersectsAny(const Ray& ray, const Vector3& invDir, float max
 	}
 
 	if (!std::isinf(invDir.y)) {
+		// I would argue this is the same condition, 
+		// just with the order of arguments changed
+		// eg checkCondition (x, y, z), checkCondition (y, z, x)...
 		if (intersectSide(start.y, ray.origin.y, invDir.y,
 			ray.origin.x, ray.origin.z, ray.direction.x,
 			ray.direction.z, start.x, start.z, end.x, end.z, maxT) > 0.0f
@@ -127,6 +131,7 @@ bool BoundingBox::intersectsAny(const Ray& ray, const Vector3& invDir, float max
 	}
 	
 	if (!std::isinf(invDir.z)) {
+		// Same here
 		if (intersectSide(start.z, ray.origin.z, invDir.z,
 			ray.origin.x, ray.origin.y, ray.direction.x,
 			ray.direction.y, start.x, start.y, end.x, end.y, maxT) > 0.0f

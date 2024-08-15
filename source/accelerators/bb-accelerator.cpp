@@ -16,8 +16,10 @@ int BBAccelerator::findSplitIndex(size_t startIndex, size_t endIndex,
 	return (startIndex + endIndex) / 2;
 }
 
-std::unique_ptr<BBNode> BBAccelerator::split(size_t startIndex, size_t endIndex,
-	std::vector<std::pair<BoundingBox, size_t>>& boxes) {
+std::unique_ptr<BBNode> BBAccelerator::split(
+	size_t startIndex, size_t endIndex,
+	std::vector<std::pair<BoundingBox, size_t>>& boxes) 
+{
 	std::unique_ptr<BBNode> node = std::make_unique<BBNode>();
 	if (endIndex - startIndex == 1) {
 		node->itemIndex = boxes[startIndex].second;
@@ -46,12 +48,9 @@ std::unique_ptr<BBNode> BBAccelerator::split(size_t startIndex, size_t endIndex,
 
 float BBAccelerator::pointAxisValue(const Point3& p, const Axis& axis) const {
 	switch(axis) {
-	case Axis::X_AXIS:
-		return p.x;
-	case Axis::Y_AXIS:
-		return p.y;
-	case Axis::Z_AXIS:
-		return p.z;
+		case Axis::X_AXIS: return p.x;
+		case Axis::Y_AXIS: return p.y;
+		case Axis::Z_AXIS: return p.z;
 	};
 	std::cout << "Warning: Undefined axis, returning X_AXIS" << std::endl;
 	return p.x;
@@ -70,8 +69,10 @@ float BBAccelerator::calculateGapAverage(std::vector<Point3>& midPoints, const A
 		- pointAxisValue(midPoints[0], axis)) / (midPoints.size() - 1);
 }
 
-Axis BBAccelerator::findSortAxis(const std::vector<std::pair<BoundingBox, size_t>>& boxes,
-	size_t startIndex, size_t endIndex) const {
+Axis BBAccelerator::findSortAxis(
+	const std::vector<std::pair<BoundingBox, size_t>>& boxes,
+	size_t startIndex, size_t endIndex) const 
+{
 	std::vector<Point3> midPoints;
 	for (int i = startIndex; i < endIndex; ++i) {
 		midPoints.push_back(boxes[i].first.mid());
@@ -79,6 +80,12 @@ Axis BBAccelerator::findSortAxis(const std::vector<std::pair<BoundingBox, size_t
 	float xavg = calculateGapAverage(midPoints, Axis::X_AXIS);
 	float yavg = calculateGapAverage(midPoints, Axis::Y_AXIS);
 	float zavg = calculateGapAverage(midPoints, Axis::Z_AXIS);
+	// float target_axis = std::max(xavg, yag, zavg)
+	//
+	// If the above algorithm is not optimal, just hide it
+	// in a costum procedure.
+	//
+	// map (target_axis -> AXIS) use array? some light map?
 	if (xavg > yavg) {
 		if (xavg > zavg) {
 			return Axis::X_AXIS;
@@ -92,15 +99,20 @@ Axis BBAccelerator::findSortAxis(const std::vector<std::pair<BoundingBox, size_t
 }
 
 void BBAccelerator::mergeRoots() {
-	auto sortNodes = [&](const std::unique_ptr<BBNode>& n0,
+	auto sortNodes = 
+		[&](const std::unique_ptr<BBNode>& n0,
 		const std::unique_ptr<BBNode>& n1) {
+			// assign m_boundingBoxes[no->itemIndex.mid().x
+			// assign m_boundingBoxes[n1->itemIndex.mid().x
 			return m_boundingBoxes[n0->itemIndex].mid().x <
 				m_boundingBoxes[n1->itemIndex].mid().x;
 	};
+	
 	std::sort(m_roots.begin(), m_roots.end(), sortNodes);
 	while (m_roots.size() > 1) {
 		int endIndex = m_roots.size() - m_roots.size() % 2;
 		for (int i = 0; i < endIndex; i += 2) {
+			// Define what this block does in a new procedure
 			int nextIndex = m_boundingBoxes.size();
 			BoundingBox b;
 			b.addBoundingBox(m_boundingBoxes[m_roots[i]->itemIndex]);
@@ -121,7 +133,9 @@ void BBAccelerator::mergeRoots() {
 	m_root = m_roots[0].get();
 }
 
-void BBAccelerator::initialize(const std::unique_ptr<Entity>* entities, size_t numberOfEntities,
+void BBAccelerator::initialize(
+		const std::unique_ptr<Entity>* entities, 
+		size_t numberOfEntities,
 		const std::vector<int>& objects) {
 	m_entities = entities;
 	std::vector<std::pair<BoundingBox, size_t>> boxes;
@@ -140,19 +154,20 @@ void BBAccelerator::initialize(const std::unique_ptr<Entity>* entities, size_t n
 }
 
 bool BBAccelerator::intersects(const Ray& ray, size_t ignoreID, EntityIntersection* result, bool findAny) const {
-	const BBNode* stack[128];
-	int stackBack;
-	const BBNode* current;
+	const BBNode* stack[128]; // Move closer to assigment
+	int stackBack; // Join with assignment
+	const BBNode* current; // Would argue about putting it into the while loop
 	bool hit = false;
 	const Vector3 invrDir = ONE_VECTOR / ray.direction;
 	stack[0] = m_root->left.get();
 	stack[1] = m_root->right.get();
-	stackBack = 2;
+	stackBack = 2; // General Suggestion of writting in snake_case 
 	while (stackBack > 0) {
 		current = stack[--stackBack];
 		if (current->isLeaf()) {
 			if (m_entities[current->itemIndex]->getID() != ignoreID
 				&& m_entities[current->itemIndex]->intersects(ray, result)) {
+				// findAny what? Also foundAnyObject...
 				if (findAny) {
 					return true;
 				}

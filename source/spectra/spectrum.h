@@ -43,6 +43,8 @@ public:
 	}
 
 	inline bool checkNaNs(const char* location) const {
+		// Duplication
+		// Join and hide in procedure
 		if (std::isnan(m_rgb.x) || std::isnan(m_rgb.y) || std::isnan(m_rgb.z)) {
 			std::cout << "Nan values on L at " << location << '\n';
 			std::cin.ignore();
@@ -61,7 +63,11 @@ public:
 	}
 
 	inline void print() const {
-		std::cout << "Spectrum: " << m_rgb.x << " " << m_rgb.y << " " << m_rgb.z << '\n';
+		std::cout 
+			<< "Spectrum: " << m_rgb.x 
+			<< " " << m_rgb.y 
+			<< " " << m_rgb.z 
+			<< '\n';
 	}
 
 	inline void clamp(float min, float max) {

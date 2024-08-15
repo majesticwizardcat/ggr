@@ -24,9 +24,12 @@ public:
 	float pdf(const Vector3& wo, const Vector3& wi) const {
 		return std::abs(glm::dot(m_normal, wi)) * INV_PI;
 	}
-
+	
+	// if parameters align with the procedures's body, 
+	// make it easier to separate them
 	Spectrum sample(const Vector3& wo, Vector3* wi, float* pdf,
-		bool* isDelta, Sampler* sampler) const {
+		bool* isDelta, Sampler* sampler) const 
+	{
 		float r = std::sqrt(sampler->getSample());
 		float phi = TWO_PI * sampler->getSample();
 		Point2 disk(r * std::cos(phi), r * std::sin(phi));

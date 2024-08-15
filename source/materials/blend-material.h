@@ -19,6 +19,7 @@ public:
 	BlendMaterial(const BlendMaterial& other) = delete;
 	BlendMaterial(const Texture* diffuse, const Texture* glossy, const Texture* roughness) :
 		BlendMaterial(diffuse, glossy, roughness, 0.5f) { }
+
 	BlendMaterial(const Texture* diffuse, const Texture* glossy, const Texture* roughness, float blend) :
 		m_diffuse(diffuse), m_glossy(glossy), m_roughness(roughness), m_blend(blend) { }
 

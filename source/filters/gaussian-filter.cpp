@@ -5,7 +5,9 @@
 #include <cmath>
 
 GaussianFilter::GaussianFilter() : Filter(), m_alpha(1.0f) { }
-GaussianFilter::GaussianFilter(const GaussianFilter& other) : Filter(other), m_alpha(other.m_alpha) { }
+GaussianFilter::GaussianFilter(const GaussianFilter& other) :
+	Filter(other), m_alpha(other.m_alpha) { }
+
 GaussianFilter::GaussianFilter(float radius) : Filter(radius), m_alpha(0.5f / radius) { }
 
 float GaussianFilter::evaluate1D(float centeredSamplePoint) const {

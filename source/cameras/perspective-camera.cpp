@@ -3,6 +3,7 @@
 
 PerspectiveCamera::PerspectiveCamera(const PerspectiveCamera& other) :
 	ProjectiveCamera(other) { }
+
 PerspectiveCamera::PerspectiveCamera(const Transformation* cameraToWorld,
 	int resolutionWidth, int resolutionHeight,
 	float lensRadius, float focalDistance, float fov) :

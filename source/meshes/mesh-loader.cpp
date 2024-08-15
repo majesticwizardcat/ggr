@@ -22,6 +22,10 @@ std::unique_ptr<TriangleMesh> meshloader::loadObj(const char* location) {
 		std::exit(1);
 	}
 
+	// This is similar to a switch struct.
+	// For each case, have one line.
+	// You might be suprised to see how much duplication you 
+	// can find this way.
 	while (file >> in) {
 		if (in == "v") {
 			float x, y, z;
@@ -66,7 +70,11 @@ std::unique_ptr<TriangleMesh> meshloader::loadObj(const char* location) {
 			}
 		}
 	}
-	std::cout << "Loaded obj " << location << " with: " << vertices.size() << " vertices and " <<
-		indices.size() << " indices -> " << indices.size() / 3 << " triangles" << std::endl;
+	std::cout 
+		<< "Loaded obj " << location 
+		<< " with: " << vertices.size() 
+		<< " vertices and " << indices.size() 
+		<< " indices -> " << indices.size() / 3 
+		<< " triangles" << std::endl;
 	return std::make_unique<TriangleMesh>(vertices, indices);
 }

@@ -21,7 +21,8 @@ private:
 	Skybox* m_skybox;
 	int m_nextID;
 
-	void fillIntersectionFromEntity(const EntityIntersection& entityIntersection,
+	void fillIntersectionFromEntity(
+		const EntityIntersection& entityIntersection,
 		Intersection* result) const;
 
 public:

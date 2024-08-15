@@ -22,8 +22,11 @@ float LightEntity::pdf(const Point3& surfacePoint, const SurfacePoint& lightPoin
 	return distance * distance / denom;
 }
 
-Spectrum LightEntity::sample(Sampler* sampler, const Point3& surfacePoint, SurfacePoint* sampledPoint,
-	Vector3* direction, float* pdf, float* lightDist) const {
+Spectrum LightEntity::sample(
+	Sampler* sampler, const Point3& surfacePoint, 
+	SurfacePoint* sampledPoint,
+	Vector3* direction, float* pdf, float* lightDist) const 
+{
 	m_mesh->samplePoint(sampler, sampledPoint);
 	sampledPoint->meshID = m_id;
 	*pdf = 0.0f;

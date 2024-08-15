@@ -46,6 +46,7 @@ float MFRefractionShader::pdf(const Vector3& wo, const Vector3& wi) const {
 	if (util::equals(outside, 0.0f)) {
 		return 0.0f;
 	}
+
 	if (outside > 0.0f) {
 		Vector3 m = glm::normalize(wo + wi);
 		float MoWo = glm::dot(m, wo);
@@ -55,6 +56,7 @@ float MFRefractionShader::pdf(const Vector3& wo, const Vector3& wi) const {
 		float cosThetaM = std::abs(glm::dot(m, m_normal));
 		return mfdist::GGX_D(cosThetaM, m_alpha) * cosThetaM / (4.0f * MoWo);
 	}
+
 	Vector3 m = glm::normalize(-(wi * m_IORout + wo * m_IORin));
 	float MoWo = std::abs(glm::dot(m, wo));
 	float MoWi = std::abs(glm::dot(m, wi));
@@ -63,6 +65,7 @@ float MFRefractionShader::pdf(const Vector3& wo, const Vector3& wi) const {
 	if (util::equals(denom, 0.0f)) {
 		return 0.0f;
 	}
+
 	float cosThetaM = std::abs(glm::dot(m, m_normal));
 	return mfdist::GGX_D(cosThetaM, m_alpha) * cosThetaM * m_IORin * m_IORin * MoWi / denom;
 }
@@ -84,6 +87,7 @@ Spectrum MFRefractionShader::sample(const Vector3& wo, Vector3* wi, float* pdf,
 	}
 	float F = fresnel::fresnelCT(m_eta, MoWo);
 	if (sampler->getSample() < F) {
+		// Extract this
 		*wi = shading::reflect(wo, m, MoWo);
 		float cosThetaWi = std::abs(glm::dot(m_normal, *wi));
 		float cosThetaWoWi = cosThetaWo * cosThetaWi;
@@ -98,6 +102,7 @@ Spectrum MFRefractionShader::sample(const Vector3& wo, Vector3* wi, float* pdf,
 		*pdf = F * D * cosThetaM / (4.0f * MoWo);
 		return m_color* (F * D * G / (4.0f * cosThetaWoWi));
 	}
+
 	*wi = shading::refract(wo, m, 1.0f / m_eta, MoWo);
 	float cosThetaWi = std::abs(glm::dot(m_normal, *wi));
 	float cosThetaWoWi = cosThetaWo * cosThetaWi;
@@ -105,6 +110,7 @@ Spectrum MFRefractionShader::sample(const Vector3& wo, Vector3* wi, float* pdf,
 		*pdf = 0.0f;
 		return Spectrum(0.0f);
 	}
+
 	cosThetaWi = std::abs(cosThetaWi);
 	float MoWi = glm::dot(m, *wi);
 	float denom = m_IORout * MoWo + m_IORin * MoWi;
@@ -113,6 +119,7 @@ Spectrum MFRefractionShader::sample(const Vector3& wo, Vector3* wi, float* pdf,
 		*pdf = 0.0f;
 		return Spectrum(0.0f);
 	}
+
 	MoWi = std::abs(MoWi);
 	float cosThetaM = std::abs(glm::dot(m, m_normal));
 	float D = mfdist::GGX_D(cosThetaM, m_alpha);

@@ -13,10 +13,13 @@ public:
 	Sample2D lensPosition;
 
 	CameraSample() { }
+
 	CameraSample(const CameraSample& other) : filmPosition(other.filmPosition),
 		lensPosition(other.lensPosition) { }
+
 	CameraSample(const Point2& filmPosition, const Sample2D& lensPosition) :
 		filmPosition(filmPosition), lensPosition(lensPosition) { }
+
 	CameraSample(CameraSample&& other) noexcept : filmPosition(std::move(other.filmPosition)),
 		lensPosition(std::move(other.lensPosition)) { }
 
